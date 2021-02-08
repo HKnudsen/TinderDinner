@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class CardViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
