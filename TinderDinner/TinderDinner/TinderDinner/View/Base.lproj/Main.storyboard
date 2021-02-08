@@ -100,11 +100,52 @@
                     <navigationItem key="navigationItem" id="pAZ-e2-KA0"/>
                     <connections>
                         <outlet property="tableView" destination="luv-f4-ayD" id="EMT-fj-118"/>
+                        <segue destination="Eak-Sk-gEH" kind="show" id="xrJ-oP-wox"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1z1-Jt-IBH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1789.8550724637682" y="470.75892857142856"/>
+        </scene>
+        <!--Filter Settings View Controller-->
+        <scene sceneID="JqU-y5-U1Z">
+            <objects>
+                <viewController id="Eak-Sk-gEH" customClass="FilterSettingsViewController" customModule="TinderDinner" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="SMu-DA-p6R">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="z7h-56-Y3N">
+                                <rect key="frame" x="0.0" y="144" width="414" height="669"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="P7O-H5-Er0">
+                                <rect key="frame" x="0.0" y="88" width="414" height="56"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="sne-mX-BA7"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="z7h-56-Y3N" firstAttribute="trailing" secondItem="sne-mX-BA7" secondAttribute="trailing" id="J68-Qz-DkA"/>
+                            <constraint firstItem="z7h-56-Y3N" firstAttribute="leading" secondItem="sne-mX-BA7" secondAttribute="leading" id="KcN-Mi-YbP"/>
+                            <constraint firstItem="P7O-H5-Er0" firstAttribute="top" secondItem="sne-mX-BA7" secondAttribute="top" id="Pzz-8G-Mds"/>
+                            <constraint firstItem="P7O-H5-Er0" firstAttribute="trailing" secondItem="sne-mX-BA7" secondAttribute="trailing" id="Q2C-9t-6HN"/>
+                            <constraint firstItem="z7h-56-Y3N" firstAttribute="top" secondItem="P7O-H5-Er0" secondAttribute="bottom" id="Rh7-sw-eh1"/>
+                            <constraint firstItem="z7h-56-Y3N" firstAttribute="top" secondItem="P7O-H5-Er0" secondAttribute="bottom" id="ZjF-bo-1zD"/>
+                            <constraint firstItem="P7O-H5-Er0" firstAttribute="leading" secondItem="sne-mX-BA7" secondAttribute="leading" id="cSD-Vu-OWL"/>
+                            <constraint firstItem="z7h-56-Y3N" firstAttribute="bottom" secondItem="sne-mX-BA7" secondAttribute="bottom" id="nLz-Gb-lbO"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="EOG-MV-mH3"/>
+                    <connections>
+                        <outlet property="searchField" destination="P7O-H5-Er0" id="e5r-QE-DdQ"/>
+                        <outlet property="tableView" destination="z7h-56-Y3N" id="QHd-VZ-4UB"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LuF-oU-Gx7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2676.811594202899" y="1020.5357142857142"/>
         </scene>
         <!--Item-->
         <scene sceneID="mdg-Kh-pIQ">

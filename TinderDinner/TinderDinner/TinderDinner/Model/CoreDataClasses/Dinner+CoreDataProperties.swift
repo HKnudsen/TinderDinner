@@ -16,8 +16,9 @@ extension Dinner {
         return NSFetchRequest<Dinner>(entityName: "Dinner")
     }
 
-    @NSManaged public var origin: String?
     @NSManaged public var ingredients: [String]?
+    @NSManaged public var origin: String?
+    @NSManaged public var name: String?
 
 }
 
