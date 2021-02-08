@@ -14,6 +14,7 @@
 		D04CC44325D04CF000BCAC81 /* TinderDinner.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D04CC44125D04CF000BCAC81 /* TinderDinner.xcdatamodeld */; };
 		D04CC44525D04CF500BCAC81 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D04CC44425D04CF500BCAC81 /* Assets.xcassets */; };
 		D04CC44825D04CF500BCAC81 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D04CC44625D04CF500BCAC81 /* LaunchScreen.storyboard */; };
+		D04CC45525D1294300BCAC81 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CC45425D1294300BCAC81 /* SettingsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		D04CC44425D04CF500BCAC81 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D04CC44725D04CF500BCAC81 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D04CC44925D04CF500BCAC81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D04CC45425D1294300BCAC81 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,16 +60,41 @@
 		D04CC43725D04CF000BCAC81 /* TinderDinner */ = {
 			isa = PBXGroup;
 			children = (
+				D04CC45325D128DF00BCAC81 /* Model */,
+				D04CC45225D128DA00BCAC81 /* View */,
+				D04CC45125D128D200BCAC81 /* Controller */,
 				D04CC43825D04CF000BCAC81 /* AppDelegate.swift */,
 				D04CC43A25D04CF000BCAC81 /* SceneDelegate.swift */,
-				D04CC43C25D04CF000BCAC81 /* CardViewController.swift */,
-				D04CC43E25D04CF000BCAC81 /* Main.storyboard */,
 				D04CC44425D04CF500BCAC81 /* Assets.xcassets */,
-				D04CC44625D04CF500BCAC81 /* LaunchScreen.storyboard */,
 				D04CC44925D04CF500BCAC81 /* Info.plist */,
-				D04CC44125D04CF000BCAC81 /* TinderDinner.xcdatamodeld */,
 			);
 			path = TinderDinner;
+			sourceTree = "<group>";
+		};
+		D04CC45125D128D200BCAC81 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				D04CC43C25D04CF000BCAC81 /* CardViewController.swift */,
+				D04CC45425D1294300BCAC81 /* SettingsViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		D04CC45225D128DA00BCAC81 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D04CC43E25D04CF000BCAC81 /* Main.storyboard */,
+				D04CC44625D04CF500BCAC81 /* LaunchScreen.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		D04CC45325D128DF00BCAC81 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D04CC44125D04CF000BCAC81 /* TinderDinner.xcdatamodeld */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -143,6 +170,7 @@
 				D04CC43D25D04CF000BCAC81 /* CardViewController.swift in Sources */,
 				D04CC43925D04CF000BCAC81 /* AppDelegate.swift in Sources */,
 				D04CC43B25D04CF000BCAC81 /* SceneDelegate.swift in Sources */,
+				D04CC45525D1294300BCAC81 /* SettingsViewController.swift in Sources */,
 				D04CC44325D04CF000BCAC81 /* TinderDinner.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
