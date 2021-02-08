@@ -109,7 +109,6 @@
 				D059D16225D139D400285279 /* CoreDataClasses */,
 				D04CC44125D04CF000BCAC81 /* TinderDinner.xcdatamodeld */,
 				D059D15325D136C500285279 /* SettingsManager.swift */,
-				D059D15A25D1395800285279 /* DatabaseManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -117,6 +116,7 @@
 		D059D16225D139D400285279 /* CoreDataClasses */ = {
 			isa = PBXGroup;
 			children = (
+				D059D15A25D1395800285279 /* DatabaseManager.swift */,
 				D059D15D25D139CD00285279 /* Dinner+CoreDataClass.swift */,
 				D059D15E25D139CD00285279 /* Dinner+CoreDataProperties.swift */,
 			);
