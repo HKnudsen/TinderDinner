@@ -48,6 +48,9 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="TF8-7J-GA2"/>
+                    <connections>
+                        <outlet property="isMultipleUsersSwith" destination="AmA-RB-pUV" id="fmc-rH-OHX"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -59,6 +62,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="Kgg-WN-l9J" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Afr-UO-ELE">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
@@ -74,7 +78,6 @@
         <!--Settings View Controller-->
         <scene sceneID="JrE-aR-0JJ">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="1z1-Jt-IBH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewController id="w6J-c9-Lcd" customClass="SettingsViewController" customModule="TinderDinner" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sKO-Kz-svi">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
@@ -99,6 +102,7 @@
                         <outlet property="tableView" destination="luv-f4-ayD" id="EMT-fj-118"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1z1-Jt-IBH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1789.8550724637682" y="470.75892857142856"/>
         </scene>

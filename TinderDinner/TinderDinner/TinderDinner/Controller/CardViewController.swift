@@ -9,6 +9,7 @@ import UIKit
 
 class CardViewController: UIViewController {
 
+    @IBOutlet weak var isMultipleUsersSwith: UISwitch!
     
     override func viewDidLoad() {
         super.viewDidLoad()
