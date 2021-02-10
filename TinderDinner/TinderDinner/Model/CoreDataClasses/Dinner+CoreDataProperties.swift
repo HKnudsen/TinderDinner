@@ -2,7 +2,7 @@
 //  Dinner+CoreDataProperties.swift
 //  TinderDinner
 //
-//  Created by Henrik Bouwer Knudsen on 09/02/2021.
+//  Created by Henrik Bouwer Knudsen on 10/02/2021.
 //
 //
 
@@ -16,7 +16,7 @@ extension Dinner {
         return NSFetchRequest<Dinner>(entityName: "Dinner")
     }
 
-    @NSManaged public var ingredients: [NSString]?
+    @NSManaged public var ingredients: [String]?
     @NSManaged public var name: String?
     @NSManaged public var origin: String?
 

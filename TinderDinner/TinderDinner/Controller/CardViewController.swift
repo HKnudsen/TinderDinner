@@ -12,12 +12,13 @@ class CardViewController: UIViewController {
 
     @IBOutlet weak var isMultipleUsersSwith: UISwitch!
     
-    var databaseManager = DatabaseManager()
+    var databaseManager = DatabaseManager.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
         let request: NSFetchRequest<Dinner> = Dinner.fetchRequest()
         // Predicate & Sort descriptor doesnt work. - EXC_BAD_ACCESS (code=1, address=0x0)
@@ -27,13 +28,24 @@ class CardViewController: UIViewController {
         do { databaseManager.items = try databaseManager.context.fetch(request)}
         catch let error { print(error) }
         
-        print(databaseManager.items)
+        //print(databaseManager.items)
         
 //        do { databaseManager.items = try databaseManager.context.fetch(request) }
 //        catch let error { print(error) }
-        print(databaseManager.items?[0].name)
-        print(databaseManager.items?[0].ingredients)
-        print(databaseManager.items?[1].name)
+//        print(databaseManager.items?[0].name)
+//        print(databaseManager.items?[0].ingredients)
+//        print(databaseManager.items?[1].name)
+        
+        
+        for dinner in databaseManager.items! {
+            if let ingredients = dinner.ingredients {
+                if ingredients.contains("Dough") {
+                    print(dinner.name)
+                    print(dinner.ingredients)
+                }
+            }
+            
+        }
         
         
         

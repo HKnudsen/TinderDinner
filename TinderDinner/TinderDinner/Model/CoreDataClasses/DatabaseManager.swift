@@ -11,6 +11,8 @@ import CoreData
 // Manages FetchRequests and results to the CoreData local backend
 
 struct DatabaseManager {
+    static let shared = DatabaseManager()
+    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var items: [Dinner]?
     var selectedIngredients: [String]?
@@ -23,8 +25,14 @@ struct DatabaseManager {
         return request
     }
     
-    func filterIngredients() {
-        
+    mutating func addNewIngredient(ingredient: String) {
+        self.selectedIngredients?.append(ingredient)
+    }
+    
+    mutating func removeIngredient(ingredient: String) {
+        guard let indexOfIngredient = selectedIngredients?.firstIndex(of: ingredient) else {
+            fatalError("Errpr getting index of ingredient") }
+        selectedIngredients?.remove(at: indexOfIngredient)
     }
     
     mutating func loadItems(with request: NSFetchRequest<Dinner> = Dinner.fetchRequest()) {

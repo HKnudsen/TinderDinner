@@ -10,6 +10,7 @@ import UIKit
 class SettingsViewController: UIViewController {
     
     var settingsManager = SettingsManager()
+    var databaseManager = DatabaseManager.shared
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -43,6 +44,15 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return CGFloat(tableView.frame.height / CGFloat(settingsManager.settingOptions.count))
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let items = databaseManager.items {
+            print(items[indexPath.row])
+        }
+        
+    }
+    
+
     
     
 }
