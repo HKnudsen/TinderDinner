@@ -7,9 +7,11 @@
 
 import UIKit
 import CoreData
+import Koloda
 
 class CardViewController: UIViewController {
 
+    @IBOutlet weak var cardView: KolodaView!
     @IBOutlet weak var isMultipleUsersSwith: UISwitch!
     
     var databaseManager = DatabaseManager.shared
@@ -18,15 +20,11 @@ class CardViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        cardView.delegate = self
+        cardView.dataSource = self
+        
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
-        let request: NSFetchRequest<Dinner> = Dinner.fetchRequest()
-        // Predicate & Sort descriptor doesnt work. - EXC_BAD_ACCESS (code=1, address=0x0)
-        //request.predicate = NSPredicate(format: "ingredients CONTAINS[cd] %@", "Milk")
-//        request.sortDescriptors = [NSSortDescriptor(key: "ingredients", ascending: true)]
-        
-        do { databaseManager.items = try databaseManager.context.fetch(request)}
-        catch let error { print(error) }
         
         databaseManager.addNewIngredient(ingredient: "Dough")
         databaseManager.loadItems()
@@ -53,5 +51,20 @@ class CardViewController: UIViewController {
     }
 
 
+}
+
+extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
+
+    
+    func koloda(_ koloda: KolodaView, viewForCardAt index: Int) -> UIView {
+        
+        return UIView()
+    }
+    
+    func kolodaNumberOfCards(_ koloda: KolodaView) -> Int {
+        return 2
+    }
+    
+    
 }
 
