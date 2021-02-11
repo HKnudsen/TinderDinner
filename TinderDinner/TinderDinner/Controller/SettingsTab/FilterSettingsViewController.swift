@@ -44,7 +44,7 @@ extension FilterSettingsViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if !searchText.isEmpty {
-            databaseManager.filterDinners(text: searchText)
+    
         }
     }
     

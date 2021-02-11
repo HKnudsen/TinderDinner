@@ -28,24 +28,11 @@ class CardViewController: UIViewController {
         do { databaseManager.items = try databaseManager.context.fetch(request)}
         catch let error { print(error) }
         
-        //print(databaseManager.items)
-        
-//        do { databaseManager.items = try databaseManager.context.fetch(request) }
-//        catch let error { print(error) }
-//        print(databaseManager.items?[0].name)
-//        print(databaseManager.items?[0].ingredients)
-//        print(databaseManager.items?[1].name)
+        databaseManager.addNewIngredient(ingredient: "Dough")
+        databaseManager.loadItems()
+        databaseManager.removeDinnersWith(filter: databaseManager.unwantedIngredients!)
         
         
-        for dinner in databaseManager.items! {
-            if let ingredients = dinner.ingredients {
-                if ingredients.contains("Dough") {
-                    print(dinner.name)
-                    print(dinner.ingredients)
-                }
-            }
-            
-        }
         
         
         

@@ -15,24 +15,38 @@ struct DatabaseManager {
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var items: [Dinner]?
-    var selectedIngredients: [String]?
+    var unwantedIngredients: [String]?
     
-    // TODO: Refactor predicate to search for ingredients instead of dinner names
-    func filterDinners(text: String) -> NSFetchRequest<Dinner> {
-        let request: NSFetchRequest<Dinner> = Dinner.fetchRequest()
-        request.predicate = NSPredicate(format: "name CONTAINS[cd] %@", text)
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        return request
+    mutating func removeDinnersWith(filter: [String]) {
+        if var items = items {
+            for (i, dinner) in items.enumerated() {
+                if let unwantedIngredients = unwantedIngredients, let ingredientsInDinner = dinner.ingredients {
+                    for (k, _) in unwantedIngredients.enumerated() {
+                        if ingredientsInDinner.contains(unwantedIngredients[k]) {
+                            items.remove(at: i)
+                        }
+                    }
+                }
+            }
+        }
     }
     
     mutating func addNewIngredient(ingredient: String) {
-        self.selectedIngredients?.append(ingredient)
+        if self.unwantedIngredients == nil {
+            self.unwantedIngredients = [ingredient]
+        } else {
+            self.unwantedIngredients?.append(ingredient)
+        }
     }
     
     mutating func removeIngredient(ingredient: String) {
-        guard let indexOfIngredient = selectedIngredients?.firstIndex(of: ingredient) else {
-            fatalError("Errpr getting index of ingredient") }
-        selectedIngredients?.remove(at: indexOfIngredient)
+        if unwantedIngredients != nil {
+            guard let indexOfIngredient = unwantedIngredients?.firstIndex(of: ingredient) else {
+                fatalError("Error getting index of ingredient") }
+            unwantedIngredients?.remove(at: indexOfIngredient)
+        } else {
+            print("Trying to remove ingredient from empty array")
+        }
     }
     
     mutating func loadItems(with request: NSFetchRequest<Dinner> = Dinner.fetchRequest()) {
