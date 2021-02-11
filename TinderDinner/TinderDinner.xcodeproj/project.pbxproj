@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		70B1E239D89FB6AF37C0D1A1 /* Pods_TinderDinner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5794A3FE2F2B36E6EFFAB4A9 /* Pods_TinderDinner.framework */; };
 		D04CC43925D04CF000BCAC81 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CC43825D04CF000BCAC81 /* AppDelegate.swift */; };
 		D04CC43B25D04CF000BCAC81 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CC43A25D04CF000BCAC81 /* SceneDelegate.swift */; };
 		D04CC43D25D04CF000BCAC81 /* CardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CC43C25D04CF000BCAC81 /* CardViewController.swift */; };
@@ -25,6 +26,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5794A3FE2F2B36E6EFFAB4A9 /* Pods_TinderDinner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TinderDinner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C6FBA5618E9473D53F2B4A25 /* Pods-TinderDinner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinderDinner.debug.xcconfig"; path = "Target Support Files/Pods-TinderDinner/Pods-TinderDinner.debug.xcconfig"; sourceTree = "<group>"; };
 		D04CC43525D04CF000BCAC81 /* TinderDinner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinderDinner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D04CC43825D04CF000BCAC81 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D04CC43A25D04CF000BCAC81 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -42,6 +45,7 @@
 		D059D16725D1790000285279 /* FilterSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterSettingsViewController.swift; sourceTree = "<group>"; };
 		D059D18A25D3D93E00285279 /* Dinner+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dinner+CoreDataClass.swift"; sourceTree = "<group>"; };
 		D059D18B25D3D93E00285279 /* Dinner+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dinner+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E59F4DDF2CDDEC363E2F3882 /* Pods-TinderDinner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinderDinner.release.xcconfig"; path = "Target Support Files/Pods-TinderDinner/Pods-TinderDinner.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,17 +53,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70B1E239D89FB6AF37C0D1A1 /* Pods_TinderDinner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		44CEAB3B252100BF39C0AA12 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5794A3FE2F2B36E6EFFAB4A9 /* Pods_TinderDinner.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D04CC42C25D04CF000BCAC81 = {
 			isa = PBXGroup;
 			children = (
 				D04CC43725D04CF000BCAC81 /* TinderDinner */,
 				D04CC43625D04CF000BCAC81 /* Products */,
+				E8AE9B230468F04FA9ADCCCE /* Pods */,
+				44CEAB3B252100BF39C0AA12 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -134,6 +149,16 @@
 			path = SettingsTab;
 			sourceTree = "<group>";
 		};
+		E8AE9B230468F04FA9ADCCCE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C6FBA5618E9473D53F2B4A25 /* Pods-TinderDinner.debug.xcconfig */,
+				E59F4DDF2CDDEC363E2F3882 /* Pods-TinderDinner.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -141,9 +166,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D04CC44C25D04CF500BCAC81 /* Build configuration list for PBXNativeTarget "TinderDinner" */;
 			buildPhases = (
+				4C9BE998FDA4BD401E2E38DB /* [CP] Check Pods Manifest.lock */,
 				D04CC43125D04CF000BCAC81 /* Sources */,
 				D04CC43225D04CF000BCAC81 /* Frameworks */,
 				D04CC43325D04CF000BCAC81 /* Resources */,
+				B2357E3DACF9A00366EAD858 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -199,6 +226,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4C9BE998FDA4BD401E2E38DB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TinderDinner-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B2357E3DACF9A00366EAD858 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TinderDinner/Pods-TinderDinner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TinderDinner/Pods-TinderDinner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TinderDinner/Pods-TinderDinner-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D04CC43125D04CF000BCAC81 /* Sources */ = {
@@ -359,6 +428,7 @@
 		};
 		D04CC44D25D04CF500BCAC81 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C6FBA5618E9473D53F2B4A25 /* Pods-TinderDinner.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -378,6 +448,7 @@
 		};
 		D04CC44E25D04CF500BCAC81 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E59F4DDF2CDDEC363E2F3882 /* Pods-TinderDinner.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
