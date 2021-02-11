@@ -55,10 +55,30 @@ class CardViewController: UIViewController {
 
 extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
 
-    
     func koloda(_ koloda: KolodaView, viewForCardAt index: Int) -> UIView {
+        let textView = UILabel(frame: CGRect(x: 20, y: 200, width: 100, height: 50))
+        textView.text = "Test"
+        textView.textColor = .blue
+        let parentView = UIView(frame: CGRect(x: 0, y: 0, width: cardView.frame.size.width, height: cardView.frame.size.height))
+        let view = UIImageView(image: UIImage(named: "ironman\(index + 1)"))
+        view.frame = parentView.bounds
+        view.layer.cornerRadius = 20
+        view.clipsToBounds = true
+        view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
-        return UIView()
+        parentView.layer.cornerRadius = 20
+        parentView.clipsToBounds = true
+        parentView.autoresizesSubviews = true
+        parentView.addSubview(view)
+        parentView.addSubview(textView)
+        
+        
+        //return parentView
+        return parentView
+    }
+    
+    func koloda(_ koloda: KolodaView, didSwipeCardAt index: Int, in direction: SwipeResultDirection) {
+        print(direction)
     }
     
     func kolodaNumberOfCards(_ koloda: KolodaView) -> Int {
