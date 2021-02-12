@@ -17,6 +17,8 @@ struct DatabaseManager {
     var items: [Dinner]?
     var unwantedIngredients: [String]?
     
+    var wantedDinners: [Dinner]?
+    
     mutating func removeDinnersWith(filter: [String]) {
         if var items = items {
             for (i, dinner) in items.enumerated() {
@@ -29,6 +31,10 @@ struct DatabaseManager {
                 }
             }
         }
+    }
+    
+    mutating func addToWantedDinner(with dinner: Dinner) {
+        self.wantedDinners?.append(dinner)
     }
     
     mutating func addNewIngredient(ingredient: String) {

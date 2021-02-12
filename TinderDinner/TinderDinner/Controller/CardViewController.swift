@@ -39,7 +39,15 @@ class CardViewController: UIViewController {
         do { try databaseManager.context.save() }
         catch let error { print(error) }
     }
+    @IBAction func switchPressed(_ sender: UISwitch) {
+        if sender.isOn {
+            let alertController = UIAlertController(title: "Connect With Someone", message: "Do you want to create or join a room?", preferredStyle: .alert)
+            
+        }
+    }
+    
 }
+
 
 extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
 
@@ -79,6 +87,7 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
     
     func kolodaDidRunOutOfCards(_ koloda: KolodaView) {
         // Perform segue to results page
+        performSegue(withIdentifier: "resultsPage", sender: self)
     }
     
     

@@ -28,6 +28,9 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="tintColor" red="0.99607843139999996" green="0.45882352939999999" blue="0.41960784309999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="onTintColor" red="0.99662548299999998" green="0.45996135469999999" blue="0.41985547540000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <action selector="switchPressed:" destination="BYZ-38-t0r" eventType="valueChanged" id="Vc9-hp-PZd"/>
+                                        </connections>
                                     </switch>
                                 </subviews>
                                 <color key="backgroundColor" red="0.087334968149999997" green="0.21138399839999999" blue="0.22745662929999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -51,7 +54,7 @@
                     <connections>
                         <outlet property="cardView" destination="dUn-ut-r1d" id="ap4-XN-yXT"/>
                         <outlet property="isMultipleUsersSwith" destination="AmA-RB-pUV" id="fmc-rH-OHX"/>
-                        <segue destination="b9p-em-NqS" kind="presentation" id="lzq-jw-20u"/>
+                        <segue destination="b9p-em-NqS" kind="presentation" identifier="resultsPage" id="lzq-jw-20u"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
