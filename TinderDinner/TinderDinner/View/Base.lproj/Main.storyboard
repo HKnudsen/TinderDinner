@@ -51,11 +51,27 @@
                     <connections>
                         <outlet property="cardView" destination="dUn-ut-r1d" id="ap4-XN-yXT"/>
                         <outlet property="isMultipleUsersSwith" destination="AmA-RB-pUV" id="fmc-rH-OHX"/>
+                        <segue destination="b9p-em-NqS" kind="presentation" id="lzq-jw-20u"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="879.71014492753625" y="-227.00892857142856"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="ubT-IQ-gbI">
+            <objects>
+                <viewController id="b9p-em-NqS" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ZFW-aF-Zb0">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="tXJ-Eb-AQC"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LwM-fl-fFz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1812" y="-227"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="LlZ-lc-upa">

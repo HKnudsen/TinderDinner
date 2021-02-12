@@ -77,6 +77,10 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
         return 2
     }
     
+    func kolodaDidRunOutOfCards(_ koloda: KolodaView) {
+        // Perform segue to results page
+    }
+    
     
 }
 
