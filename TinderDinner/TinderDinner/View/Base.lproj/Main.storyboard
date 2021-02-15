@@ -23,17 +23,29 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jzA-GW-SVn">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="122"/>
                                 <subviews>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AmA-RB-pUV">
-                                        <rect key="frame" x="314" y="52" width="49" height="31"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AmA-RB-pUV">
+                                        <rect key="frame" x="314" y="52" width="51" height="31"/>
                                         <color key="tintColor" red="0.99607843139999996" green="0.45882352939999999" blue="0.41960784309999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="onTintColor" red="0.99662548299999998" green="0.45996135469999999" blue="0.41985547540000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
                                             <action selector="switchPressed:" destination="BYZ-38-t0r" eventType="valueChanged" id="Vc9-hp-PZd"/>
                                         </connections>
                                     </switch>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wx6-Rf-QDI">
+                                        <rect key="frame" x="173" y="62" width="54" height="27"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="22"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.087334968149999997" green="0.21138399839999999" blue="0.22745662929999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstItem="wx6-Rf-QDI" firstAttribute="top" secondItem="jzA-GW-SVn" secondAttribute="top" constant="62" id="0Hj-hd-xh8"/>
+                                    <constraint firstItem="AmA-RB-pUV" firstAttribute="leading" secondItem="wx6-Rf-QDI" secondAttribute="trailing" constant="87" id="HPV-GN-PKC"/>
+                                    <constraint firstItem="wx6-Rf-QDI" firstAttribute="leading" secondItem="jzA-GW-SVn" secondAttribute="leading" constant="173" id="JSn-sF-uUu"/>
+                                    <constraint firstAttribute="bottom" secondItem="wx6-Rf-QDI" secondAttribute="bottom" constant="33" id="JUA-T5-UI9"/>
+                                    <constraint firstItem="AmA-RB-pUV" firstAttribute="top" secondItem="jzA-GW-SVn" secondAttribute="topMargin" id="ONl-ir-Xyv"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -53,6 +65,7 @@
                     <tabBarItem key="tabBarItem" title="Item" id="TF8-7J-GA2"/>
                     <connections>
                         <outlet property="cardView" destination="dUn-ut-r1d" id="ap4-XN-yXT"/>
+                        <outlet property="groupCodeLabel" destination="wx6-Rf-QDI" id="DtA-9F-XOm"/>
                         <outlet property="isMultipleUsersSwith" destination="AmA-RB-pUV" id="fmc-rH-OHX"/>
                         <segue destination="b9p-em-NqS" kind="presentation" identifier="resultsPage" id="lzq-jw-20u"/>
                     </connections>

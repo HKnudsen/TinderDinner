@@ -9,6 +9,7 @@ import Foundation
 import Firebase
 
 struct FirebaseManager {
+    
     func getUsedIds(completion: @escaping ([Int], Error?) -> Void) {
         let dbRef = Firestore.firestore().collection("Groups")
         var documentIdArray = [Int]()
@@ -39,7 +40,7 @@ struct FirebaseManager {
     // Removes the used group ID after online session
     func collectGarbageId(groupId: Int) {
         let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
-        dbRef.delete()        
+        dbRef.delete()
     }
 }
 

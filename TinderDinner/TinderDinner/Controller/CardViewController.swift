@@ -13,8 +13,16 @@ class CardViewController: UIViewController {
 
     @IBOutlet weak var cardView: KolodaView!
     @IBOutlet weak var isMultipleUsersSwith: UISwitch!
+    @IBOutlet weak var groupCodeLabel: UILabel!
     
     var databaseManager = DatabaseManager.shared
+    var firebaseManager = FirebaseManager()
+    
+    var groupId: Int? {
+        willSet {
+            print(newValue)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +53,16 @@ class CardViewController: UIViewController {
     }
     
     func createPressed() {
-        print("Create")
+        firebaseManager.getUsedIds { (groupIds, error) in
+            self.groupId = self.firebaseManager.checkForMachInIds(with: groupIds)
+            DispatchQueue.main.async {
+                if let groupId = self.groupId {
+                    self.groupCodeLabel.text = "\(groupId)"
+                }
+                
+            }
+        }
+        
     }
     
     @IBAction func switchPressed(_ sender: UISwitch) {

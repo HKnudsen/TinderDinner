@@ -24,6 +24,7 @@
 		D059D18C25D3D93E00285279 /* Dinner+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059D18A25D3D93E00285279 /* Dinner+CoreDataClass.swift */; };
 		D059D18D25D3D93E00285279 /* Dinner+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059D18B25D3D93E00285279 /* Dinner+CoreDataProperties.swift */; };
 		D059D1A925D6A90A00285279 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059D1A825D6A90A00285279 /* FirebaseManager.swift */; };
+		D059D1AC25DA98FC00285279 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D059D1AB25DA98FC00285279 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 		D059D18A25D3D93E00285279 /* Dinner+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dinner+CoreDataClass.swift"; sourceTree = "<group>"; };
 		D059D18B25D3D93E00285279 /* Dinner+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dinner+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		D059D1A825D6A90A00285279 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
+		D059D1AB25DA98FC00285279 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E59F4DDF2CDDEC363E2F3882 /* Pods-TinderDinner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinderDinner.release.xcconfig"; path = "Target Support Files/Pods-TinderDinner/Pods-TinderDinner.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -98,6 +100,7 @@
 				D04CC44425D04CF500BCAC81 /* Assets.xcassets */,
 				D04CC43A25D04CF000BCAC81 /* SceneDelegate.swift */,
 				D04CC44925D04CF500BCAC81 /* Info.plist */,
+				D059D1AB25DA98FC00285279 /* GoogleService-Info.plist */,
 			);
 			path = TinderDinner;
 			sourceTree = "<group>";
@@ -222,6 +225,7 @@
 			files = (
 				D04CC44825D04CF500BCAC81 /* LaunchScreen.storyboard in Resources */,
 				D04CC44525D04CF500BCAC81 /* Assets.xcassets in Resources */,
+				D059D1AC25DA98FC00285279 /* GoogleService-Info.plist in Resources */,
 				D059D14F25D12E9E00285279 /* SettingsTableViewCell.xib in Resources */,
 				D04CC44025D04CF000BCAC81 /* Main.storyboard in Resources */,
 			);
