@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -23,6 +23,7 @@
 		D059D16825D1790000285279 /* FilterSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059D16725D1790000285279 /* FilterSettingsViewController.swift */; };
 		D059D18C25D3D93E00285279 /* Dinner+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059D18A25D3D93E00285279 /* Dinner+CoreDataClass.swift */; };
 		D059D18D25D3D93E00285279 /* Dinner+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059D18B25D3D93E00285279 /* Dinner+CoreDataProperties.swift */; };
+		D059D1A925D6A90A00285279 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059D1A825D6A90A00285279 /* FirebaseManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 		D059D16725D1790000285279 /* FilterSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterSettingsViewController.swift; sourceTree = "<group>"; };
 		D059D18A25D3D93E00285279 /* Dinner+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dinner+CoreDataClass.swift"; sourceTree = "<group>"; };
 		D059D18B25D3D93E00285279 /* Dinner+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dinner+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		D059D1A825D6A90A00285279 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		E59F4DDF2CDDEC363E2F3882 /* Pods-TinderDinner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinderDinner.release.xcconfig"; path = "Target Support Files/Pods-TinderDinner/Pods-TinderDinner.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -126,6 +128,7 @@
 			children = (
 				D059D16225D139D400285279 /* CoreDataClasses */,
 				D059D15325D136C500285279 /* SettingsManager.swift */,
+				D059D1A825D6A90A00285279 /* FirebaseManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -155,7 +158,6 @@
 				C6FBA5618E9473D53F2B4A25 /* Pods-TinderDinner.debug.xcconfig */,
 				E59F4DDF2CDDEC363E2F3882 /* Pods-TinderDinner.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -274,6 +276,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D059D1A925D6A90A00285279 /* FirebaseManager.swift in Sources */,
 				D059D15B25D1395800285279 /* DatabaseManager.swift in Sources */,
 				D059D18C25D3D93E00285279 /* Dinner+CoreDataClass.swift in Sources */,
 				D04CC43D25D04CF000BCAC81 /* CardViewController.swift in Sources */,

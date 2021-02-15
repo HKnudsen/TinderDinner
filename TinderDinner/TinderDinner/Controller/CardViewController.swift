@@ -19,7 +19,7 @@ class CardViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
+        isMultipleUsersSwith.isOn = false
         cardView.delegate = self
         cardView.dataSource = self
         
@@ -39,9 +39,26 @@ class CardViewController: UIViewController {
         do { try databaseManager.context.save() }
         catch let error { print(error) }
     }
+    
+    func joinPressed() {
+        print("Join")
+    }
+    
+    func createPressed() {
+        print("Create")
+    }
+    
     @IBAction func switchPressed(_ sender: UISwitch) {
         if sender.isOn {
             let alertController = UIAlertController(title: "Connect With Someone", message: "Do you want to create or join a room?", preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "Join", style: .default, handler: { (action) in
+                self.joinPressed()
+            }))
+            alertController.addAction(UIAlertAction(title: "Create", style: .default, handler: { (action) in
+                self.createPressed()
+            }))
+            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            present(alertController, animated: true, completion: nil)
             
         }
     }

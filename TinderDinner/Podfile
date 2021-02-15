@@ -7,5 +7,6 @@ target 'TinderDinner' do
 
   # Pods for TinderDinner
 pod "Koloda"
+pod 'Firebase/Firestore'
 
 end
