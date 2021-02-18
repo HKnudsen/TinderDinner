@@ -1,8 +1,8 @@
 //
 //  Dinner+CoreDataClass.swift
-//  TinderDinner
+//  
 //
-//  Created by Henrik Bouwer Knudsen on 10/02/2021.
+//  Created by Henrik Bouwer Knudsen on 18/02/2021.
 //
 //
 

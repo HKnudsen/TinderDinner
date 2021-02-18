@@ -34,7 +34,12 @@ struct DatabaseManager {
     }
     
     mutating func addToWantedDinner(with dinner: Dinner) {
-        self.wantedDinners?.append(dinner)
+        if self.wantedDinners == nil {
+            self.wantedDinners = [dinner]
+        } else {
+            self.wantedDinners?.append(dinner)
+        }
+        
     }
     
     mutating func addNewIngredient(ingredient: String) {

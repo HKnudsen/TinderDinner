@@ -1,8 +1,8 @@
 //
 //  Dinner+CoreDataProperties.swift
-//  TinderDinner
+//  
 //
-//  Created by Henrik Bouwer Knudsen on 10/02/2021.
+//  Created by Henrik Bouwer Knudsen on 18/02/2021.
 //
 //
 
@@ -19,9 +19,6 @@ extension Dinner {
     @NSManaged public var ingredients: [String]?
     @NSManaged public var name: String?
     @NSManaged public var origin: String?
-
-}
-
-extension Dinner : Identifiable {
+    @NSManaged public var howToMake: String?
 
 }

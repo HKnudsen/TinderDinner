@@ -74,7 +74,9 @@ class CardViewController: UIViewController {
             alertController.addAction(UIAlertAction(title: "Create", style: .default, handler: { (action) in
                 self.createPressed()
             }))
-            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+                self.isMultipleUsersSwith.setOn(false, animated: true)
+            }))
             present(alertController, animated: true, completion: nil)
             
         }
@@ -111,8 +113,24 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
         return parentView
     }
     
+    func koloda(_ koloda: KolodaView, allowedDirectionsForIndex index: Int) -> [SwipeResultDirection] {
+        return [.left, .right, .up]
+    }
+    
     func koloda(_ koloda: KolodaView, didSwipeCardAt index: Int, in direction: SwipeResultDirection) {
-        print(direction)
+        // Save
+        if direction == SwipeResultDirection.right {
+            guard let items = databaseManager.items else {
+                fatalError("No items found at databaseManager: 118 CardVC")
+            }
+            databaseManager.addToWantedDinner(with: items[index])
+        // Dont save
+        } else if direction == SwipeResultDirection.left {
+            
+        } else if direction == SwipeResultDirection.up {
+            // TODO: End the swiping and go to dinner at index
+            print("UP!")
+        }
     }
     
     func kolodaNumberOfCards(_ koloda: KolodaView) -> Int {
