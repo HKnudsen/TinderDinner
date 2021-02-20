@@ -33,9 +33,11 @@ class CardViewController: UIViewController {
         
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
-        databaseManager.addNewIngredient(ingredient: "Dough")
+//        databaseManager.addNewIngredient(ingredient: "Dough")
         databaseManager.loadItems()
-        databaseManager.removeDinnersWith(filter: databaseManager.unwantedIngredients!)
+//        databaseManager.removeDinnersWith(filter: databaseManager.unwantedIngredients!)
+        print(databaseManager.items)
+
     }
     
     func addDinnerTest() {
@@ -43,6 +45,7 @@ class CardViewController: UIViewController {
         dinner.ingredients = ["Milk", "Dough"]
         dinner.name = "Second Best Dinner"
         dinner.origin = "Sweeden"
+        dinner.howToMake = ["Mix milk and dough", "Make make", "Done!"]
         
         do { try databaseManager.context.save() }
         catch let error { print(error) }
@@ -146,8 +149,6 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
             return view
         }()
         
-
-        
         parentView.addSubview(imgView)
         parentView.addSubview(bottomView)
         bottomView.addSubview(stackView)
@@ -191,19 +192,28 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
         imgView.layer.cornerRadius = 20
         imgView.clipsToBounds = true
         
-        for item in testIngredients {
-            let ingredientText: UITextView = {
-                let view = UITextView()
-                view.text = item
-                view.textColor = .green
-                view.textAlignment = .center
-                return view
-            }()
-            
-            rightList.addArrangedSubview(ingredientText)
-            
-    
+        databaseManager.loadItems()
+        
+        if let items = databaseManager.items {
+            for (k, item) in items.enumerated() {
+                if let howToMake = item.howToMake {
+                    for (j, step) in howToMake.enumerated() {
+                        let ingredientText: UITextView = {
+                            let view = UITextView()
+                            view.text = "\(j)" + ": " + step
+                            view.textAlignment = .center
+                            return view
+                        }()
+                        rightList.addArrangedSubview(ingredientText)
+                    }
+
+                }
+
+            }
         }
+
+
+        
         
         for item in testIngredients {
             let ingredientText: UITextView = {
@@ -245,7 +255,7 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
     }
     
     func kolodaNumberOfCards(_ koloda: KolodaView) -> Int {
-        return 2
+        return databaseManager.items?.count ?? 2
     }
     
     func kolodaDidRunOutOfCards(_ koloda: KolodaView) {
