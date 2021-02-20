@@ -182,9 +182,9 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
 //        leftList.leadingAnchor.constraint(equalTo: leftBottomView.leadingAnchor).isActive = true
 //        leftList.trailingAnchor.constraint(equalTo: leftBottomView.trailingAnchor).isActive = true
         
-        stackView.centerInParent(parent: bottomView)
-        leftList.centerInParent(parent: leftBottomView)
-        rightList.centerInParent(parent: rightBottomView)
+        stackView.fillInParent(parent: bottomView)
+        leftList.fillInParent(parent: leftBottomView)
+        rightList.fillInParent(parent: rightBottomView)
     
     
         parentView.layer.cornerRadius = 20
@@ -212,9 +212,6 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
             }
         }
 
-
-        
-        
         for item in testIngredients {
             let ingredientText: UITextView = {
                 let view = UITextView()
@@ -223,8 +220,7 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
                 view.textAlignment = .center
                 return view
             }()
-            
-            
+        
             leftList.addArrangedSubview(ingredientText)
     
         }

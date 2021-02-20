@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIView {
-    func centerInParent(parent: UIView) {
+    func fillInParent(parent: UIView) {
         translatesAutoresizingMaskIntoConstraints = false
         
         topAnchor.constraint(equalTo: parent.topAnchor).isActive = true
@@ -16,5 +16,7 @@ extension UIView {
         bottomAnchor.constraint(equalTo: parent.bottomAnchor).isActive = true
         leadingAnchor.constraint(equalTo: parent.leadingAnchor).isActive = true
     }
+    
+    
     
 }
