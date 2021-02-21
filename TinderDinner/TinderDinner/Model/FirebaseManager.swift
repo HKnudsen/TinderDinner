@@ -42,5 +42,24 @@ struct FirebaseManager {
         let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
         dbRef.delete()
     }
+    
+    func createGroup(with groupId: Int) {
+        let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
+        dbRef.setData(<#T##documentData: [String : Any]##[String : Any]#>, mergeFields: <#T##[Any]#>)
+        
+    }
+    
+    
+    func initiateEventListenerFor(groupCode: Int, completion: @escaping () -> Void) {
+        Firestore.firestore().collection("Groups").document("\(groupCode)").addSnapshotListener { (document, error) in
+            if let document = document {
+                completion()
+            } else {
+                if let error = error {
+                    print("Error getting snapshot from eventlistener: Firebasemanager: \(error)")
+                }
+            }
+        }
+    }
 }
 

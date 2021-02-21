@@ -16,7 +16,4 @@ extension UIView {
         bottomAnchor.constraint(equalTo: parent.bottomAnchor).isActive = true
         leadingAnchor.constraint(equalTo: parent.leadingAnchor).isActive = true
     }
-    
-    
-    
 }

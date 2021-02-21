@@ -62,8 +62,24 @@ class CardViewController: UIViewController {
                 if let groupId = self.groupId {
                     self.groupCodeLabel.text = "\(groupId)"
                 }
+            }
+            if let groupId = self.groupId {
+                
+                let waitingForParticipantsController = UIAlertController(title: "\(groupId)", message: "Waiting for participants", preferredStyle: .alert)
+                waitingForParticipantsController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+                    self.dismiss(animated: true, completion: nil)
+                }))
+                
+                let firebaseEventListener = self.firebaseManager.initiateEventListenerFor(groupCode: groupId) {
+                    waitingForParticipantsController.dismiss(animated: true) {
+                        print("Participants")
+                    }
+                }
+                
                 
             }
+           
+
         }
         
     }
@@ -172,20 +188,9 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
         bottomView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor, constant: -10).isActive = true
         bottomView.topAnchor.constraint(equalTo: imgView.bottomAnchor).isActive = true
         
-//        stackView.bottomAnchor.constraint(equalTo: bottomView.bottomAnchor).isActive = true
-//        stackView.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor).isActive = true
-//        stackView.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor).isActive = true
-//        stackView.topAnchor.constraint(equalTo: bottomView.topAnchor).isActive = true
-        
-//        leftList.bottomAnchor.constraint(equalTo: leftBottomView.bottomAnchor).isActive = true
-//        leftList.topAnchor.constraint(equalTo: leftBottomView.topAnchor).isActive = true
-//        leftList.leadingAnchor.constraint(equalTo: leftBottomView.leadingAnchor).isActive = true
-//        leftList.trailingAnchor.constraint(equalTo: leftBottomView.trailingAnchor).isActive = true
-        
         stackView.fillInParent(parent: bottomView)
         leftList.fillInParent(parent: leftBottomView)
         rightList.fillInParent(parent: rightBottomView)
-    
     
         parentView.layer.cornerRadius = 20
         parentView.autoresizesSubviews = true
@@ -206,9 +211,7 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
                         }()
                         rightList.addArrangedSubview(ingredientText)
                     }
-
                 }
-
             }
         }
 
