@@ -10,6 +10,9 @@ import Firebase
 
 struct FirebaseManager {
     
+    var activeEventListener: ListenerRegistration?
+    
+    // MARK: - ID Section
     func getUsedIds(completion: @escaping ([Int], Error?) -> Void) {
         let dbRef = Firestore.firestore().collection("Groups")
         var documentIdArray = [Int]()
@@ -43,23 +46,53 @@ struct FirebaseManager {
         dbRef.delete()
     }
     
+    //MARK: - Group Edit Section
+    
     func createGroup(with groupId: Int) {
         let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
-        dbRef.setData(<#T##documentData: [String : Any]##[String : Any]#>, mergeFields: <#T##[Any]#>)
-        
+        let newGroup = GroupStructure(participants: 1, acceptedDinners: ["none"], swipingSessionRunning: false, removedIngredients: [String]())
+        do { try dbRef.setData(from: newGroup) }
+        catch let error { print(error) }
     }
     
+    // Call this function to transform a DocumentSnapshot to a Swift compatible struct
+    func getFirebaseObject(document: DocumentSnapshot, completion: @escaping(GroupStructure) -> Void) {
+        let result = Result {
+            try document.data(as: GroupStructure.self)
+        }
+        
+        switch result {
+        case .success(let response):
+            if let response = response {
+                completion(response)
+            } else {
+                print("Document Doesnt exist")
+            }
+        case .failure(let error):
+            print(error)
+
+        }
+    }
     
-    func initiateEventListenerFor(groupCode: Int, completion: @escaping () -> Void) {
-        Firestore.firestore().collection("Groups").document("\(groupCode)").addSnapshotListener { (document, error) in
+    mutating func initiateEventListenerFor(groupCode: Int, completion: @escaping (DocumentSnapshot) -> Void) {
+         let listener = Firestore.firestore().collection("Groups").document("\(groupCode)").addSnapshotListener { (document, error) in
             if let document = document {
-                completion()
+                completion(document)
             } else {
                 if let error = error {
                     print("Error getting snapshot from eventlistener: Firebasemanager: \(error)")
                 }
             }
         }
+        self.activeEventListener = listener
+        
     }
+    
+    mutating func removeEventListener() {
+        self.activeEventListener?.remove()
+        self.activeEventListener = nil
+    }
+    
+    
 }
 

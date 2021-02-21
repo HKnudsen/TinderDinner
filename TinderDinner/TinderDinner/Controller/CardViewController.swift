@@ -8,6 +8,9 @@
 import UIKit
 import CoreData
 import Koloda
+import Firebase
+
+// Figure out a way to merge data from swiping to avoid overwrites when using multiple users. ArrayUnion doesnt work.
 
 class CardViewController: UIViewController {
 
@@ -21,6 +24,7 @@ class CardViewController: UIViewController {
     var groupId: Int? {
         willSet {
             print(newValue)
+            groupCodeLabel.text = "\(newValue)"
         }
     }
     
@@ -52,7 +56,41 @@ class CardViewController: UIViewController {
     }
     
     func joinPressed() {
-        print("Join")
+        let joinGroupController = UIAlertController(title: "Join", message: "Enter group code", preferredStyle: .alert)
+        joinGroupController.addTextField()
+        joinGroupController.textFields![0].delegate = self
+        joinGroupController.textFields![0].smartInsertDeleteType = UITextSmartInsertDeleteType.no
+        joinGroupController.textFields![0].keyboardType = .numberPad
+        
+        joinGroupController.addAction(UIAlertAction(title: "Join", style: .default, handler: { (action) in
+            if let inputCode = joinGroupController.textFields![0].text {
+                Firestore.firestore().collection("Groups").document(inputCode).getDocument { (document, error) in
+                    if let document = document {
+                        if document.exists {
+                            self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
+                                self.groupId = Int(inputCode)
+                                self.firebaseManager.initiateEventListenerFor(groupCode: Int(inputCode)!) { (document) in
+                                    self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
+                                        print(groupStructure)
+                                    }
+                                }
+                            }
+                        } else {
+                            print("Doesnt exist vc")
+                        }
+
+                    }
+                }
+            }
+            
+        }))
+        
+        joinGroupController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+            self.dismiss(animated: true, completion: nil)
+            self.isMultipleUsersSwith.setOn(false, animated: true)
+        }))
+        
+        self.present(joinGroupController, animated: true, completion: nil)
     }
     
     func createPressed() {
@@ -65,23 +103,32 @@ class CardViewController: UIViewController {
             }
             if let groupId = self.groupId {
                 
-                let waitingForParticipantsController = UIAlertController(title: "\(groupId)", message: "Waiting for participants", preferredStyle: .alert)
+                let waitingForParticipantsController = UIAlertController(title: "\(groupId)", message: "Waiting for participants \n Number of participants: 1", preferredStyle: .alert)
                 waitingForParticipantsController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
                     self.dismiss(animated: true, completion: nil)
+                    self.isMultipleUsersSwith.setOn(false, animated: true)
+                    
+                    self.firebaseManager.removeEventListener()
+                    
+                }))
+                waitingForParticipantsController.addAction(UIAlertAction(title: "Start", style: .default, handler: { (actuin) in
+                    self.dismiss(animated: true) {
+                        print("Starting online session")
+                        self.firebaseManager.removeEventListener()
+                    }
                 }))
                 
-                let firebaseEventListener = self.firebaseManager.initiateEventListenerFor(groupCode: groupId) {
-                    waitingForParticipantsController.dismiss(animated: true) {
-                        print("Participants")
+                self.present(waitingForParticipantsController, animated: true, completion: nil)
+                self.firebaseManager.createGroup(with: groupId)
+                
+                self.firebaseManager.initiateEventListenerFor(groupCode: groupId) { (document) in
+                    self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
+                        waitingForParticipantsController.message = "Waiting for participants \n Number of participants: \(groupStructure.participants)"
+                        print("Listener ran")
                     }
                 }
-                
-                
             }
-           
-
         }
-        
     }
     
     @IBAction func switchPressed(_ sender: UISwitch) {
@@ -103,13 +150,14 @@ class CardViewController: UIViewController {
     let testIngredients = ["First", "Second", "Third", "Fourth", "Last"]
 }
 
+
+
+
 // MARK: - Koloda Section
 
 extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
 
     func koloda(_ koloda: KolodaView, viewForCardAt index: Int) -> UIView {
-        
-        // Kanskje bruke tableview til ingredients?
         
         let parentView = UIView(frame: CGRect(x: 0, y: 0, width: cardView.frame.size.width, height: cardView.frame.size.height))
         let imgView = UIImageView(image: UIImage(named: "ironman\(index + 1)"))
@@ -262,4 +310,24 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
         performSegue(withIdentifier: "resultsPage", sender: self)
     }
 }
+
+
+
+// MARK:- UITextField Section
+// UITextFieldDelegate for UIAlertController
+
+extension CardViewController: UITextFieldDelegate {
+    // Limits length to 5
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let textFieldText = textField.text, let rangeOfTextToReplace = Range(range, in: textFieldText) else {
+            return false
+        }
+        let substringToReplace = textFieldText[rangeOfTextToReplace]
+        let count = textFieldText.count - substringToReplace.count + string.count
+        return count <= 5
+    }
+}
+
+
+
 

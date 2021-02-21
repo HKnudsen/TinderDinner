@@ -8,5 +8,6 @@ target 'TinderDinner' do
   # Pods for TinderDinner
 pod "Koloda"
 pod 'Firebase/Firestore'
+pod 'FirebaseFirestoreSwift', '~> 7.0-beta'
 
 end
