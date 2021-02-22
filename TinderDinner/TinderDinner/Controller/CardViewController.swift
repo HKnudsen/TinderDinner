@@ -18,6 +18,9 @@ class CardViewController: UIViewController {
     @IBOutlet weak var isMultipleUsersSwith: UISwitch!
     @IBOutlet weak var groupCodeLabel: UILabel!
     
+    @IBOutlet weak var popupContainer: UIView!
+    @IBOutlet weak var popupImageView: UIImageView!
+    
     var databaseManager = DatabaseManager.shared
     var firebaseManager = FirebaseManager()
     
@@ -34,6 +37,10 @@ class CardViewController: UIViewController {
         isMultipleUsersSwith.isOn = false
         cardView.delegate = self
         cardView.dataSource = self
+        popupContainer.alpha = 0.0
+        
+        popupContainer.layer.cornerRadius = 20
+        popupImageView.layer.cornerRadius = 20
         
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
@@ -41,8 +48,8 @@ class CardViewController: UIViewController {
         databaseManager.loadItems()
 //        databaseManager.removeDinnersWith(filter: databaseManager.unwantedIngredients!)
         print(databaseManager.items)
-
     }
+    
     
     func addDinnerTest() {
         let dinner = Dinner(context: databaseManager.context)
@@ -78,11 +85,9 @@ class CardViewController: UIViewController {
                         } else {
                             print("Doesnt exist vc")
                         }
-
                     }
                 }
             }
-            
         }))
         
         joinGroupController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
@@ -104,13 +109,14 @@ class CardViewController: UIViewController {
             if let groupId = self.groupId {
                 
                 let waitingForParticipantsController = UIAlertController(title: "\(groupId)", message: "Waiting for participants \n Number of participants: 1", preferredStyle: .alert)
+                
                 waitingForParticipantsController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
                     self.dismiss(animated: true, completion: nil)
                     self.isMultipleUsersSwith.setOn(false, animated: true)
                     
                     self.firebaseManager.removeEventListener()
-                    
                 }))
+                
                 waitingForParticipantsController.addAction(UIAlertAction(title: "Start", style: .default, handler: { (actuin) in
                     self.dismiss(animated: true) {
                         print("Starting online session")
@@ -149,7 +155,6 @@ class CardViewController: UIViewController {
     }
     let testIngredients = ["First", "Second", "Third", "Fourth", "Last"]
 }
-
 
 
 
@@ -286,28 +291,59 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
     }
     
     func koloda(_ koloda: KolodaView, didSwipeCardAt index: Int, in direction: SwipeResultDirection) {
-        // Save
-        if direction == SwipeResultDirection.right {
-            guard let items = databaseManager.items else {
-                fatalError("No items found at databaseManager: 118 CardVC")
+        guard let items = databaseManager.items else {
+            fatalError("No items found at databaseManager: 118 CardVC")
+        }
+        
+        if isMultipleUsersSwith.isOn == true {
+            // Multiple Users
+            switch direction {
+            case SwipeResultDirection.right:
+                print("Swipe right multiuser")
+            case SwipeResultDirection.left:
+                print("Swipe left multiuser")
+            case SwipeResultDirection.up:
+                print("Swipe up multiuser")
+            default:
+                fatalError("Error in didSwipeCardAt")
             }
-            //databaseManager.addToWantedDinner(with: items[index])
-        // Dont save
-        } else if direction == SwipeResultDirection.left {
-            
-        } else if direction == SwipeResultDirection.up {
-            // TODO: End the swiping and go to dinner at index
-            print("UP!")
+        } else {
+            // Single User
+            switch direction {
+            case SwipeResultDirection.right:
+                databaseManager.addToWantedDinner(with: items[index])
+            case SwipeResultDirection.left:
+                print("Swipe left singleuser")
+            case SwipeResultDirection.up:
+                print("Swipe up singleuser")
+            default:
+                fatalError("Error in didSwipeCardAt")
+            }
         }
     }
     
     func kolodaNumberOfCards(_ koloda: KolodaView) -> Int {
-        return databaseManager.items?.count ?? 2
+        databaseManager.loadItems()
+        return databaseManager.items?.count ?? 0
     }
     
     func kolodaDidRunOutOfCards(_ koloda: KolodaView) {
-        // Perform segue to results page
-        performSegue(withIdentifier: "resultsPage", sender: self)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(identifier: "SelectedDinnerViewController")
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    func koloda(_ koloda: KolodaView, draggedCardWithPercentage finishPercentage: CGFloat, in direction: SwipeResultDirection) {
+        print(finishPercentage, direction)
+        if finishPercentage > 10 {
+            popupContainer.alpha = finishPercentage / 95
+//            popupImageView.alpha = finishPercentage
+        }
+    }
+    
+    func kolodaPanFinished(_ koloda: KolodaView, card: DraggableCardView) {
+        popupContainer.alpha = 0.0
     }
 }
 

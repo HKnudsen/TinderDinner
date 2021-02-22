@@ -45,7 +45,9 @@ struct FirebaseManager {
         let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
         dbRef.delete()
     }
+
     
+
     //MARK: - Group Edit Section
     
     func createGroup(with groupId: Int) {
@@ -85,12 +87,15 @@ struct FirebaseManager {
             }
         }
         self.activeEventListener = listener
-        
     }
     
     mutating func removeEventListener() {
         self.activeEventListener?.remove()
         self.activeEventListener = nil
+    }
+    
+    func appendToFirebase(with dinnerName: String) {
+        
     }
     
     

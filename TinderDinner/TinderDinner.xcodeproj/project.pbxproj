@@ -29,6 +29,8 @@
 		D059D1D725E15A8700285279 /* Dinner+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059D1D425E15A8700285279 /* Dinner+CoreDataClass.swift */; };
 		D059D1EB25E2884900285279 /* GroupStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059D1EA25E2884900285279 /* GroupStructure.swift */; };
 		D059D20225E289E700285279 /* GroupStructureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059D20125E289E700285279 /* GroupStructureManager.swift */; };
+		D059D20825E2D01C00285279 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059D20725E2D01C00285279 /* HeaderView.swift */; };
+		D059D20B25E2D75500285279 /* StretchyHeaderLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059D20A25E2D75500285279 /* StretchyHeaderLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +59,8 @@
 		D059D1D525E15A8700285279 /* Dinner+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Dinner+CoreDataProperties.swift"; path = "/Users/henrikbouwerknudsen/Documents/Sabulu/MiddagTinder/TinderDinner/TinderDinner/TinderDinner/Model/CoreDataClasses/Dinner+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		D059D1EA25E2884900285279 /* GroupStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupStructure.swift; sourceTree = "<group>"; };
 		D059D20125E289E700285279 /* GroupStructureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupStructureManager.swift; sourceTree = "<group>"; };
+		D059D20725E2D01C00285279 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		D059D20A25E2D75500285279 /* StretchyHeaderLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StretchyHeaderLayout.swift; sourceTree = "<group>"; };
 		E59F4DDF2CDDEC363E2F3882 /* Pods-TinderDinner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinderDinner.release.xcconfig"; path = "Target Support Files/Pods-TinderDinner/Pods-TinderDinner.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -129,6 +133,7 @@
 		D04CC45225D128DA00BCAC81 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				D059D20D25E2DB8B00285279 /* CollectionViewHeader */,
 				D04CC43E25D04CF000BCAC81 /* Main.storyboard */,
 				D04CC44625D04CF500BCAC81 /* LaunchScreen.storyboard */,
 				D059D14D25D12E9E00285279 /* SettingsTableViewCell.xib */,
@@ -181,6 +186,15 @@
 				D059D20125E289E700285279 /* GroupStructureManager.swift */,
 			);
 			path = GroupModels;
+			sourceTree = "<group>";
+		};
+		D059D20D25E2DB8B00285279 /* CollectionViewHeader */ = {
+			isa = PBXGroup;
+			children = (
+				D059D20725E2D01C00285279 /* HeaderView.swift */,
+				D059D20A25E2D75500285279 /* StretchyHeaderLayout.swift */,
+			);
+			path = CollectionViewHeader;
 			sourceTree = "<group>";
 		};
 		E8AE9B230468F04FA9ADCCCE /* Pods */ = {
@@ -314,11 +328,13 @@
 				D059D1C925E1553D00285279 /* ViewExtenstion.swift in Sources */,
 				D059D1EB25E2884900285279 /* GroupStructure.swift in Sources */,
 				D04CC43D25D04CF000BCAC81 /* CardViewController.swift in Sources */,
+				D059D20825E2D01C00285279 /* HeaderView.swift in Sources */,
 				D04CC43925D04CF000BCAC81 /* AppDelegate.swift in Sources */,
 				D059D16825D1790000285279 /* FilterSettingsViewController.swift in Sources */,
 				D059D14E25D12E9E00285279 /* SettingsTableViewCell.swift in Sources */,
 				D059D1D625E15A8700285279 /* Dinner+CoreDataProperties.swift in Sources */,
 				D059D15425D136C500285279 /* SettingsManager.swift in Sources */,
+				D059D20B25E2D75500285279 /* StretchyHeaderLayout.swift in Sources */,
 				D04CC43B25D04CF000BCAC81 /* SceneDelegate.swift in Sources */,
 				D059D1D725E15A8700285279 /* Dinner+CoreDataClass.swift in Sources */,
 				D04CC45525D1294300BCAC81 /* SettingsViewController.swift in Sources */,
