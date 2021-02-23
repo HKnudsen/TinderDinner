@@ -31,6 +31,9 @@
 		D059D20225E289E700285279 /* GroupStructureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059D20125E289E700285279 /* GroupStructureManager.swift */; };
 		D059D20825E2D01C00285279 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059D20725E2D01C00285279 /* HeaderView.swift */; };
 		D059D20B25E2D75500285279 /* StretchyHeaderLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059D20A25E2D75500285279 /* StretchyHeaderLayout.swift */; };
+		D059D21025E3F62800285279 /* DinnerYesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059D20F25E3F62800285279 /* DinnerYesListViewController.swift */; };
+		D059D21725E3FC2D00285279 /* DinnerListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059D21525E3FC2D00285279 /* DinnerListTableViewCell.swift */; };
+		D059D21825E3FC2D00285279 /* DinnerListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D059D21625E3FC2D00285279 /* DinnerListTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +64,9 @@
 		D059D20125E289E700285279 /* GroupStructureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupStructureManager.swift; sourceTree = "<group>"; };
 		D059D20725E2D01C00285279 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		D059D20A25E2D75500285279 /* StretchyHeaderLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StretchyHeaderLayout.swift; sourceTree = "<group>"; };
+		D059D20F25E3F62800285279 /* DinnerYesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DinnerYesListViewController.swift; sourceTree = "<group>"; };
+		D059D21525E3FC2D00285279 /* DinnerListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DinnerListTableViewCell.swift; sourceTree = "<group>"; };
+		D059D21625E3FC2D00285279 /* DinnerListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DinnerListTableViewCell.xib; sourceTree = "<group>"; };
 		E59F4DDF2CDDEC363E2F3882 /* Pods-TinderDinner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinderDinner.release.xcconfig"; path = "Target Support Files/Pods-TinderDinner/Pods-TinderDinner.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -121,11 +127,9 @@
 		D04CC45125D128D200BCAC81 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				D059D21225E3F63000285279 /* DinnerControllers */,
 				D059D16625D178E600285279 /* SettingsTab */,
-				D059D14C25D12E9E00285279 /* SettingsTableViewCell.swift */,
 				D04CC43C25D04CF000BCAC81 /* CardViewController.swift */,
-				D04CC45425D1294300BCAC81 /* SettingsViewController.swift */,
-				D059D1AE25DEA41C00285279 /* SelectedDinnerViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -133,6 +137,7 @@
 		D04CC45225D128DA00BCAC81 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				D059D21A25E3FCDF00285279 /* TableViewCells */,
 				D059D20D25E2DB8B00285279 /* CollectionViewHeader */,
 				D04CC43E25D04CF000BCAC81 /* Main.storyboard */,
 				D04CC44625D04CF500BCAC81 /* LaunchScreen.storyboard */,
@@ -166,6 +171,8 @@
 		D059D16625D178E600285279 /* SettingsTab */ = {
 			isa = PBXGroup;
 			children = (
+				D04CC45425D1294300BCAC81 /* SettingsViewController.swift */,
+				D059D14C25D12E9E00285279 /* SettingsTableViewCell.swift */,
 				D059D16725D1790000285279 /* FilterSettingsViewController.swift */,
 			);
 			path = SettingsTab;
@@ -195,6 +202,24 @@
 				D059D20A25E2D75500285279 /* StretchyHeaderLayout.swift */,
 			);
 			path = CollectionViewHeader;
+			sourceTree = "<group>";
+		};
+		D059D21225E3F63000285279 /* DinnerControllers */ = {
+			isa = PBXGroup;
+			children = (
+				D059D20F25E3F62800285279 /* DinnerYesListViewController.swift */,
+				D059D1AE25DEA41C00285279 /* SelectedDinnerViewController.swift */,
+			);
+			path = DinnerControllers;
+			sourceTree = "<group>";
+		};
+		D059D21A25E3FCDF00285279 /* TableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				D059D21525E3FC2D00285279 /* DinnerListTableViewCell.swift */,
+				D059D21625E3FC2D00285279 /* DinnerListTableViewCell.xib */,
+			);
+			path = TableViewCells;
 			sourceTree = "<group>";
 		};
 		E8AE9B230468F04FA9ADCCCE /* Pods */ = {
@@ -266,6 +291,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D04CC44825D04CF500BCAC81 /* LaunchScreen.storyboard in Resources */,
+				D059D21825E3FC2D00285279 /* DinnerListTableViewCell.xib in Resources */,
 				D04CC44525D04CF500BCAC81 /* Assets.xcassets in Resources */,
 				D059D1AC25DA98FC00285279 /* GoogleService-Info.plist in Resources */,
 				D059D14F25D12E9E00285279 /* SettingsTableViewCell.xib in Resources */,
@@ -329,6 +355,7 @@
 				D059D1EB25E2884900285279 /* GroupStructure.swift in Sources */,
 				D04CC43D25D04CF000BCAC81 /* CardViewController.swift in Sources */,
 				D059D20825E2D01C00285279 /* HeaderView.swift in Sources */,
+				D059D21725E3FC2D00285279 /* DinnerListTableViewCell.swift in Sources */,
 				D04CC43925D04CF000BCAC81 /* AppDelegate.swift in Sources */,
 				D059D16825D1790000285279 /* FilterSettingsViewController.swift in Sources */,
 				D059D14E25D12E9E00285279 /* SettingsTableViewCell.swift in Sources */,
@@ -340,6 +367,7 @@
 				D04CC45525D1294300BCAC81 /* SettingsViewController.swift in Sources */,
 				D04CC44325D04CF000BCAC81 /* TinderDinner.xcdatamodeld in Sources */,
 				D059D20225E289E700285279 /* GroupStructureManager.swift in Sources */,
+				D059D21025E3F62800285279 /* DinnerYesListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -95,6 +95,36 @@
             </objects>
             <point key="canvasLocation" x="879.71014492753625" y="-227.00892857142856"/>
         </scene>
+        <!--Dinner Yes List View Controller-->
+        <scene sceneID="wAc-PF-sYX">
+            <objects>
+                <viewController storyboardIdentifier="DinnerYesListViewController" id="KDj-8Q-q1K" customClass="DinnerYesListViewController" customModule="TinderDinner" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="oyF-if-0UN">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="o6r-pc-ChO">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vSy-0G-MGO"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="o6r-pc-ChO" firstAttribute="leading" secondItem="vSy-0G-MGO" secondAttribute="leading" id="DOU-kB-ukv"/>
+                            <constraint firstItem="o6r-pc-ChO" firstAttribute="trailing" secondItem="vSy-0G-MGO" secondAttribute="trailing" id="FOO-OG-X6v"/>
+                            <constraint firstItem="o6r-pc-ChO" firstAttribute="top" secondItem="oyF-if-0UN" secondAttribute="top" id="Qbe-Gd-DF1"/>
+                            <constraint firstAttribute="bottom" secondItem="o6r-pc-ChO" secondAttribute="bottom" id="bx1-Pz-x3N"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="listTableView" destination="o6r-pc-ChO" id="avm-sf-ntU"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qCM-lx-H1T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1813.0434782608697" y="-227.00892857142856"/>
+        </scene>
         <!--Selected Dinner View Controller-->
         <scene sceneID="ubT-IQ-gbI">
             <objects>
@@ -103,9 +133,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="IBF-H7-8Rc">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="IBF-H7-8Rc">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="862"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Yum-WV-rXv">
                                     <size key="itemSize" width="128" height="128"/>
@@ -127,6 +156,12 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="tXJ-Eb-AQC"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="IBF-H7-8Rc" firstAttribute="leading" secondItem="tXJ-Eb-AQC" secondAttribute="leading" id="5hD-Zd-k47"/>
+                            <constraint firstItem="IBF-H7-8Rc" firstAttribute="top" secondItem="ZFW-aF-Zb0" secondAttribute="top" id="bQB-Vr-jAP"/>
+                            <constraint firstItem="IBF-H7-8Rc" firstAttribute="trailing" secondItem="tXJ-Eb-AQC" secondAttribute="trailing" id="hrh-nd-T8W"/>
+                            <constraint firstItem="tXJ-Eb-AQC" firstAttribute="bottom" secondItem="IBF-H7-8Rc" secondAttribute="bottom" id="qTa-yx-Ohf"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="IBF-H7-8Rc" id="IPs-Km-xAc"/>
@@ -134,7 +169,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LwM-fl-fFz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1811.594202898551" y="-227.00892857142856"/>
+            <point key="canvasLocation" x="2771" y="-227"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="LlZ-lc-upa">

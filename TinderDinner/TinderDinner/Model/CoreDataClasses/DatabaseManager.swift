@@ -39,7 +39,6 @@ struct DatabaseManager {
         } else {
             self.wantedDinners?.append(dinner)
         }
-        
     }
     
     mutating func addNewIngredient(ingredient: String) {
@@ -63,5 +62,9 @@ struct DatabaseManager {
     mutating func loadItems(with request: NSFetchRequest<Dinner> = Dinner.fetchRequest()) {
         do { items = try context.fetch(request) }
         catch let error { print("Error getting data with fetch request: \(error)") }
+    }
+    
+    func addDinnerToFavourites(with Dinner: String) {
+        print("Added to favourites")
     }
 }

@@ -39,17 +39,19 @@ class CardViewController: UIViewController {
         cardView.dataSource = self
         popupContainer.alpha = 0.0
         
-        popupContainer.layer.cornerRadius = 20
+        popupContainer.layer.cornerRadius = 100
         popupImageView.layer.cornerRadius = 20
+        popupContainer.backgroundColor = .none
         
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+        
+//        addDinnerTest()
         
 //        databaseManager.addNewIngredient(ingredient: "Dough")
         databaseManager.loadItems()
 //        databaseManager.removeDinnersWith(filter: databaseManager.unwantedIngredients!)
         print(databaseManager.items)
     }
-    
     
     func addDinnerTest() {
         let dinner = Dinner(context: databaseManager.context)
@@ -76,6 +78,7 @@ class CardViewController: UIViewController {
                         if document.exists {
                             self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
                                 self.groupId = Int(inputCode)
+                                self.firebaseManager.activeGroupId = Int(inputCode)
                                 self.firebaseManager.initiateEventListenerFor(groupCode: Int(inputCode)!) { (document) in
                                     self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
                                         print(groupStructure)
@@ -107,20 +110,20 @@ class CardViewController: UIViewController {
                 }
             }
             if let groupId = self.groupId {
-                
+                self.firebaseManager.activeGroupId = groupId
                 let waitingForParticipantsController = UIAlertController(title: "\(groupId)", message: "Waiting for participants \n Number of participants: 1", preferredStyle: .alert)
                 
                 waitingForParticipantsController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
                     self.dismiss(animated: true, completion: nil)
                     self.isMultipleUsersSwith.setOn(false, animated: true)
                     
-                    self.firebaseManager.removeEventListener()
+                    self.firebaseManager.detachEventListener()
                 }))
                 
                 waitingForParticipantsController.addAction(UIAlertAction(title: "Start", style: .default, handler: { (actuin) in
                     self.dismiss(animated: true) {
                         print("Starting online session")
-                        self.firebaseManager.removeEventListener()
+                        self.firebaseManager.detachEventListener()
                     }
                 }))
                 
@@ -153,7 +156,6 @@ class CardViewController: UIViewController {
             
         }
     }
-    let testIngredients = ["First", "Second", "Third", "Fourth", "Last"]
 }
 
 
@@ -226,7 +228,6 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
         leftBottomView.addSubview(leftList)
         rightBottomView.addSubview(rightList)
         
-        
         // This enables autolayout for imgView
         imgView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -252,37 +253,26 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
         
         databaseManager.loadItems()
         
-        if let items = databaseManager.items {
-            for (k, item) in items.enumerated() {
-                if let howToMake = item.howToMake {
-                    for (j, step) in howToMake.enumerated() {
-                        let ingredientText: UITextView = {
-                            let view = UITextView()
-                            view.text = "\(j)" + ": " + step
-                            view.textAlignment = .center
-                            return view
-                        }()
-                        rightList.addArrangedSubview(ingredientText)
-                    }
-                }
+        if let allItems = databaseManager.items {
+            for (step, item) in allItems[index].howToMake!.enumerated() {
+                let stepText: UITextView = {
+                    let view = UITextView()
+                    view.text = "\(step): " + item
+                    view.textAlignment = .center
+                    return view
+                }()
+                rightList.addArrangedSubview(stepText)
+            }
+            for ingredient in allItems[index].ingredients! {
+                let ingredientText: UITextView = {
+                    let view = UITextView()
+                    view.text = "\(ingredient)"
+                    view.textAlignment = .center
+                    return view
+                }()
+                leftList.addArrangedSubview(ingredientText)
             }
         }
-
-        for item in testIngredients {
-            let ingredientText: UITextView = {
-                let view = UITextView()
-                view.text = item
-                view.textColor = .green
-                view.textAlignment = .center
-                return view
-            }()
-        
-            leftList.addArrangedSubview(ingredientText)
-    
-        }
-        
-
-        
         return parentView
     }
     
@@ -300,6 +290,7 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
             switch direction {
             case SwipeResultDirection.right:
                 print("Swipe right multiuser")
+                firebaseManager.appendToFirebase(with: "Test3", groupId: 8137)
             case SwipeResultDirection.left:
                 print("Swipe left multiuser")
             case SwipeResultDirection.up:
@@ -315,7 +306,10 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
             case SwipeResultDirection.left:
                 print("Swipe left singleuser")
             case SwipeResultDirection.up:
-                print("Swipe up singleuser")
+                if let itemName = items[index].name {
+                    databaseManager.addDinnerToFavourites(with: itemName)
+                }
+                
             default:
                 fatalError("Error in didSwipeCardAt")
             }
@@ -328,17 +322,31 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
     }
     
     func kolodaDidRunOutOfCards(_ koloda: KolodaView) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(identifier: "SelectedDinnerViewController")
-        vc.modalPresentationStyle = .fullScreen
-        self.present(vc, animated: true, completion: nil)
+        if isMultipleUsersSwith.isOn == true {
+            
+        } else {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//            let vc = storyboard.instantiateViewController(identifier: "SelectedDinnerViewController") as SelectedDinnerViewController
+            let vc = storyboard.instantiateViewController(identifier: "DinnerYesListViewController") as DinnerYesListViewController
+            vc.modalPresentationStyle = .fullScreen
+            vc.dinnerList = databaseManager.wantedDinners
+            
+            self.present(vc, animated: true, completion: nil)
+        }
+
     }
     
     func koloda(_ koloda: KolodaView, draggedCardWithPercentage finishPercentage: CGFloat, in direction: SwipeResultDirection) {
         print(finishPercentage, direction)
-        if finishPercentage > 10 {
+        if finishPercentage > 10  && direction == .right {
             popupContainer.alpha = finishPercentage / 95
-//            popupImageView.alpha = finishPercentage
+            popupImageView.image = .add
+        } else if finishPercentage > 10 && direction == .left {
+            popupContainer.alpha = finishPercentage / 95
+            popupImageView.image = .remove
+        } else if finishPercentage > 10 && direction == .up {
+            popupContainer.alpha = finishPercentage / 95
+            popupImageView.image = .strokedCheckmark
         }
     }
     

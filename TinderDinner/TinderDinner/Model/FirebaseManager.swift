@@ -11,6 +11,7 @@ import Firebase
 struct FirebaseManager {
     
     var activeEventListener: ListenerRegistration?
+    var activeGroupId: Int?
     
     // MARK: - ID Section
     func getUsedIds(completion: @escaping ([Int], Error?) -> Void) {
@@ -52,7 +53,7 @@ struct FirebaseManager {
     
     func createGroup(with groupId: Int) {
         let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
-        let newGroup = GroupStructure(participants: 1, acceptedDinners: ["none"], swipingSessionRunning: false, removedIngredients: [String]())
+        let newGroup = GroupStructure(participants: 1, acceptedDinners: [String](), swipingSessionRunning: false, removedIngredients: [String]())
         do { try dbRef.setData(from: newGroup) }
         catch let error { print(error) }
     }
@@ -75,6 +76,25 @@ struct FirebaseManager {
 
         }
     }
+    // Works for now. Might not work with multiple user input at the same time.
+    func appendToFirebase(with dinnerName: String, groupId: Int) {
+        let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
+        dbRef.getDocument { (document, error) in
+            if let document = document {
+                getFirebaseObject(document: document) { (groupStructure) in
+                    var groupData = groupStructure
+                    groupData.acceptedDinners.append(dinnerName)
+                    do { try dbRef.setData(from: groupData) }
+                    catch let error { print("Error transforming data to firebase: \(error)") }
+                }
+            }
+
+        }
+    }
+
+    
+    
+    // MARK: - Event Listener Section
     
     mutating func initiateEventListenerFor(groupCode: Int, completion: @escaping (DocumentSnapshot) -> Void) {
          let listener = Firestore.firestore().collection("Groups").document("\(groupCode)").addSnapshotListener { (document, error) in
@@ -89,14 +109,12 @@ struct FirebaseManager {
         self.activeEventListener = listener
     }
     
-    mutating func removeEventListener() {
+    mutating func detachEventListener() {
         self.activeEventListener?.remove()
         self.activeEventListener = nil
     }
     
-    func appendToFirebase(with dinnerName: String) {
-        
-    }
+
     
     
 }

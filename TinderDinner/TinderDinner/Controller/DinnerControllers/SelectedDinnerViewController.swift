@@ -14,6 +14,7 @@ class SelectedDinnerViewController: UIViewController {
     fileprivate let cellId = "cellId"
     fileprivate let headerId = "headerId"
     fileprivate let padding: CGFloat = 16
+    var dinner: Dinner?
     
     var headerView: HeaderView?
     
@@ -25,18 +26,17 @@ class SelectedDinnerViewController: UIViewController {
         
         setupCollectionViewLayout()
         setupCollectionView()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        // Stops animation to prevent system from crashing when trying to start an active animation on app re-open
-        headerView?.animator.stopAnimation(true)
-        headerView?.animator.finishAnimation(at: .current)
+        
+        print(dinner?.name)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
     
+    
+    
+    // MARK: - Layout & Animation Section
     fileprivate func setupCollectionView() {
         collectionView.backgroundColor                  = .blue
         collectionView.contentInsetAdjustmentBehavior   = .never
@@ -50,12 +50,18 @@ class SelectedDinnerViewController: UIViewController {
             layout.sectionInset = .init(top: padding, left: padding, bottom: padding, right: padding)
         }
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        // Stops animation to prevent system from crashing when trying to start an active animation on app re-open
+        headerView?.animator.stopAnimation(true)
+        headerView?.animator.finishAnimation(at: .current)
+    }
 }
 
-extension SelectedDinnerViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
 
-    
+
+// MARK: - UICollectionView
+extension SelectedDinnerViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 18
     }
@@ -64,7 +70,6 @@ extension SelectedDinnerViewController: UICollectionViewDelegate, UICollectionVi
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
         cell.backgroundColor = .black
         return cell
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -77,7 +82,10 @@ extension SelectedDinnerViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+
         return .init(width: view.frame.width, height: 340)
+        
+
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -86,15 +94,10 @@ extension SelectedDinnerViewController: UICollectionViewDelegate, UICollectionVi
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let contentOffsetY = scrollView.contentOffset.y
-        print(contentOffsetY)
-        
         if contentOffsetY > 0 {
             headerView?.animator.fractionComplete = 0
             return
         }
-        
         headerView?.animator.fractionComplete = abs(contentOffsetY / 100)
     }
-
-        
 }
