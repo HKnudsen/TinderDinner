@@ -9,6 +9,7 @@ import UIKit
 
 class DinnerYesListViewController: UIViewController {
     
+    var databaseManager = DatabaseManager.shared
     
     @IBOutlet weak var listTableView: UITableView!
     
@@ -23,17 +24,29 @@ class DinnerYesListViewController: UIViewController {
         let nib = UINib(nibName: "DinnerListTableViewCell", bundle: nil)
         listTableView.register(nib, forCellReuseIdentifier: cellReusableId)
         print(dinnerList)
+        print("ListVC: \(databaseManager.wantedDinners?.count)")
     }
 }
 
 extension DinnerYesListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let wantedDinners = databaseManager.wantedDinners {
+            return wantedDinners.count
+        }
         return 10
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = listTableView.dequeueReusableCell(withIdentifier: cellReusableId, for: indexPath) as! DinnerListTableViewCell
-        cell.dinnerImage.image = #imageLiteral(resourceName: "ironman1")
+        if let wantedDinners = databaseManager.wantedDinners {
+            guard let data = wantedDinners[indexPath.row].image else { fatalError("Error loading png data from CoreData") }
+            let image = UIImage(data: data)
+            cell.dinnerImage.image = image
+        } else {
+            cell.dinnerImage.image = #imageLiteral(resourceName: "ironman2")
+            print("Error ja")
+        }
+        
         cell.dinnerLabel.text = "Test text"
         return cell
     }

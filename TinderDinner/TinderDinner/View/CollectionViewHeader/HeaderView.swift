@@ -10,7 +10,7 @@ import UIKit
 class HeaderView: UICollectionReusableView {
     
     let imageView: UIImageView = {
-        let view = UIImageView(image: #imageLiteral(resourceName: "ironman1"))
+        let view = UIImageView(image: #imageLiteral(resourceName: "ironman2"))
         view.contentMode = .scaleAspectFill
         return view
     }()
@@ -29,7 +29,6 @@ class HeaderView: UICollectionReusableView {
         setupVisualEffectBlur()
     }
     
-        
     fileprivate func setupVisualEffectBlur() {
         self.addSubview(visualEffectView)
         animator.addAnimations {
@@ -38,9 +37,6 @@ class HeaderView: UICollectionReusableView {
         animator.fractionComplete = 0
         visualEffectView.fillInParent(parent: self)
         animator.pausesOnCompletion = true
-        
-        
-    
     }
     
     required init?(coder: NSCoder) {

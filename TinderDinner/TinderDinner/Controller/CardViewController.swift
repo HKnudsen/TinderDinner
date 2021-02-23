@@ -45,12 +45,11 @@ class CardViewController: UIViewController {
         
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
-//        addDinnerTest()
-        
 //        databaseManager.addNewIngredient(ingredient: "Dough")
         databaseManager.loadItems()
 //        databaseManager.removeDinnersWith(filter: databaseManager.unwantedIngredients!)
         print(databaseManager.items)
+        print(UIDevice().type)
     }
     
     func addDinnerTest() {
@@ -59,6 +58,11 @@ class CardViewController: UIViewController {
         dinner.name = "Second Best Dinner"
         dinner.origin = "Sweeden"
         dinner.howToMake = ["Mix milk and dough", "Make make", "Done!"]
+        
+        let img = UIImage(named: "ironman1")
+        let imgData = img?.pngData()
+        
+        dinner.image = imgData
         
         do { try databaseManager.context.save() }
         catch let error { print(error) }
@@ -167,7 +171,7 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
     func koloda(_ koloda: KolodaView, viewForCardAt index: Int) -> UIView {
         
         let parentView = UIView(frame: CGRect(x: 0, y: 0, width: cardView.frame.size.width, height: cardView.frame.size.height))
-        let imgView = UIImageView(image: UIImage(named: "ironman\(index + 1)"))
+        let imgView = UIImageView(image: UIImage(named: "ironman2"))
         
         let bottomView: UIView = {
             let view = UIView()
@@ -303,6 +307,7 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
             switch direction {
             case SwipeResultDirection.right:
                 databaseManager.addToWantedDinner(with: items[index])
+                print(databaseManager.wantedDinners?.count)
             case SwipeResultDirection.left:
                 print("Swipe left singleuser")
             case SwipeResultDirection.up:

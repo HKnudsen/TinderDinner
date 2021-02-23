@@ -28,6 +28,7 @@ class SelectedDinnerViewController: UIViewController {
         setupCollectionView()
         
         print(dinner?.name)
+        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -82,10 +83,15 @@ extension SelectedDinnerViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-
-        return .init(width: view.frame.width, height: 340)
+        if UIDevice().type.rawValue == "iPad Pro 4 12.9\"" {
+            
+        }
         
-
+        if UIDevice().type == Model.iPadPro4_12_9 || UIDevice().type == Model.iPadPro3_12_9 || UIDevice().type == Model.iPadPro2_12_9 {
+            return .init(width: view.frame.width, height: 730)
+        }
+        
+        return .init(width: view.frame.width, height: 340)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

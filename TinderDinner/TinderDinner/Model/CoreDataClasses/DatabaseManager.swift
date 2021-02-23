@@ -10,7 +10,7 @@ import CoreData
 
 // Manages FetchRequests and results to the CoreData local backend
 
-struct DatabaseManager {
+class DatabaseManager {
     static let shared = DatabaseManager()
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -19,7 +19,7 @@ struct DatabaseManager {
     
     var wantedDinners: [Dinner]?
     
-    mutating func removeDinnersWith(filter: [String]) {
+    func removeDinnersWith(filter: [String]) {
         if var items = items {
             for (i, dinner) in items.enumerated() {
                 if let unwantedIngredients = unwantedIngredients, let ingredientsInDinner = dinner.ingredients {
@@ -33,7 +33,7 @@ struct DatabaseManager {
         }
     }
     
-    mutating func addToWantedDinner(with dinner: Dinner) {
+    func addToWantedDinner(with dinner: Dinner) {
         if self.wantedDinners == nil {
             self.wantedDinners = [dinner]
         } else {
@@ -41,7 +41,7 @@ struct DatabaseManager {
         }
     }
     
-    mutating func addNewIngredient(ingredient: String) {
+    func addNewIngredient(ingredient: String) {
         if self.unwantedIngredients == nil {
             self.unwantedIngredients = [ingredient]
         } else {
@@ -49,7 +49,7 @@ struct DatabaseManager {
         }
     }
     
-    mutating func removeIngredient(ingredient: String) {
+    func removeIngredient(ingredient: String) {
         if unwantedIngredients != nil {
             guard let indexOfIngredient = unwantedIngredients?.firstIndex(of: ingredient) else {
                 fatalError("Error getting index of ingredient") }
@@ -59,7 +59,7 @@ struct DatabaseManager {
         }
     }
     
-    mutating func loadItems(with request: NSFetchRequest<Dinner> = Dinner.fetchRequest()) {
+    func loadItems(with request: NSFetchRequest<Dinner> = Dinner.fetchRequest()) {
         do { items = try context.fetch(request) }
         catch let error { print("Error getting data with fetch request: \(error)") }
     }
