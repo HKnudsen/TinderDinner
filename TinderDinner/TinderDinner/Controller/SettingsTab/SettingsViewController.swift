@@ -46,10 +46,14 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let items = databaseManager.items {
-            print(items[indexPath.row])
+        switch indexPath.row {
+        case 0:
+            performSegue(withIdentifier: "filterSettings", sender: self)
+        case 1:
+            performSegue(withIdentifier: "goToFavourites", sender: self)
+        default:
+            print("clicked on tbv")
         }
-        
     }
     
 

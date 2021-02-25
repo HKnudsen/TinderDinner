@@ -2,10 +2,10 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/henrikbouwerknudsen/Documents/Sabulu/MiddagTinder/TinderDinner/TinderDinner/TinderDinner/Model/CoreDataClasses/Dinner+CoreDataClass.swift">
+      location = "group:/Users/henrikbouwerknudsen/Documents/Sabulu/MiddagTinder/TinderDinner/TinderDinner/TinderDinner/Model/Dinner+CoreDataClass.swift">
    </FileRef>
    <FileRef
-      location = "group:/Users/henrikbouwerknudsen/Documents/Sabulu/MiddagTinder/TinderDinner/TinderDinner/TinderDinner/Model/CoreDataClasses/Dinner+CoreDataProperties.swift">
+      location = "group:/Users/henrikbouwerknudsen/Documents/Sabulu/MiddagTinder/TinderDinner/TinderDinner/TinderDinner/Model/Dinner+CoreDataProperties.swift">
    </FileRef>
    <FileRef
       location = "group:TinderDinner.xcodeproj">

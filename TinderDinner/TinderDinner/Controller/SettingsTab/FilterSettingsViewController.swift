@@ -13,7 +13,9 @@ class FilterSettingsViewController: UIViewController {
     @IBOutlet weak var searchField: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
-    let databaseManager = DatabaseManager()
+    fileprivate let reuseIdentifier = "FilterTableViewCell"
+    
+    let databaseManager = DatabaseManager.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +23,8 @@ class FilterSettingsViewController: UIViewController {
         searchField.delegate    = self
         tableView.delegate      = self
         tableView.dataSource    = self
-        
+        let nib = UINib(nibName: "FilterTableViewCell", bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: reuseIdentifier)
     }
     
 
@@ -29,15 +32,15 @@ class FilterSettingsViewController: UIViewController {
 
 extension FilterSettingsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return databaseManager.allAllergens.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! FilterTableViewCell
+        cell.label.text = databaseManager.allAllergens[indexPath.row]
+        cell.accessoryType = .checkmark
         return cell
     }
-    
-    
 }
 
 extension FilterSettingsViewController: UISearchBarDelegate {

@@ -10,8 +10,6 @@ import CoreData
 import Koloda
 import Firebase
 
-// Figure out a way to merge data from swiping to avoid overwrites when using multiple users. ArrayUnion doesnt work.
-
 class CardViewController: UIViewController {
 
     @IBOutlet weak var cardView: KolodaView!
@@ -37,27 +35,30 @@ class CardViewController: UIViewController {
         isMultipleUsersSwith.isOn = false
         cardView.delegate = self
         cardView.dataSource = self
-        popupContainer.alpha = 0.0
         
-        popupContainer.layer.cornerRadius = 100
+//        popupContainer.alpha = 0.0
+//        popupContainer.layer.cornerRadius = 20
         popupImageView.layer.cornerRadius = 20
-        popupContainer.backgroundColor = .none
+//        popupContainer.backgroundColor = .none
         
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
-//        databaseManager.addNewIngredient(ingredient: "Dough")
-        databaseManager.loadItems()
-//        databaseManager.removeDinnersWith(filter: databaseManager.unwantedIngredients!)
+
+        
+//        addDinnerTest()
+//        databaseManager.doesNotContain(text: "Dairy")
+        databaseManager.filterWithMultipleAllergens(allergens: ["Dairy", "Gluten"])
         print(databaseManager.items)
         print(UIDevice().type)
     }
     
     func addDinnerTest() {
         let dinner = Dinner(context: databaseManager.context)
-        dinner.ingredients = ["Milk", "Dough"]
-        dinner.name = "Second Best Dinner"
+        dinner.ingredients = "Water;Dough;Milk"
+        dinner.name = "Third Best Dinner"
         dinner.origin = "Sweeden"
         dinner.howToMake = ["Mix milk and dough", "Make make", "Done!"]
+        dinner.allergens = "Gluten;Dairy"
         
         let img = UIImage(named: "ironman1")
         let imgData = img?.pngData()
@@ -322,8 +323,15 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
     }
     
     func kolodaNumberOfCards(_ koloda: KolodaView) -> Int {
+//        if databaseManager.unwantedAllergens == nil {
+//            databaseManager.loadItems()
+//            return databaseManager.items?.count ?? 0
+//        } else {
+//            databaseManager.doesNotContain(attribute: "allergens", text: "Dairy")
+//            return databaseManager.items?.count ?? 0
+//        }
         databaseManager.loadItems()
-        return databaseManager.items?.count ?? 0
+        return databaseManager.items?.count ?? 10
     }
     
     func kolodaDidRunOutOfCards(_ koloda: KolodaView) {
@@ -346,9 +354,11 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
         if finishPercentage > 10  && direction == .right {
             popupContainer.alpha = finishPercentage / 95
             popupImageView.image = .add
+
         } else if finishPercentage > 10 && direction == .left {
             popupContainer.alpha = finishPercentage / 95
             popupImageView.image = .remove
+
         } else if finishPercentage > 10 && direction == .up {
             popupContainer.alpha = finishPercentage / 95
             popupImageView.image = .strokedCheckmark
@@ -357,6 +367,10 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
     
     func kolodaPanFinished(_ koloda: KolodaView, card: DraggableCardView) {
         popupContainer.alpha = 0.0
+    }
+    
+    func kolodaSwipeThresholdRatioMargin(_ koloda: KolodaView) -> CGFloat? {
+        return .init(0.6)
     }
 }
 

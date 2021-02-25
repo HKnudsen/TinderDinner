@@ -2,7 +2,7 @@
 //  Dinner+CoreDataProperties.swift
 //  
 //
-//  Created by Henrik Bouwer Knudsen on 23/02/2021.
+//  Created by Henrik Bouwer Knudsen on 25/02/2021.
 //
 //
 
@@ -17,9 +17,10 @@ extension Dinner {
     }
 
     @NSManaged public var howToMake: [String]?
-    @NSManaged public var ingredients: [String]?
+    @NSManaged public var ingredients: String?
     @NSManaged public var name: String?
     @NSManaged public var origin: String?
     @NSManaged public var image: Data?
+    @NSManaged public var allergens: String?
 
 }

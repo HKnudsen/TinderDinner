@@ -10,11 +10,13 @@ import UIKit
 class SelectedDinnerViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var exitButton: UIButton!
     
     fileprivate let cellId = "cellId"
     fileprivate let headerId = "headerId"
     fileprivate let padding: CGFloat = 16
     var dinner: Dinner?
+    var instantiatedFrom: String?
     
     var headerView: HeaderView?
     
@@ -28,12 +30,29 @@ class SelectedDinnerViewController: UIViewController {
         setupCollectionView()
         
         print(dinner?.name)
+        exitButton.imageView?.image = .remove
+        let image = UIImage.remove
+        exitButton.setImage(image, for: .normal)
+        exitButton.setTitle("", for: .normal)
         
+        print(instantiatedFrom)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
+    
+
+    
+    
+    
+    @IBAction func exitPressed(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(identifier: instantiatedFrom ?? "FavouritesViewController")
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true, completion: nil)
+    }
+    
     
     
     

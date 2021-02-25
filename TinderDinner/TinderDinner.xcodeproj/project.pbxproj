@@ -33,8 +33,13 @@
 		D059D21725E3FC2D00285279 /* DinnerListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059D21525E3FC2D00285279 /* DinnerListTableViewCell.swift */; };
 		D059D21825E3FC2D00285279 /* DinnerListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D059D21625E3FC2D00285279 /* DinnerListTableViewCell.xib */; };
 		D070AF4D25E5806300969981 /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D070AF4C25E5806200969981 /* UIDeviceExtension.swift */; };
-		D090426025E58A97008DF8A2 /* Dinner+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = D090425E25E58A97008DF8A2 /* Dinner+CoreDataClass.swift */; };
-		D090426125E58A97008DF8A2 /* Dinner+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D090425F25E58A97008DF8A2 /* Dinner+CoreDataProperties.swift */; };
+		D090426425E5A804008DF8A2 /* FavouritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D090426325E5A804008DF8A2 /* FavouritesViewController.swift */; };
+		D090426825E5ABF0008DF8A2 /* FavouritesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D090426625E5ABEF008DF8A2 /* FavouritesTableViewCell.swift */; };
+		D090426925E5ABF0008DF8A2 /* FavouritesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D090426725E5ABEF008DF8A2 /* FavouritesTableViewCell.xib */; };
+		D090427225E7257E008DF8A2 /* Dinner+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = D090427025E7257E008DF8A2 /* Dinner+CoreDataClass.swift */; };
+		D090427325E7257E008DF8A2 /* Dinner+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D090427125E7257E008DF8A2 /* Dinner+CoreDataProperties.swift */; };
+		D090427825E73540008DF8A2 /* FilterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D090427625E73540008DF8A2 /* FilterTableViewCell.swift */; };
+		D090427925E73540008DF8A2 /* FilterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D090427725E73540008DF8A2 /* FilterTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,8 +72,13 @@
 		D059D21525E3FC2D00285279 /* DinnerListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DinnerListTableViewCell.swift; sourceTree = "<group>"; };
 		D059D21625E3FC2D00285279 /* DinnerListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DinnerListTableViewCell.xib; sourceTree = "<group>"; };
 		D070AF4C25E5806200969981 /* UIDeviceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDeviceExtension.swift; sourceTree = "<group>"; };
-		D090425E25E58A97008DF8A2 /* Dinner+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Dinner+CoreDataClass.swift"; path = "/Users/henrikbouwerknudsen/Documents/Sabulu/MiddagTinder/TinderDinner/TinderDinner/TinderDinner/Model/CoreDataClasses/Dinner+CoreDataClass.swift"; sourceTree = "<absolute>"; };
-		D090425F25E58A97008DF8A2 /* Dinner+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Dinner+CoreDataProperties.swift"; path = "/Users/henrikbouwerknudsen/Documents/Sabulu/MiddagTinder/TinderDinner/TinderDinner/TinderDinner/Model/CoreDataClasses/Dinner+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
+		D090426325E5A804008DF8A2 /* FavouritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesViewController.swift; sourceTree = "<group>"; };
+		D090426625E5ABEF008DF8A2 /* FavouritesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesTableViewCell.swift; sourceTree = "<group>"; };
+		D090426725E5ABEF008DF8A2 /* FavouritesTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FavouritesTableViewCell.xib; sourceTree = "<group>"; };
+		D090427025E7257E008DF8A2 /* Dinner+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Dinner+CoreDataClass.swift"; path = "/Users/henrikbouwerknudsen/Documents/Sabulu/MiddagTinder/TinderDinner/TinderDinner/TinderDinner/Model/Dinner+CoreDataClass.swift"; sourceTree = "<absolute>"; };
+		D090427125E7257E008DF8A2 /* Dinner+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Dinner+CoreDataProperties.swift"; path = "/Users/henrikbouwerknudsen/Documents/Sabulu/MiddagTinder/TinderDinner/TinderDinner/TinderDinner/Model/Dinner+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
+		D090427625E73540008DF8A2 /* FilterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTableViewCell.swift; sourceTree = "<group>"; };
+		D090427725E73540008DF8A2 /* FilterTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FilterTableViewCell.xib; sourceTree = "<group>"; };
 		E59F4DDF2CDDEC363E2F3882 /* Pods-TinderDinner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinderDinner.release.xcconfig"; path = "Target Support Files/Pods-TinderDinner/Pods-TinderDinner.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -162,8 +172,8 @@
 		D059D16225D139D400285279 /* CoreDataClasses */ = {
 			isa = PBXGroup;
 			children = (
-				D090425E25E58A97008DF8A2 /* Dinner+CoreDataClass.swift */,
-				D090425F25E58A97008DF8A2 /* Dinner+CoreDataProperties.swift */,
+				D090427025E7257E008DF8A2 /* Dinner+CoreDataClass.swift */,
+				D090427125E7257E008DF8A2 /* Dinner+CoreDataProperties.swift */,
 				D04CC44125D04CF000BCAC81 /* TinderDinner.xcdatamodeld */,
 				D059D15A25D1395800285279 /* DatabaseManager.swift */,
 			);
@@ -174,8 +184,8 @@
 			isa = PBXGroup;
 			children = (
 				D04CC45425D1294300BCAC81 /* SettingsViewController.swift */,
-				D059D14C25D12E9E00285279 /* SettingsTableViewCell.swift */,
 				D059D16725D1790000285279 /* FilterSettingsViewController.swift */,
+				D090426325E5A804008DF8A2 /* FavouritesViewController.swift */,
 			);
 			path = SettingsTab;
 			sourceTree = "<group>";
@@ -219,8 +229,13 @@
 		D059D21A25E3FCDF00285279 /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
+				D059D14C25D12E9E00285279 /* SettingsTableViewCell.swift */,
 				D059D21525E3FC2D00285279 /* DinnerListTableViewCell.swift */,
 				D059D21625E3FC2D00285279 /* DinnerListTableViewCell.xib */,
+				D090426625E5ABEF008DF8A2 /* FavouritesTableViewCell.swift */,
+				D090426725E5ABEF008DF8A2 /* FavouritesTableViewCell.xib */,
+				D090427625E73540008DF8A2 /* FilterTableViewCell.swift */,
+				D090427725E73540008DF8A2 /* FilterTableViewCell.xib */,
 			);
 			path = TableViewCells;
 			sourceTree = "<group>";
@@ -294,7 +309,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D04CC44825D04CF500BCAC81 /* LaunchScreen.storyboard in Resources */,
+				D090427925E73540008DF8A2 /* FilterTableViewCell.xib in Resources */,
 				D059D21825E3FC2D00285279 /* DinnerListTableViewCell.xib in Resources */,
+				D090426925E5ABF0008DF8A2 /* FavouritesTableViewCell.xib in Resources */,
 				D04CC44525D04CF500BCAC81 /* Assets.xcassets in Resources */,
 				D059D1AC25DA98FC00285279 /* GoogleService-Info.plist in Resources */,
 				D059D14F25D12E9E00285279 /* SettingsTableViewCell.xib in Resources */,
@@ -352,11 +369,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				D059D1A925D6A90A00285279 /* FirebaseManager.swift in Sources */,
-				D090426025E58A97008DF8A2 /* Dinner+CoreDataClass.swift in Sources */,
 				D059D1AF25DEA41C00285279 /* SelectedDinnerViewController.swift in Sources */,
 				D059D15B25D1395800285279 /* DatabaseManager.swift in Sources */,
 				D059D1C925E1553D00285279 /* ViewExtenstion.swift in Sources */,
-				D090426125E58A97008DF8A2 /* Dinner+CoreDataProperties.swift in Sources */,
+				D090427325E7257E008DF8A2 /* Dinner+CoreDataProperties.swift in Sources */,
 				D059D1EB25E2884900285279 /* GroupStructure.swift in Sources */,
 				D04CC43D25D04CF000BCAC81 /* CardViewController.swift in Sources */,
 				D059D20825E2D01C00285279 /* HeaderView.swift in Sources */,
@@ -364,14 +380,18 @@
 				D04CC43925D04CF000BCAC81 /* AppDelegate.swift in Sources */,
 				D059D16825D1790000285279 /* FilterSettingsViewController.swift in Sources */,
 				D059D14E25D12E9E00285279 /* SettingsTableViewCell.swift in Sources */,
+				D090427225E7257E008DF8A2 /* Dinner+CoreDataClass.swift in Sources */,
 				D059D15425D136C500285279 /* SettingsManager.swift in Sources */,
+				D090426425E5A804008DF8A2 /* FavouritesViewController.swift in Sources */,
 				D059D20B25E2D75500285279 /* StretchyHeaderLayout.swift in Sources */,
 				D04CC43B25D04CF000BCAC81 /* SceneDelegate.swift in Sources */,
 				D04CC45525D1294300BCAC81 /* SettingsViewController.swift in Sources */,
 				D04CC44325D04CF000BCAC81 /* TinderDinner.xcdatamodeld in Sources */,
 				D070AF4D25E5806300969981 /* UIDeviceExtension.swift in Sources */,
 				D059D20225E289E700285279 /* GroupStructureManager.swift in Sources */,
+				D090427825E73540008DF8A2 /* FilterTableViewCell.swift in Sources */,
 				D059D21025E3F62800285279 /* DinnerYesListViewController.swift in Sources */,
+				D090426825E5ABF0008DF8A2 /* FavouritesTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

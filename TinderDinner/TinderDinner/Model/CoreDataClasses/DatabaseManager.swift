@@ -16,8 +16,9 @@ class DatabaseManager {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var items: [Dinner]?
     var unwantedIngredients: [String]?
-    
     var wantedDinners: [Dinner]?
+    var unwantedAllergens: [String]?
+    let allAllergens = ["Dairy", "Gluten"]
     
     func removeDinnersWith(filter: [String]) {
         if var items = items {
@@ -59,6 +60,20 @@ class DatabaseManager {
         }
     }
     
+    func exactSearchWithNSPredicate(attribute: String, text: String) {
+        let request: NSFetchRequest<Dinner> = Dinner.fetchRequest()
+        let predicate = NSPredicate(format: "\(attribute) == %@", text)
+        request.predicate = predicate
+        loadItems(with: request)
+    }
+    
+    func containsSearchWithNSPredicate(attribute: String, text: String) {
+        let request: NSFetchRequest<Dinner> = Dinner.fetchRequest()
+        let predicate = NSPredicate(format: "\(attribute) CONTAINS[cd] %@", text)
+        request.predicate = predicate
+        loadItems(with: request)
+    }
+    
     func loadItems(with request: NSFetchRequest<Dinner> = Dinner.fetchRequest()) {
         do { items = try context.fetch(request) }
         catch let error { print("Error getting data with fetch request: \(error)") }
@@ -66,5 +81,37 @@ class DatabaseManager {
     
     func addDinnerToFavourites(with Dinner: String) {
         print("Added to favourites")
+    }
+    
+    func doesNotContain(attribute: String = "allergens", text: String) {
+        let request: NSFetchRequest<Dinner> = Dinner.fetchRequest()
+        let predicate = NSPredicate(format:"NOT (%K CONTAINS[cd] %@)",attribute, text)
+        request.predicate = predicate
+        do { items = try context.fetch(request) }
+        catch let error { print("Error: \(error)") }
+//        loadItems(with: request)
+    }
+    
+    func filterWithMultipleAllergens(allergens: [String]) {
+        var predicates = [NSPredicate]()
+        for allergen in allergens {
+            var predicate = NSPredicate(format: "NOT (allergens CONTAINS[cd] %@)", allergen)
+            predicates.append(predicate)
+        }
+
+        var compoundPredicate = NSCompoundPredicate.init(andPredicateWithSubpredicates: predicates)
+        let request: NSFetchRequest<Dinner> = Dinner.fetchRequest()
+        request.predicate = compoundPredicate
+        loadItems(with: request)
+        
+        
+        
+    }
+    
+    func testNotContain() {
+        let request: NSFetchRequest<Dinner> = Dinner.fetchRequest()
+        let predicate = NSPredicate(format: "NOT %K CONTAINS %@", "name", "Second Best Dinner")
+        request.predicate = predicate
+        loadItems(with: request)
     }
 }
