@@ -43,13 +43,22 @@ class CardViewController: UIViewController {
         
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
-
+        //This has to be called first to check if some allergens has been selected
+        databaseManager.loadAllergensPlistData()
         
 //        addDinnerTest()
 //        databaseManager.doesNotContain(text: "Dairy")
-        databaseManager.filterWithMultipleAllergens(allergens: ["Dairy", "Gluten"])
+
+        databaseManager.filterWithMultipleAllergens()
+
+        
         print(databaseManager.items)
         print(UIDevice().type)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        databaseManager.filterWithMultipleAllergens()
+        cardView.reloadData()
     }
     
     func addDinnerTest() {
@@ -256,7 +265,7 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
         imgView.layer.cornerRadius = 20
         imgView.clipsToBounds = true
         
-        databaseManager.loadItems()
+//        databaseManager.loadItems()
         
         if let allItems = databaseManager.items {
             for (step, item) in allItems[index].howToMake!.enumerated() {
@@ -330,7 +339,7 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
 //            databaseManager.doesNotContain(attribute: "allergens", text: "Dairy")
 //            return databaseManager.items?.count ?? 0
 //        }
-        databaseManager.loadItems()
+//        databaseManager.loadItems()
         return databaseManager.items?.count ?? 10
     }
     

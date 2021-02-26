@@ -17,6 +17,9 @@ class FilterSettingsViewController: UIViewController {
     
     let databaseManager = DatabaseManager.shared
     
+    // Used to search for allergens in table
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -25,30 +28,55 @@ class FilterSettingsViewController: UIViewController {
         tableView.dataSource    = self
         let nib = UINib(nibName: "FilterTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: reuseIdentifier)
-    }
-    
+        
 
+        
+    }
 }
 
 extension FilterSettingsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return databaseManager.allAllergens.count
+        return databaseManager.allergensState!.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+   
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! FilterTableViewCell
-        cell.label.text = databaseManager.allAllergens[indexPath.row]
-        cell.accessoryType = .checkmark
+        cell.label.text = databaseManager.allergensState?.allKeys[indexPath.row] as? String
+        
+        let allergenState = databaseManager.allergensState?.object(forKey: cell.label.text)
+        if allergenState as! Int == 1 {
+            cell.accessoryType = .checkmark
+        } else {
+            cell.accessoryType = .none
+        }
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! FilterTableViewCell
+        databaseManager.editAllergenPlistData(allergen: cell.label.text!)
+        tableView.deselectRow(at: indexPath, animated: true)
+        tableView.reloadData()
+        
     }
 }
 
 extension FilterSettingsViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if !searchText.isEmpty {
-    
-        }
+
     }
     
 }
+
+//if !searchText.isEmpty {
+//            var dataBaseData = databaseManager.allergensState?.allKeys as? [String]
+//            print(dataBaseData)
+//            filteredAllergens = searchText.isEmpty ? dataBaseData : dataBaseData?.filter({ (dataString) -> Bool in
+//                return dataString.range(of: searchText, options: .caseInsensitive) != nil
+//            })
+//        } else {
+//
+//        }
+//        tableView.reloadData()

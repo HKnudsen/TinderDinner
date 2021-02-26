@@ -40,6 +40,7 @@
 		D090427325E7257E008DF8A2 /* Dinner+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D090427125E7257E008DF8A2 /* Dinner+CoreDataProperties.swift */; };
 		D090427825E73540008DF8A2 /* FilterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D090427625E73540008DF8A2 /* FilterTableViewCell.swift */; };
 		D090427925E73540008DF8A2 /* FilterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D090427725E73540008DF8A2 /* FilterTableViewCell.xib */; };
+		D090428225E7716A008DF8A2 /* allergens.plist in Resources */ = {isa = PBXBuildFile; fileRef = D090428125E77169008DF8A2 /* allergens.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -79,6 +80,7 @@
 		D090427125E7257E008DF8A2 /* Dinner+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Dinner+CoreDataProperties.swift"; path = "/Users/henrikbouwerknudsen/Documents/Sabulu/MiddagTinder/TinderDinner/TinderDinner/TinderDinner/Model/Dinner+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		D090427625E73540008DF8A2 /* FilterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTableViewCell.swift; sourceTree = "<group>"; };
 		D090427725E73540008DF8A2 /* FilterTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FilterTableViewCell.xib; sourceTree = "<group>"; };
+		D090428125E77169008DF8A2 /* allergens.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = allergens.plist; sourceTree = "<group>"; };
 		E59F4DDF2CDDEC363E2F3882 /* Pods-TinderDinner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinderDinner.release.xcconfig"; path = "Target Support Files/Pods-TinderDinner/Pods-TinderDinner.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -165,6 +167,7 @@
 				D059D16225D139D400285279 /* CoreDataClasses */,
 				D059D15325D136C500285279 /* SettingsManager.swift */,
 				D059D1A825D6A90A00285279 /* FirebaseManager.swift */,
+				D090428125E77169008DF8A2 /* allergens.plist */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -315,6 +318,7 @@
 				D04CC44525D04CF500BCAC81 /* Assets.xcassets in Resources */,
 				D059D1AC25DA98FC00285279 /* GoogleService-Info.plist in Resources */,
 				D059D14F25D12E9E00285279 /* SettingsTableViewCell.xib in Resources */,
+				D090428225E7716A008DF8A2 /* allergens.plist in Resources */,
 				D04CC44025D04CF000BCAC81 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

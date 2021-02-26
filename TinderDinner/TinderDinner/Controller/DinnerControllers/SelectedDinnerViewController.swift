@@ -47,10 +47,12 @@ class SelectedDinnerViewController: UIViewController {
     
     
     @IBAction func exitPressed(_ sender: UIButton) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(identifier: instantiatedFrom ?? "FavouritesViewController")
-        vc.modalPresentationStyle = .fullScreen
-        self.present(vc, animated: true, completion: nil)
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let vc = storyboard.instantiateViewController(identifier: instantiatedFrom ?? "FavouritesViewController")
+//        vc.modalPresentationStyle = .fullScreen
+//        self.present(vc, animated: true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
+        // LOL
     }
     
     
