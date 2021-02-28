@@ -20,12 +20,13 @@ class CardViewController: UIViewController {
     @IBOutlet weak var popupImageView: UIImageView!
     
     var databaseManager = DatabaseManager.shared
-    var firebaseManager = FirebaseManager()
+    var firebaseManager = FirebaseManager.shared
+    var settingsManager = SettingsManager.shared
     
     var groupId: Int? {
         willSet {
             print(newValue)
-            groupCodeLabel.text = "\(newValue)"
+            groupCodeLabel.text = "\(newValue!)"
         }
     }
     
@@ -35,6 +36,7 @@ class CardViewController: UIViewController {
         isMultipleUsersSwith.isOn = false
         cardView.delegate = self
         cardView.dataSource = self
+        tabBarItem.title = "Swipe"
         
 //        popupContainer.alpha = 0.0
 //        popupContainer.layer.cornerRadius = 20
@@ -50,16 +52,22 @@ class CardViewController: UIViewController {
 //        databaseManager.doesNotContain(text: "Dairy")
 
         databaseManager.filterWithMultipleAllergens()
+        cardView.reloadData()
 
         
-        print(databaseManager.items)
+        print(databaseManager.itemsForCardView)
         print(UIDevice().type)
     }
     
+
+    
     override func viewWillAppear(_ animated: Bool) {
-        databaseManager.filterWithMultipleAllergens()
-        cardView.reloadData()
+        if cardView.isRunOutOfCards {
+            databaseManager.filterWithMultipleAllergens()
+            cardView.resetCurrentCardIndex()
+        }
     }
+    
     
     func addDinnerTest() {
         let dinner = Dinner(context: databaseManager.context)
@@ -78,6 +86,19 @@ class CardViewController: UIViewController {
         catch let error { print(error) }
     }
     
+    fileprivate func prepareForOnlineSession(inputCode: String) {
+        self.groupId = Int(inputCode)
+        self.firebaseManager.activeGroupId = Int(inputCode)
+        self.firebaseManager.isInOnlineSession = true
+        self.firebaseManager.isGroupCreator = false
+        self.tabBarController!.tabBar.items![1].isEnabled = false
+        self.firebaseManager.initiateEventListenerFor(groupCode: Int(inputCode)!) { (document) in
+            self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
+                print(groupStructure)
+            }
+        }
+    }
+    
     func joinPressed() {
         let joinGroupController = UIAlertController(title: "Join", message: "Enter group code", preferredStyle: .alert)
         joinGroupController.addTextField()
@@ -91,13 +112,7 @@ class CardViewController: UIViewController {
                     if let document = document {
                         if document.exists {
                             self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
-                                self.groupId = Int(inputCode)
-                                self.firebaseManager.activeGroupId = Int(inputCode)
-                                self.firebaseManager.initiateEventListenerFor(groupCode: Int(inputCode)!) { (document) in
-                                    self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
-                                        print(groupStructure)
-                                    }
-                                }
+                                self.prepareForOnlineSession(inputCode: inputCode)
                             }
                         } else {
                             print("Doesnt exist vc")
@@ -167,8 +182,14 @@ class CardViewController: UIViewController {
                 self.isMultipleUsersSwith.setOn(false, animated: true)
             }))
             present(alertController, animated: true, completion: nil)
-            
+        } else {
+            changeBackToSingleUserState()
         }
+    }
+    
+    func changeBackToSingleUserState() {
+        isMultipleUsersSwith.setOn(false, animated: true)
+        tabBarController!.tabBar.items![1].isEnabled = true
     }
 }
 
@@ -267,7 +288,7 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
         
 //        databaseManager.loadItems()
         
-        if let allItems = databaseManager.items {
+        if let allItems = databaseManager.itemsForCardView {
             for (step, item) in allItems[index].howToMake!.enumerated() {
                 let stepText: UITextView = {
                     let view = UITextView()
@@ -295,7 +316,7 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
     }
     
     func koloda(_ koloda: KolodaView, didSwipeCardAt index: Int, in direction: SwipeResultDirection) {
-        guard let items = databaseManager.items else {
+        guard let items = databaseManager.itemsForCardView else {
             fatalError("No items found at databaseManager: 118 CardVC")
         }
         
@@ -304,7 +325,8 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
             switch direction {
             case SwipeResultDirection.right:
                 print("Swipe right multiuser")
-                firebaseManager.appendToFirebase(with: "Test3", groupId: 8137)
+                firebaseManager.addDinnerNameToFirebase(with: items[index].name!, groupId: groupId!)
+                print(firebaseManager.leftSwipedDinnerNames)
             case SwipeResultDirection.left:
                 print("Swipe left multiuser")
             case SwipeResultDirection.up:
@@ -332,30 +354,36 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
     }
     
     func kolodaNumberOfCards(_ koloda: KolodaView) -> Int {
-//        if databaseManager.unwantedAllergens == nil {
-//            databaseManager.loadItems()
-//            return databaseManager.items?.count ?? 0
-//        } else {
-//            databaseManager.doesNotContain(attribute: "allergens", text: "Dairy")
-//            return databaseManager.items?.count ?? 0
-//        }
-//        databaseManager.loadItems()
-        return databaseManager.items?.count ?? 10
+        if databaseManager.itemsForCardView!.count < settingsManager.numberOfDesieredCards {
+            return databaseManager.itemsForCardView!.count
+        } else {
+            return settingsManager.numberOfDesieredCards
+        }
     }
     
     func kolodaDidRunOutOfCards(_ koloda: KolodaView) {
         if isMultipleUsersSwith.isOn == true {
-            
+            firebaseManager.retrieveLeftSwipedDinnerNames { (groupStructure) in
+                // TODO: Only use firebase for wanted dinners as long as possible
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let vc = storyboard.instantiateViewController(identifier: "DinnerYesListViewController") as DinnerYesListViewController
+                vc.modalPresentationStyle = .fullScreen
+                print(self.firebaseManager.leftSwipedDinnerNames)
+                self.firebaseManager.leftSwipedDinnerNames = groupStructure.acceptedDinners
+                for name in self.firebaseManager.leftSwipedDinnerNames {
+                    if let dinnerFromDatabase = self.databaseManager.getDinnerWithName(name: name) {
+                        vc.addDinnerToDinnerList(with: dinnerFromDatabase)
+                    }
+                }
+                self.present(vc, animated: true, completion: nil)
+            }
         } else {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//            let vc = storyboard.instantiateViewController(identifier: "SelectedDinnerViewController") as SelectedDinnerViewController
             let vc = storyboard.instantiateViewController(identifier: "DinnerYesListViewController") as DinnerYesListViewController
             vc.modalPresentationStyle = .fullScreen
             vc.dinnerList = databaseManager.wantedDinners
-            
             self.present(vc, animated: true, completion: nil)
         }
-
     }
     
     func koloda(_ koloda: KolodaView, draggedCardWithPercentage finishPercentage: CGFloat, in direction: SwipeResultDirection) {

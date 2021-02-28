@@ -41,6 +41,7 @@
 		D090427825E73540008DF8A2 /* FilterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D090427625E73540008DF8A2 /* FilterTableViewCell.swift */; };
 		D090427925E73540008DF8A2 /* FilterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D090427725E73540008DF8A2 /* FilterTableViewCell.xib */; };
 		D090428225E7716A008DF8A2 /* allergens.plist in Resources */ = {isa = PBXBuildFile; fileRef = D090428125E77169008DF8A2 /* allergens.plist */; };
+		D090428525EB7C93008DF8A2 /* SwipeSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D090428425EB7C93008DF8A2 /* SwipeSettingsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,6 +82,7 @@
 		D090427625E73540008DF8A2 /* FilterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTableViewCell.swift; sourceTree = "<group>"; };
 		D090427725E73540008DF8A2 /* FilterTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FilterTableViewCell.xib; sourceTree = "<group>"; };
 		D090428125E77169008DF8A2 /* allergens.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = allergens.plist; sourceTree = "<group>"; };
+		D090428425EB7C93008DF8A2 /* SwipeSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeSettingsViewController.swift; sourceTree = "<group>"; };
 		E59F4DDF2CDDEC363E2F3882 /* Pods-TinderDinner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinderDinner.release.xcconfig"; path = "Target Support Files/Pods-TinderDinner/Pods-TinderDinner.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -189,6 +191,7 @@
 				D04CC45425D1294300BCAC81 /* SettingsViewController.swift */,
 				D059D16725D1790000285279 /* FilterSettingsViewController.swift */,
 				D090426325E5A804008DF8A2 /* FavouritesViewController.swift */,
+				D090428425EB7C93008DF8A2 /* SwipeSettingsViewController.swift */,
 			);
 			path = SettingsTab;
 			sourceTree = "<group>";
@@ -390,6 +393,7 @@
 				D059D20B25E2D75500285279 /* StretchyHeaderLayout.swift in Sources */,
 				D04CC43B25D04CF000BCAC81 /* SceneDelegate.swift in Sources */,
 				D04CC45525D1294300BCAC81 /* SettingsViewController.swift in Sources */,
+				D090428525EB7C93008DF8A2 /* SwipeSettingsViewController.swift in Sources */,
 				D04CC44325D04CF000BCAC81 /* TinderDinner.xcdatamodeld in Sources */,
 				D070AF4D25E5806300969981 /* UIDeviceExtension.swift in Sources */,
 				D059D20225E289E700285279 /* GroupStructureManager.swift in Sources */,

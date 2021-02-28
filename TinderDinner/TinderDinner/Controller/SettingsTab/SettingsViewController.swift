@@ -17,6 +17,7 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
+        tabBarItem.title = "Settings"
     }
     
     fileprivate func setupTableView() {
@@ -51,12 +52,12 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
             performSegue(withIdentifier: "filterSettings", sender: self)
         case 1:
             performSegue(withIdentifier: "goToFavourites", sender: self)
+        case 2:
+            performSegue(withIdentifier: "goToSettings", sender: self)
         default:
+            
             print("clicked on tbv")
         }
+        tableView.deselectRow(at: indexPath, animated: true)
     }
-    
-
-    
-    
 }

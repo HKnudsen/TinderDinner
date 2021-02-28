@@ -16,25 +16,25 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3p5-gO-Nb5">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3p5-gO-Nb5">
+                        <rect key="frame" x="25" y="0.0" width="295" height="44"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="3p5-gO-Nb5" secondAttribute="bottom" id="JxL-UZ-ZkH"/>
-                    <constraint firstItem="3p5-gO-Nb5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="aDj-tq-fZe"/>
-                    <constraint firstAttribute="trailing" secondItem="3p5-gO-Nb5" secondAttribute="trailing" id="kP2-UA-fUJ"/>
-                    <constraint firstItem="3p5-gO-Nb5" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="zDx-5L-g5l"/>
+                    <constraint firstAttribute="bottom" secondItem="3p5-gO-Nb5" secondAttribute="bottom" id="Jf3-QP-Seh"/>
+                    <constraint firstAttribute="trailing" secondItem="3p5-gO-Nb5" secondAttribute="trailing" id="gO2-Y3-XHJ"/>
+                    <constraint firstItem="3p5-gO-Nb5" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="25" id="not-Jr-iRO"/>
+                    <constraint firstItem="3p5-gO-Nb5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="zwc-oH-X3i"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="label" destination="3p5-gO-Nb5" id="3kM-20-9Qr"/>
             </connections>
-            <point key="canvasLocation" x="141" y="115"/>
+            <point key="canvasLocation" x="140.57971014492756" y="114.50892857142857"/>
         </tableViewCell>
     </objects>
 </document>

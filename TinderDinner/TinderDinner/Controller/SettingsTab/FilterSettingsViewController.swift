@@ -23,7 +23,7 @@ class FilterSettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        searchField.delegate    = self
+        
         tableView.delegate      = self
         tableView.dataSource    = self
         let nib = UINib(nibName: "FilterTableViewCell", bundle: nil)
@@ -35,8 +35,14 @@ class FilterSettingsViewController: UIViewController {
 }
 
 extension FilterSettingsViewController: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print(databaseManager.allergensState!.count)
         return databaseManager.allergensState!.count
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return tableView.frame.height / CGFloat(databaseManager.allergensState!.count)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -61,22 +67,3 @@ extension FilterSettingsViewController: UITableViewDelegate, UITableViewDataSour
         
     }
 }
-
-extension FilterSettingsViewController: UISearchBarDelegate {
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-
-    }
-    
-}
-
-//if !searchText.isEmpty {
-//            var dataBaseData = databaseManager.allergensState?.allKeys as? [String]
-//            print(dataBaseData)
-//            filteredAllergens = searchText.isEmpty ? dataBaseData : dataBaseData?.filter({ (dataString) -> Bool in
-//                return dataString.range(of: searchText, options: .caseInsensitive) != nil
-//            })
-//        } else {
-//
-//        }
-//        tableView.reloadData()

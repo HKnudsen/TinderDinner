@@ -8,10 +8,16 @@
 import Foundation
 import Firebase
 
-struct FirebaseManager {
+class FirebaseManager {
+    static let shared = FirebaseManager()
     
     var activeEventListener: ListenerRegistration?
     var activeGroupId: Int?
+    var isGroupCreator: Bool = false
+    var isInOnlineSession: Bool = false
+    var leftSwipedDinnerNames = [String]()
+    
+    
     
     // MARK: - ID Section
     func getUsedIds(completion: @escaping ([Int], Error?) -> Void) {
@@ -25,7 +31,6 @@ struct FirebaseManager {
             } else {
                 for document in snapshot!.documents {
                     documentIdArray.append(Int(document.documentID)!)
-                    
                 }
                 completion(documentIdArray, nil)
             }
@@ -54,7 +59,7 @@ struct FirebaseManager {
     func createGroup(with groupId: Int) {
         let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
         let newGroup = GroupStructure(participants: 1, acceptedDinners: [String](), swipingSessionRunning: false, removedIngredients: [String]())
-        do { try dbRef.setData(from: newGroup) }
+        do { try dbRef.setData(from: newGroup); self.isGroupCreator = true }
         catch let error { print(error) }
     }
     
@@ -73,15 +78,15 @@ struct FirebaseManager {
             }
         case .failure(let error):
             print(error)
-
         }
     }
+    
     // Works for now. Might not work with multiple user input at the same time.
     func appendToFirebase(with dinnerName: String, groupId: Int) {
         let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
         dbRef.getDocument { (document, error) in
             if let document = document {
-                getFirebaseObject(document: document) { (groupStructure) in
+                self.getFirebaseObject(document: document) { (groupStructure) in
                     var groupData = groupStructure
                     groupData.acceptedDinners.append(dinnerName)
                     do { try dbRef.setData(from: groupData) }
@@ -91,12 +96,32 @@ struct FirebaseManager {
 
         }
     }
+    
+    func addDinnerNameToFirebase(with dinnerName: String, groupId: Int) {
+        let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
+        dbRef.updateData([
+            "acceptedDinners": FieldValue.arrayUnion([dinnerName])
+        ])
+    }
+    
+    // Gets the data from firebase when session is done
+    func retrieveLeftSwipedDinnerNames(completion: @escaping (GroupStructure) -> Void) {
+        let dbRef = Firestore.firestore().collection("Groups").document("\(activeGroupId!)")
+        dbRef.getDocument { (document, error) in
+            if let document = document {
+                self.getFirebaseObject(document: document) { (groupStructure) in
+                    self.leftSwipedDinnerNames = groupStructure.acceptedDinners
+                    completion(groupStructure)
+                }
+            }
+        }
+    }
 
     
     
     // MARK: - Event Listener Section
     
-    mutating func initiateEventListenerFor(groupCode: Int, completion: @escaping (DocumentSnapshot) -> Void) {
+    func initiateEventListenerFor(groupCode: Int, completion: @escaping (DocumentSnapshot) -> Void) {
          let listener = Firestore.firestore().collection("Groups").document("\(groupCode)").addSnapshotListener { (document, error) in
             if let document = document {
                 completion(document)
@@ -109,13 +134,9 @@ struct FirebaseManager {
         self.activeEventListener = listener
     }
     
-    mutating func detachEventListener() {
+    func detachEventListener() {
         self.activeEventListener?.remove()
         self.activeEventListener = nil
     }
-    
-
-    
-    
 }
 

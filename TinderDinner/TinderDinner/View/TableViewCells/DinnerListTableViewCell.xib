@@ -25,6 +25,12 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wzI-3r-RaA">
+                        <rect key="frame" x="268" y="10" width="42" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstItem="eV7-2W-cum" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="D1I-Mq-rLr"/>
@@ -34,11 +40,14 @@
                     <constraint firstItem="dVl-iz-XNf" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="nvC-3T-5Fg"/>
                     <constraint firstAttribute="trailing" secondItem="eV7-2W-cum" secondAttribute="trailing" constant="16" id="o3a-uk-Qj7"/>
                     <constraint firstItem="dVl-iz-XNf" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="ogG-Ix-2PT"/>
+                    <constraint firstAttribute="trailing" secondItem="wzI-3r-RaA" secondAttribute="trailing" constant="10" id="r9Y-Fv-EnO"/>
                     <constraint firstAttribute="trailing" secondItem="dVl-iz-XNf" secondAttribute="trailing" id="twN-1A-TrM"/>
+                    <constraint firstItem="wzI-3r-RaA" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="ybs-be-T4U"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
+                <outlet property="countLeftSwipe" destination="wzI-3r-RaA" id="voo-RY-I1p"/>
                 <outlet property="dinnerImage" destination="dVl-iz-XNf" id="K5S-Sr-pfq"/>
                 <outlet property="dinnerLabel" destination="eV7-2W-cum" id="tDn-Kc-SGW"/>
             </connections>

@@ -14,26 +14,14 @@ class DatabaseManager {
     static let shared = DatabaseManager()
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var items: [Dinner]?
+    var itemsForCardView: [Dinner]?
+    // Used to pick the correct amount of cards at random that matches filter criteria
+    var allItemsWithCurrentFiler: [Dinner]?
     
     var wantedDinners: [Dinner]?
     
     let allAllergens = ["Dairy", "Gluten"]
     var allergensState: NSMutableDictionary?
-    
-//    func removeDinnersWith(filter: [String]) {
-//        if var items = items {
-//            for (i, dinner) in items.enumerated() {
-//                if let unwantedIngredients = unwantedIngredients, let ingredientsInDinner = dinner.ingredients {
-//                    for (k, _) in unwantedIngredients.enumerated() {
-//                        if ingredientsInDinner.contains(unwantedIngredients[k]) {
-//                            items.remove(at: i)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
     
     func addToWantedDinner(with dinner: Dinner) {
         if self.wantedDinners == nil {
@@ -42,18 +30,6 @@ class DatabaseManager {
             self.wantedDinners?.append(dinner)
         }
     }
-
-    
-    
-//    func removeIngredient(ingredient: String) {
-//        if unwantedIngredients != nil {
-//            guard let indexOfIngredient = unwantedIngredients?.firstIndex(of: ingredient) else {
-//                fatalError("Error getting index of ingredient") }
-//            unwantedIngredients?.remove(at: indexOfIngredient)
-//        } else {
-//            print("Trying to remove ingredient from empty array")
-//        }
-//    }
     
     func exactSearchWithNSPredicate(attribute: String, text: String) {
         let request: NSFetchRequest<Dinner> = Dinner.fetchRequest()
@@ -69,8 +45,18 @@ class DatabaseManager {
         loadItems(with: request)
     }
     
+    func getDinnerWithName(name: String) -> Dinner? {
+        var dinnerFromFetch: [Dinner]
+        let request: NSFetchRequest<Dinner> = Dinner.fetchRequest()
+        let predicate = NSPredicate(format: "name MATCHES[cd] %@", name)
+        request.predicate = predicate
+        do { dinnerFromFetch = try context.fetch(request) }
+        catch let error { print(error); return nil }
+        return dinnerFromFetch[0]
+    }
+    
     func loadItems(with request: NSFetchRequest<Dinner> = Dinner.fetchRequest()) {
-        do { items = try context.fetch(request) }
+        do { itemsForCardView = try context.fetch(request) }
         catch let error { print("Error getting data with fetch request: \(error)") }
     }
     
@@ -82,11 +68,12 @@ class DatabaseManager {
         let request: NSFetchRequest<Dinner> = Dinner.fetchRequest()
         let predicate = NSPredicate(format:"NOT (%K CONTAINS[cd] %@)",attribute, text)
         request.predicate = predicate
-        do { items = try context.fetch(request) }
+        do { itemsForCardView = try context.fetch(request) }
         catch let error { print("Error: \(error)") }
 //        loadItems(with: request)
     }
     
+    // Checks for allergen ON/OFF value in Plist and filters with compoundPredicate
     func filterWithMultipleAllergens() {
         var predicates = [NSPredicate]()
 
@@ -103,24 +90,15 @@ class DatabaseManager {
         let request: NSFetchRequest<Dinner> = Dinner.fetchRequest()
         request.predicate = compoundPredicate
         loadItems(with: request)
-        print("SE HER 3 : \(items?.count)")
-        
-        
-        
+        print("SE HER 3 : \(itemsForCardView?.count)")
     }
-    
-    func prepareCompoundPredicateFilter() {
-        
-    }
-    
+
     func testNotContain() {
         let request: NSFetchRequest<Dinner> = Dinner.fetchRequest()
         let predicate = NSPredicate(format: "NOT %K CONTAINS %@", "name", "Second Best Dinner")
         request.predicate = predicate
         loadItems(with: request)
     }
-    
-
     
     
     
@@ -161,8 +139,6 @@ class DatabaseManager {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as NSArray
         let documentsInDirectory = paths.object(at: 0) as! NSString
         let path = documentsInDirectory.appendingPathComponent("allergens.plist")
-        let fileManager = FileManager.default
-        
         var dictionary = NSMutableDictionary(contentsOfFile: path)
         
         if dictionary?.object(forKey: allergen) as! Int == 0 {
@@ -175,6 +151,4 @@ class DatabaseManager {
         
         dictionary?.write(toFile: path, atomically: true)
     }
-    
-    
 }

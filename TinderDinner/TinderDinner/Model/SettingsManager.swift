@@ -7,7 +7,9 @@
 
 import Foundation
 
-struct SettingsManager {
-    let settingOptions = ["Filter", "Favourites", "Group", "About"]
+class SettingsManager {
+    static let shared = SettingsManager()
     
+    let settingOptions = ["Filter", "Favourites", "Settings", "About"]
+    var numberOfDesieredCards: Int = 20
 }

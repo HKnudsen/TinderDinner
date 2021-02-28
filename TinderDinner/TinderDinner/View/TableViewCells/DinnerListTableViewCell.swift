@@ -11,12 +11,14 @@ class DinnerListTableViewCell: UITableViewCell {
     
     @IBOutlet weak var dinnerImage: UIImageView!
     @IBOutlet weak var dinnerLabel: UILabel!
+    @IBOutlet weak var countLeftSwipe: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         dinnerImage.contentMode     = .scaleAspectFill
         dinnerLabel.textColor       = .white
+        countLeftSwipe.isHidden     = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
