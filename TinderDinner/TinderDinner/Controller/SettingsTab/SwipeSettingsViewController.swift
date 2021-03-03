@@ -20,6 +20,11 @@ class SwipeSettingsViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        numberOfCardsLabel.text = "20"
+        numberOfCardsSlider.value = 20
+    }
+    
     @IBAction func sliderDidSlide(_ sender: UISlider) {
         let roundedValue = round(sender.value / 1) * 1
         sender.value = roundedValue

@@ -12,14 +12,12 @@ class FavouritesViewController: UIViewController {
     var databaseManager = DatabaseManager.shared
     
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var searchBar: UISearchBar!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.dataSource    = self
         tableView.delegate      = self
-        searchBar.delegate      = self
 
         // Do any additional setup after loading the view.
     }
@@ -42,8 +40,4 @@ extension FavouritesViewController: UITableViewDelegate, UITableViewDataSource {
         vc.instantiatedFrom = "FavouritesViewController"
         self.present(vc, animated: true, completion: nil)
     }
-}
-
-extension FavouritesViewController: UISearchBarDelegate {
-    
 }

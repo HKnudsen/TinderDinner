@@ -11,15 +11,23 @@ import FirebaseFirestoreSwift
 
 struct GroupStructure: Codable {
     var participants: Int
-    var acceptedDinners: [String]
+    var acceptedDinnerList: [Int]
     var swipingSessionRunning: Bool
-    var removedIngredients: [String]
+    var numberOfCards: Int
+    var dinnerIdsForCardView: [Int]
+    var numberOfUsersReady: Int
     
     enum CodingKeys: String, CodingKey {
         case participants
-        case acceptedDinners
+        case acceptedDinnerList
         case swipingSessionRunning
-        case removedIngredients
+        case numberOfCards
+        case dinnerIdsForCardView
+        case numberOfUsersReady
     }
+}
+
+struct acceptedDinnerList: Codable {
+    var acceptedDinners: [Int]
 }
 

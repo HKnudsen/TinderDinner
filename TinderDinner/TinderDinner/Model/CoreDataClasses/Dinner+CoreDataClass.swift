@@ -2,7 +2,7 @@
 //  Dinner+CoreDataClass.swift
 //  
 //
-//  Created by Henrik Bouwer Knudsen on 25/02/2021.
+//  Created by Henrik Bouwer Knudsen on 02/03/2021.
 //
 //
 

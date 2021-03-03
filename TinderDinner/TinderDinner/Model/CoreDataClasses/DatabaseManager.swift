@@ -14,7 +14,7 @@ class DatabaseManager {
     static let shared = DatabaseManager()
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var itemsForCardView: [Dinner]?
+    var itemsForCardView:[Dinner]?
     // Used to pick the correct amount of cards at random that matches filter criteria
     var allItemsWithCurrentFiler: [Dinner]?
     
@@ -29,6 +29,41 @@ class DatabaseManager {
         } else {
             self.wantedDinners?.append(dinner)
         }
+    }
+    
+    func appendCardsToKolodaWithAmount(number numberOfCards: Int) {
+        guard let allItemsWithCurrentFiler = allItemsWithCurrentFiler else { return }
+        for _ in 0..<numberOfCards {
+            if let randomDinner = allItemsWithCurrentFiler.randomElement() {
+                if itemsForCardView == nil {
+                    itemsForCardView = [randomDinner]
+                } else {
+                    itemsForCardView?.append(randomDinner)
+                }
+            }
+        }
+    }
+    
+    // Used to get dinners from the hosts list synced with other users itemsForCardView
+    func getDinnersWithMultipleIds(ids: [Int]) {
+        // Could also be done with compound predicate. Time complexity difference?
+        var synchronizedDinners = [Dinner]()
+        for id in ids {
+            let request: NSFetchRequest<Dinner> = Dinner.fetchRequest()
+            let predicate = NSPredicate(format: "uniqueID == %i", id)
+            request.predicate = predicate
+            do { try synchronizedDinners.append(context.fetch(request)[0]) }
+            catch let error { print("Error getting exact dinner with id: \(error)") }
+        }
+        itemsForCardView = synchronizedDinners
+    }
+    
+    func getDinnerWithSingleId(id: Int) -> Dinner? {
+        let request: NSFetchRequest<Dinner> = Dinner.fetchRequest()
+        let predicate = NSPredicate(format: "uniqueID == %i", id)
+        request.predicate = predicate
+        do { return try context.fetch(request)[0] }
+        catch let error { print("Error getting single dinner with id: \(error)"); return nil}
     }
     
     func exactSearchWithNSPredicate(attribute: String, text: String) {
@@ -56,7 +91,7 @@ class DatabaseManager {
     }
     
     func loadItems(with request: NSFetchRequest<Dinner> = Dinner.fetchRequest()) {
-        do { itemsForCardView = try context.fetch(request) }
+        do { allItemsWithCurrentFiler = try context.fetch(request) }
         catch let error { print("Error getting data with fetch request: \(error)") }
     }
     
@@ -68,7 +103,7 @@ class DatabaseManager {
         let request: NSFetchRequest<Dinner> = Dinner.fetchRequest()
         let predicate = NSPredicate(format:"NOT (%K CONTAINS[cd] %@)",attribute, text)
         request.predicate = predicate
-        do { itemsForCardView = try context.fetch(request) }
+        do { allItemsWithCurrentFiler = try context.fetch(request) }
         catch let error { print("Error: \(error)") }
 //        loadItems(with: request)
     }
@@ -90,7 +125,7 @@ class DatabaseManager {
         let request: NSFetchRequest<Dinner> = Dinner.fetchRequest()
         request.predicate = compoundPredicate
         loadItems(with: request)
-        print("SE HER 3 : \(itemsForCardView?.count)")
+        
     }
 
     func testNotContain() {
@@ -99,6 +134,7 @@ class DatabaseManager {
         request.predicate = predicate
         loadItems(with: request)
     }
+    
     
     
     

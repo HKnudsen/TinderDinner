@@ -15,7 +15,10 @@ class FirebaseManager {
     var activeGroupId: Int?
     var isGroupCreator: Bool = false
     var isInOnlineSession: Bool = false
-    var leftSwipedDinnerNames = [String]()
+    var leftSwipedDinnerIds = [Int]()
+    var numberOfDesiredCards: Int = 20
+    var userNumber: Int?
+    var localUserYesSwiped = [Int]()
     
     
     
@@ -51,14 +54,22 @@ class FirebaseManager {
         let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
         dbRef.delete()
     }
+    
+    func getCurrentId() -> Int? {
+        if let id = activeGroupId {
+            return id
+        } else {
+            return nil
+        }
+    }
 
     
 
     //MARK: - Group Edit Section
     
-    func createGroup(with groupId: Int) {
+    func createGroup(with groupId: Int, numberOfDesiredCards: Int) {
         let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
-        let newGroup = GroupStructure(participants: 1, acceptedDinners: [String](), swipingSessionRunning: false, removedIngredients: [String]())
+        let newGroup = GroupStructure(participants: 1, acceptedDinnerList: [Int](), swipingSessionRunning: false, numberOfCards: numberOfDesiredCards, dinnerIdsForCardView: [Int](), numberOfUsersReady: 0)
         do { try dbRef.setData(from: newGroup); self.isGroupCreator = true }
         catch let error { print(error) }
     }
@@ -81,27 +92,46 @@ class FirebaseManager {
         }
     }
     
-    // Works for now. Might not work with multiple user input at the same time.
-    func appendToFirebase(with dinnerName: String, groupId: Int) {
+    // Not in use atm.
+    func appendToFirebase(with dinnerId: Int, groupId: Int) {
         let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
         dbRef.getDocument { (document, error) in
             if let document = document {
                 self.getFirebaseObject(document: document) { (groupStructure) in
                     var groupData = groupStructure
-                    groupData.acceptedDinners.append(dinnerName)
+                    groupData.acceptedDinnerList.append(dinnerId)
                     do { try dbRef.setData(from: groupData) }
                     catch let error { print("Error transforming data to firebase: \(error)") }
                 }
             }
-
         }
     }
     
-    func addDinnerNameToFirebase(with dinnerName: String, groupId: Int) {
+    func removeOneFromParticipants(groupCode: Int) {
+        let dbRef = Firestore.firestore().collection("Groups").document("\(groupCode)")
+        dbRef.getDocument { (document, error) in
+            if let document = document {
+                self.getFirebaseObject(document: document) { (groupStructure) in
+                    var newData = groupStructure
+                    newData.participants -= 1
+                    do { try dbRef.setData(from: newData) }
+                    catch let error { print("Error ramoving one from participants count - Firebase: \(error)") }
+                }
+            }
+        }
+    }
+    
+    func addDinnerIdToFirebase(with dinnerId: Int, groupId: Int) {
         let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
         dbRef.updateData([
-            "acceptedDinners": FieldValue.arrayUnion([dinnerName])
+            "acceptedDinners": FieldValue.arrayUnion([dinnerId])
         ])
+    }
+    
+    func mergeIdFieldWithLocalStage(with dinnerIds: [Int]) {
+        let dbRef = Firestore.firestore().collection("Groups").document("\(activeGroupId!)")
+        dbRef.setData(["acceptedDinners" : dinnerIds], merge: true)
+        
     }
     
     // Gets the data from firebase when session is done
@@ -110,11 +140,57 @@ class FirebaseManager {
         dbRef.getDocument { (document, error) in
             if let document = document {
                 self.getFirebaseObject(document: document) { (groupStructure) in
-                    self.leftSwipedDinnerNames = groupStructure.acceptedDinners
+                    self.leftSwipedDinnerIds = groupStructure.acceptedDinnerList
                     completion(groupStructure)
                 }
             }
         }
+    }
+    
+    // Starts the online session
+    func startOnlineSession(withDinnersIds: [Int]) {
+        guard let groupId = getCurrentId() else { return }
+        let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
+        dbRef.getDocument { (document, error) in
+            if let document = document {
+                self.getFirebaseObject(document: document) { (groupStructure) in
+                    var newData = groupStructure
+                    newData.swipingSessionRunning = true
+                    newData.dinnerIdsForCardView = withDinnersIds
+                    do { try dbRef.setData(from: newData) }
+                    catch let error { print("Error changing state of session in firebase: \(error)") }
+                    self.isInOnlineSession = true
+                }
+            }
+        }
+    }
+    
+    
+    // MARK: - User Action Section
+    
+    func saveDinnerIdToLocalStage(with dinnerId: Int) {
+        self.localUserYesSwiped.append(dinnerId)
+    }
+    
+    func markThisUserAsReady() {
+        let dbRef = Firestore.firestore().collection("Groups").document("\(activeGroupId!)")
+        dbRef.updateData([
+            "numberOfUsersReady": FieldValue.increment(Int64(1))
+        ])
+    }
+    
+    func addOneParticipant() {
+        let dbRef = Firestore.firestore().collection("Groups").document("\(activeGroupId!)")
+        dbRef.updateData([
+            "participants": FieldValue.increment(Int64(1))
+        ])
+    }
+    
+    func addOneParticipant(to groupCode: String) {
+        let dbRef = Firestore.firestore().collection("Groups").document(groupCode)
+        dbRef.updateData([
+            "participants": FieldValue.increment(Int64(1))
+        ])
     }
 
     

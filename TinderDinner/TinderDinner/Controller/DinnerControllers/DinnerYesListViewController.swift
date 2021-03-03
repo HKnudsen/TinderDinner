@@ -38,12 +38,16 @@ class DinnerYesListViewController: UIViewController {
     }
     
     @IBAction func didPressRestart(_ sender: UIButton) {
+        print("DidPressRestart")
         let alertController = UIAlertController(title: "Are you sure?", message: "Restarting or leaving will delete the swipes you just did, and take you back to the main page", preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alertController.addAction(UIAlertAction(title: "Restart", style: .destructive, handler: { (action) in
             
             self.dismiss(animated: true, completion: nil)
         }))
+        if firebaseManager.isInOnlineSession {
+            NotificationCenter.default.post(Notification(name: Notification.Name("didExitGroupFromListVC")))
+        }
         present(alertController, animated: true, completion: nil)
     }
     

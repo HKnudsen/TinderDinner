@@ -4,11 +4,12 @@
         <attribute name="allergens" optional="YES" attributeType="String" customClassName="[String]"/>
         <attribute name="howToMake" optional="YES" attributeType="Transformable" customClassName="[String]"/>
         <attribute name="image" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
-        <attribute name="ingredients" optional="YES" attributeType="String" customClassName="[String]"/>
+        <attribute name="ingredients" optional="YES" attributeType="Transformable" customClassName="[String]"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="origin" optional="YES" attributeType="String"/>
+        <attribute name="uniqueID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <elements>
-        <element name="Dinner" positionX="-63" positionY="-18" width="128" height="133"/>
+        <element name="Dinner" positionX="-63" positionY="-18" width="128" height="148"/>
     </elements>
 </model>

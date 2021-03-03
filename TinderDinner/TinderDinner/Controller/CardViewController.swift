@@ -30,6 +30,16 @@ class CardViewController: UIViewController {
         }
     }
     
+    
+    fileprivate func setupObservers() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(onlineSessionStartedByHost),
+                                               name: NSNotification.Name(rawValue: "didStartOnlineSessionObserver"),
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(changeBackToSingleUserState), name: NSNotification.Name("didExitGroupFromListVC"), object: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the imgView.
@@ -38,15 +48,19 @@ class CardViewController: UIViewController {
         cardView.dataSource = self
         tabBarItem.title = "Swipe"
         
+        let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+        print("PATH: \(path)")
+        
 //        popupContainer.alpha = 0.0
 //        popupContainer.layer.cornerRadius = 20
         popupImageView.layer.cornerRadius = 20
 //        popupContainer.backgroundColor = .none
         
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
-        
+//        addDinnerTest()
         //This has to be called first to check if some allergens has been selected
         databaseManager.loadAllergensPlistData()
+        
         
 //        addDinnerTest()
 //        databaseManager.doesNotContain(text: "Dairy")
@@ -57,6 +71,8 @@ class CardViewController: UIViewController {
         
         print(databaseManager.itemsForCardView)
         print(UIDevice().type)
+        
+        setupObservers()
     }
     
 
@@ -66,16 +82,27 @@ class CardViewController: UIViewController {
             databaseManager.filterWithMultipleAllergens()
             cardView.resetCurrentCardIndex()
         }
+        if firebaseManager.isInOnlineSession {
+            self.tabBarController!.tabBar.items![1].isEnabled = false
+        }
+        
+    }
+    
+    @objc func onlineSessionStartedByHost() {
+        self.tabBarController!.tabBar.items![1].isEnabled = false
+        cardView.resetCurrentCardIndex()
     }
     
     
     func addDinnerTest() {
         let dinner = Dinner(context: databaseManager.context)
-        dinner.ingredients = "Water;Dough;Milk"
-        dinner.name = "Third Best Dinner"
+        dinner.ingredients = ["Water", "Milk", "Dough"]
+        dinner.name = "Sixth Best Dinner"
         dinner.origin = "Sweeden"
         dinner.howToMake = ["Mix milk and dough", "Make make", "Done!"]
         dinner.allergens = "Gluten;Dairy"
+        dinner.uniqueID = 6
+        
         
         let img = UIImage(named: "ironman1")
         let imgData = img?.pngData()
@@ -87,6 +114,10 @@ class CardViewController: UIViewController {
     }
     
     fileprivate func prepareForOnlineSession(inputCode: String) {
+        let waitingForHostAlertController = UIAlertController(title: "Waiting for host to start", message: "", preferredStyle: .alert)
+        waitingForHostAlertController.addAction(UIAlertAction(title: "Leave", style: .destructive, handler: { (action) in
+            self.leaveGroupPressed(groupCode: Int(inputCode)!)
+        }))
         self.groupId = Int(inputCode)
         self.firebaseManager.activeGroupId = Int(inputCode)
         self.firebaseManager.isInOnlineSession = true
@@ -95,9 +126,21 @@ class CardViewController: UIViewController {
         self.firebaseManager.initiateEventListenerFor(groupCode: Int(inputCode)!) { (document) in
             self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
                 print(groupStructure)
+                waitingForHostAlertController.message = "Participants: \(groupStructure.participants)"
+                if groupStructure.swipingSessionRunning == true {
+                    self.startOnlineSession(groupStructure: groupStructure)
+                    self.firebaseManager.detachEventListener()
+                    self.dismiss(animated: true, completion: nil)
+                }
+                
             }
         }
+        self.present(waitingForHostAlertController, animated: true, completion: nil)
     }
+    
+    
+    
+    // MARK: - Group Section
     
     func joinPressed() {
         let joinGroupController = UIAlertController(title: "Join", message: "Enter group code", preferredStyle: .alert)
@@ -112,6 +155,7 @@ class CardViewController: UIViewController {
                     if let document = document {
                         if document.exists {
                             self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
+                                self.firebaseManager.addOneParticipant(to: inputCode)
                                 self.prepareForOnlineSession(inputCode: inputCode)
                             }
                         } else {
@@ -140,7 +184,7 @@ class CardViewController: UIViewController {
             }
             if let groupId = self.groupId {
                 self.firebaseManager.activeGroupId = groupId
-                let waitingForParticipantsController = UIAlertController(title: "\(groupId)", message: "Waiting for participants \n Number of participants: 1", preferredStyle: .alert)
+                let waitingForParticipantsController = UIAlertController(title: "\(groupId)", message: "Waiting for participants \n Number of participants: 1. Wait for everyone to join, and press start", preferredStyle: .alert)
                 
                 waitingForParticipantsController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
                     self.dismiss(animated: true, completion: nil)
@@ -152,21 +196,36 @@ class CardViewController: UIViewController {
                 waitingForParticipantsController.addAction(UIAlertAction(title: "Start", style: .default, handler: { (actuin) in
                     self.dismiss(animated: true) {
                         print("Starting online session")
-                        self.firebaseManager.detachEventListener()
+                        self.moveToOnlineSessionSettings()
                     }
                 }))
                 
                 self.present(waitingForParticipantsController, animated: true, completion: nil)
-                self.firebaseManager.createGroup(with: groupId)
+                self.firebaseManager.createGroup(with: groupId, numberOfDesiredCards: self.settingsManager.numberOfDesieredCards)
                 
                 self.firebaseManager.initiateEventListenerFor(groupCode: groupId) { (document) in
                     self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
-                        waitingForParticipantsController.message = "Waiting for participants \n Number of participants: \(groupStructure.participants)"
+                        waitingForParticipantsController.message = "Waiting for participants \n Number of participants: \(groupStructure.participants). Wait for everyone to join, and press start"
                         print("Listener ran")
                     }
                 }
             }
         }
+    }
+    
+    func leaveGroupPressed(groupCode: Int) {
+        firebaseManager.activeGroupId = nil
+        firebaseManager.detachEventListener()
+        firebaseManager.isInOnlineSession = false
+        self.tabBarController!.tabBar.items![1].isEnabled = true
+        isMultipleUsersSwith.setOn(false, animated: true)
+        firebaseManager.removeOneFromParticipants(groupCode: groupCode)
+    }
+    
+    func startOnlineSession(groupStructure: GroupStructure) {
+        databaseManager.getDinnersWithMultipleIds(ids: groupStructure.dinnerIdsForCardView)
+        cardView.reloadData()
+        
     }
     
     @IBAction func switchPressed(_ sender: UISwitch) {
@@ -187,9 +246,24 @@ class CardViewController: UIViewController {
         }
     }
     
-    func changeBackToSingleUserState() {
+    @objc func changeBackToSingleUserState() {
         isMultipleUsersSwith.setOn(false, animated: true)
         tabBarController!.tabBar.items![1].isEnabled = true
+        firebaseManager.isInOnlineSession = false
+        firebaseManager.activeGroupId = nil
+        groupCodeLabel.text = nil
+        groupCodeLabel.isHidden = true
+        
+    }
+    
+    // Changes rootVC to Tab Bar for online session settings
+    func moveToOnlineSessionSettings() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let onlineSessionSettingsController = storyboard.instantiateViewController(identifier: "onlineSessionSettings")
+        modalPresentationStyle = .fullScreen
+        self.present(onlineSessionSettingsController, animated: true) {
+            
+        }
     }
 }
 
@@ -200,7 +274,7 @@ class CardViewController: UIViewController {
 extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
 
     func koloda(_ koloda: KolodaView, viewForCardAt index: Int) -> UIView {
-        
+
         let parentView = UIView(frame: CGRect(x: 0, y: 0, width: cardView.frame.size.width, height: cardView.frame.size.height))
         let imgView = UIImageView(image: UIImage(named: "ironman2"))
         
@@ -289,7 +363,10 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
 //        databaseManager.loadItems()
         
         if let allItems = databaseManager.itemsForCardView {
+            print("All items count\(allItems.count)")
             for (step, item) in allItems[index].howToMake!.enumerated() {
+                print("INDEX: \(index)")
+                print("ITEM: \(item)")
                 let stepText: UITextView = {
                     let view = UITextView()
                     view.text = "\(step): " + item
@@ -317,7 +394,7 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
     
     func koloda(_ koloda: KolodaView, didSwipeCardAt index: Int, in direction: SwipeResultDirection) {
         guard let items = databaseManager.itemsForCardView else {
-            fatalError("No items found at databaseManager: 118 CardVC")
+            fatalError("No items found at databaseManager CardVC")
         }
         
         if isMultipleUsersSwith.isOn == true {
@@ -325,8 +402,9 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
             switch direction {
             case SwipeResultDirection.right:
                 print("Swipe right multiuser")
-                firebaseManager.addDinnerNameToFirebase(with: items[index].name!, groupId: groupId!)
-                print(firebaseManager.leftSwipedDinnerNames)
+//                firebaseManager.addDinnerIdToFirebase(with: Int(items[index].uniqueID), groupId: groupId!)
+//                firebaseManager.appendToFirebase(with: Int(items[index].uniqueID), groupId: groupId!)
+                firebaseManager.saveDinnerIdToLocalStage(with: Int(items[index].uniqueID))
             case SwipeResultDirection.left:
                 print("Swipe left multiuser")
             case SwipeResultDirection.up:
@@ -352,31 +430,61 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
             }
         }
     }
-    
+    // This has du be changed after testing
     func kolodaNumberOfCards(_ koloda: KolodaView) -> Int {
-        if databaseManager.itemsForCardView!.count < settingsManager.numberOfDesieredCards {
-            return databaseManager.itemsForCardView!.count
+        if isMultipleUsersSwith.isOn == false {
+            databaseManager.loadAllergensPlistData()
+            databaseManager.filterWithMultipleAllergens()
+            databaseManager.appendCardsToKolodaWithAmount(number: settingsManager.numberOfDesieredCards)
+            if databaseManager.itemsForCardView?.count ?? 0 < settingsManager.numberOfDesieredCards {
+                return databaseManager.itemsForCardView?.count ?? 0
+            } else {
+                return databaseManager.itemsForCardView!.count
+            }
         } else {
-            return settingsManager.numberOfDesieredCards
+            return databaseManager.itemsForCardView!.count
         }
+
     }
     
     func kolodaDidRunOutOfCards(_ koloda: KolodaView) {
         if isMultipleUsersSwith.isOn == true {
-            firebaseManager.retrieveLeftSwipedDinnerNames { (groupStructure) in
-                // TODO: Only use firebase for wanted dinners as long as possible
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let vc = storyboard.instantiateViewController(identifier: "DinnerYesListViewController") as DinnerYesListViewController
-                vc.modalPresentationStyle = .fullScreen
-                print(self.firebaseManager.leftSwipedDinnerNames)
-                self.firebaseManager.leftSwipedDinnerNames = groupStructure.acceptedDinners
-                for name in self.firebaseManager.leftSwipedDinnerNames {
-                    if let dinnerFromDatabase = self.databaseManager.getDinnerWithName(name: name) {
-                        vc.addDinnerToDinnerList(with: dinnerFromDatabase)
+            firebaseManager.mergeIdFieldWithLocalStage(with: self.firebaseManager.localUserYesSwiped)
+            
+            firebaseManager.initiateEventListenerFor(groupCode: firebaseManager.activeGroupId!) { (document) in
+                self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
+                    if groupStructure.numberOfUsersReady == groupStructure.participants {
+                        
+                        // Create a function that gets the agreed upon dinner
+                        // LEFTOFF
+                        
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let vc = storyboard.instantiateViewController(identifier: "DinnerYesListViewController") as DinnerYesListViewController
+                        vc.modalPresentationStyle = .fullScreen
+                        
+                        self.present(vc, animated: true, completion: nil)
                     }
                 }
-                self.present(vc, animated: true, completion: nil)
             }
+            
+            
+
+            
+//            firebaseManager.retrieveLeftSwipedDinnerNames { (groupStructure) in
+//                // TODO: Only use firebase for wanted dinners as long as possible
+//
+//
+////                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+////                let vc = storyboard.instantiateViewController(identifier: "DinnerYesListViewController") as DinnerYesListViewController
+////                vc.modalPresentationStyle = .fullScreen
+//
+//                self.firebaseManager.leftSwipedDinnerIds = groupStructure.collectionOfAcceptedDinnerLists[self.firebaseManager.userNumber!].acceptedDinners
+//                var idArray = [Int]()
+//                for id in groupStructure.collectionOfAcceptedDinnerLists[self.firebaseManager.userNumber!].acceptedDinners {
+//                    vc.addDinnerToDinnerList(with: self.databaseManager.getDinnerWithSingleId(id: id)!)
+//                }
+//
+//                self.present(vc, animated: true, completion: nil)
         } else {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vc = storyboard.instantiateViewController(identifier: "DinnerYesListViewController") as DinnerYesListViewController
