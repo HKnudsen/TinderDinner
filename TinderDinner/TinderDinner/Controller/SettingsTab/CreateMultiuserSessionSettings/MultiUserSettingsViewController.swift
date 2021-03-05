@@ -50,7 +50,7 @@ class MultiUserSettingsViewController: UIViewController {
                 print(i.name)
             }
             let randomElement = databaseManager.allItemsWithCurrentFiler?.randomElement()
-            print("RANDOM ELEMENT: \(randomElement?.name)")
+            print("RANDOM ELEMENT: \(randomElement?.uniqueID)")
             let randomElementIndex = (databaseManager.allItemsWithCurrentFiler?.firstIndex(of: randomElement!))!
             databaseManager.allItemsWithCurrentFiler?.remove(at: randomElementIndex)
             dinnerIds.append(Int(randomElement!.uniqueID))

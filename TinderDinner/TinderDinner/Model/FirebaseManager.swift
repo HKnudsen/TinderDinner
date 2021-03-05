@@ -19,6 +19,7 @@ class FirebaseManager {
     var numberOfDesiredCards: Int = 20
     var userNumber: Int?
     var localUserYesSwiped = [Int]()
+    var uniqueUserId: String?
     
     
     
@@ -69,7 +70,8 @@ class FirebaseManager {
     
     func createGroup(with groupId: Int, numberOfDesiredCards: Int) {
         let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
-        let newGroup = GroupStructure(participants: 1, acceptedDinnerList: [Int](), swipingSessionRunning: false, numberOfCards: numberOfDesiredCards, dinnerIdsForCardView: [Int](), numberOfUsersReady: 0)
+
+        let newGroup = GroupStructure(participants: 1, swipingSessionRunning: false, numberOfCards: numberOfDesiredCards, dinnerIdsForCardView: [Int](), numberOfUsersReady: 0, collectionOfAcceptedDinnerList: [String: [Int]]())
         do { try dbRef.setData(from: newGroup); self.isGroupCreator = true }
         catch let error { print(error) }
     }
@@ -82,30 +84,32 @@ class FirebaseManager {
         
         switch result {
         case .success(let response):
+            print("TEST123 SUCCESS")
             if let response = response {
                 completion(response)
             } else {
                 print("Document Doesnt exist")
             }
         case .failure(let error):
+            print("TEST123 FAIL")
             print(error)
         }
     }
     
     // Not in use atm.
-    func appendToFirebase(with dinnerId: Int, groupId: Int) {
-        let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
-        dbRef.getDocument { (document, error) in
-            if let document = document {
-                self.getFirebaseObject(document: document) { (groupStructure) in
-                    var groupData = groupStructure
-                    groupData.acceptedDinnerList.append(dinnerId)
-                    do { try dbRef.setData(from: groupData) }
-                    catch let error { print("Error transforming data to firebase: \(error)") }
-                }
-            }
-        }
-    }
+//    func appendToFirebase(with dinnerId: Int, groupId: Int) {
+//        let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
+//        dbRef.getDocument { (document, error) in
+//            if let document = document {
+//                self.getFirebaseObject(document: document) { (groupStructure) in
+//                    var groupData = groupStructure
+//                    groupData.acceptedDinnerList.append(dinnerId)
+//                    do { try dbRef.setData(from: groupData) }
+//                    catch let error { print("Error transforming data to firebase: \(error)") }
+//                }
+//            }
+//        }
+//    }
     
     func removeOneFromParticipants(groupCode: Int) {
         let dbRef = Firestore.firestore().collection("Groups").document("\(groupCode)")
@@ -121,12 +125,30 @@ class FirebaseManager {
         }
     }
     
-    func addDinnerIdToFirebase(with dinnerId: Int, groupId: Int) {
+    func createUniqueUserId() {
+        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        let uniqueUserId = String((0..<10).map({ _ in letters.randomElement()! }))
+        self.uniqueUserId = uniqueUserId
+    }
+    
+    func markUserAsReady() {
+        let dbRef = Firestore.firestore().collection("Groups").document("\(activeGroupId)")
+        dbRef.updateData(["numberOfUsersReady" : FieldValue.increment(Int64(1))])
+    }
+    
+    func addDinnerIdsToFirebase(with dinnerIds: [Int], for groupId: Int, at userId: String) {
         let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
         dbRef.updateData([
-            "acceptedDinners": FieldValue.arrayUnion([dinnerId])
+            "collectionOfAcceptedDinnerList.\(userId)": dinnerIds
         ])
     }
+    
+//    func addDinnerIdToFirebase(with dinnerId: Int, groupId: Int) {
+//        let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
+//        dbRef.updateData([
+//            "acceptedDinners": FieldValue.arrayUnion([dinnerId])
+//        ])
+//    }
     
     func mergeIdFieldWithLocalStage(with dinnerIds: [Int]) {
         let dbRef = Firestore.firestore().collection("Groups").document("\(activeGroupId!)")
@@ -135,17 +157,17 @@ class FirebaseManager {
     }
     
     // Gets the data from firebase when session is done
-    func retrieveLeftSwipedDinnerNames(completion: @escaping (GroupStructure) -> Void) {
-        let dbRef = Firestore.firestore().collection("Groups").document("\(activeGroupId!)")
-        dbRef.getDocument { (document, error) in
-            if let document = document {
-                self.getFirebaseObject(document: document) { (groupStructure) in
-                    self.leftSwipedDinnerIds = groupStructure.acceptedDinnerList
-                    completion(groupStructure)
-                }
-            }
-        }
-    }
+//    func retrieveLeftSwipedDinnerNames(completion: @escaping (GroupStructure) -> Void) {
+//        let dbRef = Firestore.firestore().collection("Groups").document("\(activeGroupId!)")
+//        dbRef.getDocument { (document, error) in
+//            if let document = document {
+//                self.getFirebaseObject(document: document) { (groupStructure) in
+//                    self.leftSwipedDinnerIds = groupStructure.acceptedDinnerList
+//                    completion(groupStructure)
+//                }
+//            }
+//        }
+//    }
     
     // Starts the online session
     func startOnlineSession(withDinnersIds: [Int]) {
@@ -163,6 +185,36 @@ class FirebaseManager {
                 }
             }
         }
+    }
+    
+    func countYesSwipes(yesSwipedDinnerIdArrays: [String: [Int]]) -> Dictionary<Int, Int> {
+        var combinedArrays = [Int]()
+        for array in yesSwipedDinnerIdArrays {
+            combinedArrays.append(contentsOf: array.value)
+        }
+        print(combinedArrays)
+        let mappedDinnerIds = combinedArrays.map({ ($0, 1)})
+        let counts = Dictionary(mappedDinnerIds, uniquingKeysWith: +)
+        return counts
+    }
+    
+    func getDinnersWithMostVotes(voteCount: [Int: Int], participants: Int) -> [Int] {
+        var dinnerIdsWithMostVotes = [Int]()
+        for (dinnerId, votes) in voteCount {
+            if votes == participants {
+                dinnerIdsWithMostVotes.append(dinnerId)
+            }
+        }
+        var participantsMinus = participants
+        while dinnerIdsWithMostVotes.isEmpty {
+            participantsMinus -= 1
+            for (dinnerId, votes) in voteCount {
+                if votes == participants {
+                    dinnerIdsWithMostVotes.append(dinnerId)
+                }
+            }
+        }
+        return dinnerIdsWithMostVotes
     }
     
     
@@ -191,6 +243,24 @@ class FirebaseManager {
         dbRef.updateData([
             "participants": FieldValue.increment(Int64(1))
         ])
+    }
+    
+    func getDinnerIdsWithMostVotes(yesSwipedDinnerIdArrays: [String: [Int]], dinnerIdArray: [Int], numberOfParticipants: Int) -> [Int] {
+        var counts: [Int: Int] = [:]
+        dinnerIdArray.forEach({counts[$0, default: 0] += 1})
+        
+        var returnArray = [Int]()
+        
+        for dinnerId in counts {
+            if dinnerId.value == numberOfParticipants {
+                returnArray.append(dinnerId.key)
+            }
+        }
+        print("RETURN ARRAY: \(returnArray)")
+        if returnArray.isEmpty {
+            getDinnerIdsWithMostVotes(yesSwipedDinnerIdArrays: yesSwipedDinnerIdArrays, dinnerIdArray: dinnerIdArray, numberOfParticipants: numberOfParticipants - 1)
+        }
+        return returnArray
     }
 
     

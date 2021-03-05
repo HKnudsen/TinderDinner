@@ -44,6 +44,8 @@ class DatabaseManager {
         }
     }
     
+    
+    
     // Used to get dinners from the hosts list synced with other users itemsForCardView
     func getDinnersWithMultipleIds(ids: [Int]) {
         // Could also be done with compound predicate. Time complexity difference?
@@ -56,6 +58,20 @@ class DatabaseManager {
             catch let error { print("Error getting exact dinner with id: \(error)") }
         }
         itemsForCardView = synchronizedDinners
+    }
+    // Used to get dinners with id for use in yesdinner list after online session
+    func getDinnersWithMultipleIds(Ids: [Int]) -> [Dinner] {
+        var dinners = [Dinner]()
+        
+        for id in Ids {
+            let request: NSFetchRequest<Dinner> = Dinner.fetchRequest()
+            let predicate = NSPredicate(format: "uniqueID == %i", id)
+            request.predicate = predicate
+            do { try dinners.append(context.fetch(request)[0]) }
+            catch let error { print("Error getting dinner with id: \(error)") }
+        }
+        
+        return dinners
     }
     
     func getDinnerWithSingleId(id: Int) -> Dinner? {

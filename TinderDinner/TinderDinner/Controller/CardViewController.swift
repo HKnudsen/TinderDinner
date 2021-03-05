@@ -121,6 +121,7 @@ class CardViewController: UIViewController {
         self.groupId = Int(inputCode)
         self.firebaseManager.activeGroupId = Int(inputCode)
         self.firebaseManager.isInOnlineSession = true
+        self.firebaseManager.createUniqueUserId()
         self.firebaseManager.isGroupCreator = false
         self.tabBarController!.tabBar.items![1].isEnabled = false
         self.firebaseManager.initiateEventListenerFor(groupCode: Int(inputCode)!) { (document) in
@@ -202,7 +203,7 @@ class CardViewController: UIViewController {
                 
                 self.present(waitingForParticipantsController, animated: true, completion: nil)
                 self.firebaseManager.createGroup(with: groupId, numberOfDesiredCards: self.settingsManager.numberOfDesieredCards)
-                
+                self.firebaseManager.createUniqueUserId()
                 self.firebaseManager.initiateEventListenerFor(groupCode: groupId) { (document) in
                     self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
                         waitingForParticipantsController.message = "Waiting for participants \n Number of participants: \(groupStructure.participants). Wait for everyone to join, and press start"
@@ -253,6 +254,7 @@ class CardViewController: UIViewController {
         firebaseManager.activeGroupId = nil
         groupCodeLabel.text = nil
         groupCodeLabel.isHidden = true
+        firebaseManager.leftSwipedDinnerIds = []
         
     }
     
@@ -449,11 +451,21 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
     
     func kolodaDidRunOutOfCards(_ koloda: KolodaView) {
         if isMultipleUsersSwith.isOn == true {
-            firebaseManager.mergeIdFieldWithLocalStage(with: self.firebaseManager.localUserYesSwiped)
-            
+//            firebaseManager.mergeIdFieldWithLocalStage(with: self.firebaseManager.localUserYesSwiped)
+            firebaseManager.addDinnerIdsToFirebase(with: firebaseManager.localUserYesSwiped, for: groupId!, at: firebaseManager.uniqueUserId!)
+            print("ADD DINNERID TO FIREBASE")
+            firebaseManager.markThisUserAsReady()
+            print("MARK USER AS READY")
             firebaseManager.initiateEventListenerFor(groupCode: firebaseManager.activeGroupId!) { (document) in
+                print("INITIATE \(document)")
                 self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
+                    print("GET FIREBASE OBJECT")
+                    print("USERS READY \(groupStructure.numberOfUsersReady)")
+                    print("participants \(groupStructure.participants)")
                     if groupStructure.numberOfUsersReady == groupStructure.participants {
+                        let leftSwipeCount = self.firebaseManager.countYesSwipes(yesSwipedDinnerIdArrays: groupStructure.collectionOfAcceptedDinnerList)
+                        var votedDinnerIds = self.firebaseManager.getDinnersWithMostVotes(voteCount: leftSwipeCount, participants: groupStructure.participants)
+                        var dinners = self.databaseManager.getDinnersWithMultipleIds(Ids: votedDinnerIds)
                         
                         // Create a function that gets the agreed upon dinner
                         // LEFTOFF
@@ -461,7 +473,7 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
                         let storyboard = UIStoryboard(name: "Main", bundle: nil)
                         let vc = storyboard.instantiateViewController(identifier: "DinnerYesListViewController") as DinnerYesListViewController
                         vc.modalPresentationStyle = .fullScreen
-                        
+                        vc.dinnerList = dinners
                         self.present(vc, animated: true, completion: nil)
                     }
                 }
