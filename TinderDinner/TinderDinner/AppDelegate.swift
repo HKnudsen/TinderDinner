@@ -33,8 +33,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
+    
+
 
     // MARK: - Core Data stack
+    
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
 
     lazy var persistentContainer: NSPersistentContainer = {
         /*
@@ -62,6 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         })
         return container
     }()
+    
 
     // MARK: - Core Data Saving support
 

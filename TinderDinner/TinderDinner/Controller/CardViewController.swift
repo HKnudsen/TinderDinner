@@ -60,7 +60,8 @@ class CardViewController: UIViewController {
 //        addDinnerTest()
         //This has to be called first to check if some allergens has been selected
         databaseManager.loadAllergensPlistData()
-        
+        databaseManager.testPreload()
+        databaseManager.testSqlite()
         
 //        addDinnerTest()
 //        databaseManager.doesNotContain(text: "Dairy")
@@ -467,9 +468,6 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
                         var votedDinnerIds = self.firebaseManager.getDinnersWithMostVotes(voteCount: leftSwipeCount, participants: groupStructure.participants)
                         var dinners = self.databaseManager.getDinnersWithMultipleIds(Ids: votedDinnerIds)
                         
-                        // Create a function that gets the agreed upon dinner
-                        // LEFTOFF
-                        
                         let storyboard = UIStoryboard(name: "Main", bundle: nil)
                         let vc = storyboard.instantiateViewController(identifier: "DinnerYesListViewController") as DinnerYesListViewController
                         vc.modalPresentationStyle = .fullScreen
@@ -478,25 +476,6 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
                     }
                 }
             }
-            
-            
-
-            
-//            firebaseManager.retrieveLeftSwipedDinnerNames { (groupStructure) in
-//                // TODO: Only use firebase for wanted dinners as long as possible
-//
-//
-////                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-////                let vc = storyboard.instantiateViewController(identifier: "DinnerYesListViewController") as DinnerYesListViewController
-////                vc.modalPresentationStyle = .fullScreen
-//
-//                self.firebaseManager.leftSwipedDinnerIds = groupStructure.collectionOfAcceptedDinnerLists[self.firebaseManager.userNumber!].acceptedDinners
-//                var idArray = [Int]()
-//                for id in groupStructure.collectionOfAcceptedDinnerLists[self.firebaseManager.userNumber!].acceptedDinners {
-//                    vc.addDinnerToDinnerList(with: self.databaseManager.getDinnerWithSingleId(id: id)!)
-//                }
-//
-//                self.present(vc, animated: true, completion: nil)
         } else {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vc = storyboard.instantiateViewController(identifier: "DinnerYesListViewController") as DinnerYesListViewController
