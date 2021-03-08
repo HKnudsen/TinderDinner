@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import SQLite3
 
 // Manages FetchRequests and results to the CoreData local backend
 
@@ -14,27 +15,45 @@ class DatabaseManager {
     static let shared = DatabaseManager()
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var storeCoordinator: NSPersistentStoreCoordinator?
+    
+    var appendCalled = 0
+    
     var itemsForCardView:[Dinner]?
     // Used to pick the correct amount of cards at random that matches filter criteria
     var allItemsWithCurrentFiler: [Dinner]?
-    
-    var wantedDinners: [Dinner]?
+
+    var wantedDinnersId: [Int]?
     
     let allAllergens = ["Dairy", "Gluten"]
     var allergensState: NSMutableDictionary?
     
-    func addToWantedDinner(with dinner: Dinner) {
-        if self.wantedDinners == nil {
-            self.wantedDinners = [dinner]
+    func addToWantedDinner(with dinnerId: Int) {
+        if self.wantedDinnersId == nil {
+            self.wantedDinnersId = [dinnerId]
         } else {
-            self.wantedDinners?.append(dinner)
+            self.wantedDinnersId?.append(dinnerId)
         }
     }
     
     func appendCardsToKolodaWithAmount(number numberOfCards: Int) {
+        self.appendCalled += 1
+        print("APPEND \(appendCalled)")
+        self.filterWithMultipleAllergens()
         guard let allItemsWithCurrentFiler = allItemsWithCurrentFiler else { return }
+//        var allItemsWithCurrentFilterLocal = allItemsWithCurrentFiler
+        var allItemsWithCurrentFilterLocal = Array(Set(allItemsWithCurrentFiler))
+        print("ALL: \(allItemsWithCurrentFiler.count)")
+        print("ALL LOCAL: \(allItemsWithCurrentFilterLocal.count)")
+        
+        itemsForCardView = nil
+        
         for _ in 0..<numberOfCards {
-            if let randomDinner = allItemsWithCurrentFiler.randomElement() {
+            if let randomDinner = allItemsWithCurrentFilterLocal.randomElement() {
+                
+                let randomDinnerIndex = allItemsWithCurrentFilterLocal.firstIndex(of: randomDinner)
+                allItemsWithCurrentFilterLocal.remove(at: randomDinnerIndex!)
+                
                 if itemsForCardView == nil {
                     itemsForCardView = [randomDinner]
                 } else {
@@ -42,13 +61,16 @@ class DatabaseManager {
                 }
             }
         }
+        
+        for item in itemsForCardView! {
+            print("ITEM IN ITEMSCV: \(item.name)")
+        }
     }
     
     
     
-    // Used to get dinners from the hosts list synced with other users itemsForCardView
+    // Used to get dinners from the hosts list synced with other user's itemsForCardView
     func getDinnersWithMultipleIds(ids: [Int]) {
-        // Could also be done with compound predicate. Time complexity difference?
         var synchronizedDinners = [Dinner]()
         for id in ids {
             let request: NSFetchRequest<Dinner> = Dinner.fetchRequest()
@@ -151,6 +173,7 @@ class DatabaseManager {
         loadItems(with: request)
     }
     
+
     
     
     
@@ -202,52 +225,5 @@ class DatabaseManager {
         }
         
         dictionary?.write(toFile: path, atomically: true)
-    }
-    
-    func testSqlite() {
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as NSArray
-        let documentsInDirectory = paths.object(at: 0) as! NSString
-        let path = documentsInDirectory.appendingPathComponent("TinderDinner.sqlite")
-        let fileManager = FileManager.default
-        
-        // Check if the file exists
-        if !fileManager.fileExists(atPath: path) {
-            guard let bundlePath = Bundle.main.path(forResource: "TinderDinner", ofType: "sqlite") else {
-                return
-            }
-            do {
-                try fileManager.copyItem(atPath: bundlePath, toPath: path)
-            } catch let error as NSError {
-                print("Unable to copy file: \(error.localizedDescription)")
-            }
-            
-            
-            
-            
-        }
-        let resultDictionary = NSDictionary(contentsOfFile: path)
-        
-        
-        
-        
-        print("Test results: \(resultDictionary)")
-    }
-    
-    func testPreload() {
-        let sourceSqliteURLs = [Bundle.main.url(forResource: "TinderDinner", withExtension: ".sqlite"), Bundle.main.url(forResource: "TinderDinner", withExtension: ".sqlite-wal"), Bundle.main.url(forResource: "TinderDinner", withExtension: ".sqlite-shm")]
-        
-        let destSqliteURLs = [
-            URL(fileURLWithPath: NSPersistentContainer.defaultDirectoryURL().relativePath + "TinderDinner.sqlite"),
-            URL(fileURLWithPath: NSPersistentContainer.defaultDirectoryURL().relativePath + "TinderDinner.sqlite-wal"),
-            URL(fileURLWithPath: NSPersistentContainer.defaultDirectoryURL().relativePath + "TinderDinner.sqlite-shm"),
-        ]
-        
-        for index in 0...sourceSqliteURLs.count-1 {
-            do {
-                try FileManager.default.copyItem(at: sourceSqliteURLs[index]!, to: destSqliteURLs[index])
-            } catch {
-                print("Could not preload data")
-            }
-        }
     }
 }

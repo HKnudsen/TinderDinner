@@ -18,6 +18,7 @@ class DinnerYesListViewController: UIViewController {
     fileprivate let cellReusableId = "DinnerListTableViewCell"
     var dinnerList: [Dinner]?
     var dinnerNames: [String]?
+    var dinnerIds: [Int]?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +33,7 @@ class DinnerYesListViewController: UIViewController {
         }
         
         print(dinnerList)
-        print("ListVC: \(databaseManager.wantedDinners?.count)")
+        print("ListVC: \(databaseManager.wantedDinnersId?.count)")
         
         
     }
@@ -42,6 +43,8 @@ class DinnerYesListViewController: UIViewController {
         let alertController = UIAlertController(title: "Are you sure?", message: "Restarting or leaving will delete the swipes you just did, and take you back to the main page", preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alertController.addAction(UIAlertAction(title: "Restart", style: .destructive, handler: { (action) in
+            self.dinnerList = nil
+            self.databaseManager.wantedDinnersId = nil
             
             self.dismiss(animated: true, completion: nil)
         }))
@@ -70,19 +73,20 @@ extension DinnerYesListViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = listTableView.dequeueReusableCell(withIdentifier: cellReusableId, for: indexPath) as! DinnerListTableViewCell
         if !firebaseManager.isInOnlineSession {
-            if let wantedDinners = databaseManager.wantedDinners {
+            if let wantedDinners = dinnerList {
                 guard let data = wantedDinners[indexPath.row].image else { fatalError("Error loading png data from CoreData") }
                 let image = UIImage(data: data)
                 cell.dinnerImage.image = image
+                cell.dinnerLabel.text = wantedDinners[indexPath.row].name
             } else {
-                cell.dinnerImage.image = #imageLiteral(resourceName: "ironman2")
+                cell.dinnerImage.image = #imageLiteral(resourceName: "test")
                 print("Error ja")
             }
             
-            cell.dinnerLabel.text = "Test text"
+            
             return cell
         } else {
-            if let wantedDinners = databaseManager.wantedDinners {
+            if let wantedDinners = dinnerList {
                 guard let data = wantedDinners[indexPath.row].image else { fatalError("Error loading png data from CoreData") }
                 let image = UIImage(data: data)
                 cell.dinnerImage.image = image
@@ -99,6 +103,8 @@ extension DinnerYesListViewController: UITableViewDelegate, UITableViewDataSourc
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(identifier: "SelectedDinnerViewController") as SelectedDinnerViewController
         vc.instantiatedFrom = "DinnerYesListViewController"
+        vc.dinner = dinnerList![indexPath.row]
+        vc.headerView?.imageView.image = UIImage(data: dinnerList![indexPath.row].image!)
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true, completion: nil)
     }

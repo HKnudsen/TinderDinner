@@ -11,5 +11,5 @@ class SettingsManager {
     static let shared = SettingsManager()
     
     let settingOptions = ["Filter", "Favourites", "Settings", "About"]
-    var numberOfDesieredCards: Int = 20
+    var numberOfDesieredCards: Int = 5
 }

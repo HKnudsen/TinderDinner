@@ -9,14 +9,15 @@ import UIKit
 
 class HeaderView: UICollectionReusableView {
     
-    let imageView: UIImageView = {
-        let view = UIImageView(image: #imageLiteral(resourceName: "ironman2"))
+    var imageView: UIImageView = {
+        var view = UIImageView(image: #imageLiteral(resourceName: "ironman2"))
         view.contentMode = .scaleAspectFill
         return view
     }()
     
     var visualEffectView = UIVisualEffectView(effect: nil)
     let animator = UIViewPropertyAnimator(duration: 0.5, curve: .linear)
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)

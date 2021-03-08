@@ -224,12 +224,18 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="o6r-pc-ChO">
                                 <rect key="frame" x="0.0" y="89" width="414" height="807"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="414" id="oKR-sJ-9vy"/>
+                                </constraints>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5F9-ue-Vt9">
-                                <rect key="frame" x="0.0" y="44" width="414" height="45"/>
+                                <rect key="frame" x="0.0" y="44" width="402" height="45"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FxE-tU-SCs">
-                                        <rect key="frame" x="12" y="4.5" width="82" height="36"/>
+                                        <rect key="frame" x="12" y="4.5" width="70" height="36"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="70" id="izU-Bh-KSn"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <state key="normal" title="Restart">
                                             <color key="titleColor" red="0.99662548299999998" green="0.45996135469999999" blue="0.41985547540000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -250,7 +256,6 @@
                         <viewLayoutGuide key="safeArea" id="vSy-0G-MGO"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="5F9-ue-Vt9" firstAttribute="trailing" secondItem="vSy-0G-MGO" secondAttribute="trailing" id="58X-WF-zxs"/>
                             <constraint firstItem="5F9-ue-Vt9" firstAttribute="leading" secondItem="vSy-0G-MGO" secondAttribute="leading" id="Cj4-q5-buu"/>
                             <constraint firstItem="o6r-pc-ChO" firstAttribute="leading" secondItem="vSy-0G-MGO" secondAttribute="leading" id="DOU-kB-ukv"/>
                             <constraint firstItem="o6r-pc-ChO" firstAttribute="trailing" secondItem="vSy-0G-MGO" secondAttribute="trailing" id="FOO-OG-X6v"/>

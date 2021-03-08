@@ -12,7 +12,7 @@ class SelectedDinnerViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var exitButton: UIButton!
     
-    fileprivate let cellId = "cellId"
+    fileprivate let cellId = "SelectedDinner"
     fileprivate let headerId = "headerId"
     fileprivate let padding: CGFloat = 16
     var dinner: Dinner?
@@ -36,15 +36,12 @@ class SelectedDinnerViewController: UIViewController {
         exitButton.setTitle("", for: .normal)
         
         print(instantiatedFrom)
+        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
-    
-
-    
-    
     
     @IBAction func exitPressed(_ sender: UIButton) {
 //        let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -100,6 +97,8 @@ extension SelectedDinnerViewController: UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as? HeaderView
+        
+        headerView?.imageView.image = UIImage(data: (dinner?.image)!)
         return headerView!
     }
     

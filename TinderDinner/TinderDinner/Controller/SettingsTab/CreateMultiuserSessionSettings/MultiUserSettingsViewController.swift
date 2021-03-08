@@ -45,10 +45,6 @@ class MultiUserSettingsViewController: UIViewController {
         var dinners = [Dinner]()
         var dinnerIds = [Int]()
         for dinner in 0..<settingsManager.numberOfDesieredCards {
-            print("elements: \(databaseManager.allItemsWithCurrentFiler)")
-            for i in databaseManager.allItemsWithCurrentFiler! {
-                print(i.name)
-            }
             let randomElement = databaseManager.allItemsWithCurrentFiler?.randomElement()
             print("RANDOM ELEMENT: \(randomElement?.uniqueID)")
             let randomElementIndex = (databaseManager.allItemsWithCurrentFiler?.firstIndex(of: randomElement!))!

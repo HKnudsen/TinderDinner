@@ -32,3 +32,4 @@ struct acceptedDinnerList: Codable {
     var acceptedDinners: [Int]
 }
 
+

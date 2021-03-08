@@ -84,14 +84,12 @@ class FirebaseManager {
         
         switch result {
         case .success(let response):
-            print("TEST123 SUCCESS")
             if let response = response {
                 completion(response)
             } else {
                 print("Document Doesnt exist")
             }
         case .failure(let error):
-            print("TEST123 FAIL")
             print(error)
         }
     }

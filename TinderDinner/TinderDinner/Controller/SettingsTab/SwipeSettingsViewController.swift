@@ -21,8 +21,8 @@ class SwipeSettingsViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        numberOfCardsLabel.text = "20"
-        numberOfCardsSlider.value = 20
+        numberOfCardsLabel.text = "5"
+        numberOfCardsSlider.value = 5
     }
     
     @IBAction func sliderDidSlide(_ sender: UISlider) {

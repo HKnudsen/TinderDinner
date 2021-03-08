@@ -11,12 +11,14 @@ import Firebase
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
+//    var preloadManager = PreloadManager()
 
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
+//        preloadManager.checkIfPreloaded()
         return true
     }
 
@@ -70,6 +72,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         })
         return container
     }()
+    
+
     
 
     // MARK: - Core Data Saving support
