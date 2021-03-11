@@ -19,6 +19,7 @@ extension Dinner {
     @NSManaged public var howToMake: [String]?
     @NSManaged public var ingredients: [String]?
     @NSManaged public var name: String?
+    // The person/company who provided the dinner
     @NSManaged public var origin: String?
     @NSManaged public var image: Data?
     @NSManaged public var allergens: String?

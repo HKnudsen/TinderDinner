@@ -282,7 +282,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="IBF-H7-8Rc">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="IBF-H7-8Rc">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="862"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Yum-WV-rXv">
@@ -322,8 +322,8 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="collectionView" destination="IBF-H7-8Rc" id="IPs-Km-xAc"/>
                         <outlet property="exitButton" destination="j3K-O9-XBi" id="7tq-JW-vWx"/>
+                        <outlet property="selectedDinnerCollectionView" destination="IBF-H7-8Rc" id="IPs-Km-xAc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LwM-fl-fFz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

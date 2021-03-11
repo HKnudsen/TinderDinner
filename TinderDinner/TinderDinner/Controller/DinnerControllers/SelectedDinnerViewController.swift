@@ -9,10 +9,10 @@ import UIKit
 
 class SelectedDinnerViewController: UIViewController {
     
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var selectedDinnerCollectionView: UICollectionView!
     @IBOutlet weak var exitButton: UIButton!
     
-    fileprivate let cellId = "SelectedDinner"
+    fileprivate let cellId = "DinnerInfoCell"
     fileprivate let headerId = "headerId"
     fileprivate let padding: CGFloat = 16
     var dinner: Dinner?
@@ -23,11 +23,13 @@ class SelectedDinnerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView.delegate     = self
-        collectionView.dataSource   = self
+        selectedDinnerCollectionView.delegate     = self
+        selectedDinnerCollectionView.dataSource   = self
+        
         
         setupCollectionViewLayout()
         setupCollectionView()
+
         
         print(dinner?.name)
         exitButton.imageView?.image = .remove
@@ -57,15 +59,16 @@ class SelectedDinnerViewController: UIViewController {
     
     // MARK: - Layout & Animation Section
     fileprivate func setupCollectionView() {
-        collectionView.backgroundColor                  = .blue
-        collectionView.contentInsetAdjustmentBehavior   = .never
-        collectionView.collectionViewLayout             = StretchyHeaderLayout()
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellId)
-        collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
+        selectedDinnerCollectionView.backgroundColor                  = .blue
+        selectedDinnerCollectionView.contentInsetAdjustmentBehavior   = .never
+        selectedDinnerCollectionView.collectionViewLayout             = StretchyHeaderLayout()
+        let nib = UINib(nibName: "DinnerInfoCell", bundle: nil)
+        selectedDinnerCollectionView.register(nib, forCellWithReuseIdentifier: cellId)
+        selectedDinnerCollectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
     }
     
     fileprivate func setupCollectionViewLayout() {
-        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+        if let layout = selectedDinnerCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.sectionInset = .init(top: padding, left: padding, bottom: padding, right: padding)
         }
     }
@@ -82,17 +85,13 @@ class SelectedDinnerViewController: UIViewController {
 // MARK: - UICollectionView
 extension SelectedDinnerViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 18
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
-        cell.backgroundColor = .black
-        return cell
+        return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return .init(width: view.frame.width - 2 * padding, height: 50)
+        let rowsWithItemsCount: Int = (dinner?.howToMake!.count)! + (dinner?.ingredients!.count)!
+//        return .init(width: view.frame.width - 2 * padding, height: CGFloat((rowsWithItemsCount * 200) + 20))
+        return .init(width: view.frame.width - 2 * padding, height: CGFloat(500))
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -125,5 +124,34 @@ extension SelectedDinnerViewController: UICollectionViewDelegate, UICollectionVi
             return
         }
         headerView?.animator.fractionComplete = abs(contentOffsetY / 100)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = selectedDinnerCollectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! DinnerInfoCell
+        cell.setupUI(data: dinner!)
+        return cell
+        
+//        let parentView = UICollectionViewCell(frame: CGRect(x: 0, y: 0, width: collectionView.frame.size.width, height: collectionView.frame.size.height))
+//
+//        // Dinner Name Title
+//        let titleView: UIView = {
+//            let view = UIView()
+//            view.translatesAutoresizingMaskIntoConstraints = false
+//            return view
+//        }()
+//
+//        let titleTextView: UITextView = {
+//            let titleText = UITextView()
+//            titleText.translatesAutoresizingMaskIntoConstraints = true
+//            titleText.textAlignment = .center
+//            return titleText
+//        }()
+//
+//        titleView.addSubview(titleTextView)
+//        parentView.addSubview(titleView)
+//
+//
+//
+//        return parentView
     }
 }
