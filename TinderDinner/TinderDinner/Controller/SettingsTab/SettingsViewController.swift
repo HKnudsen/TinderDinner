@@ -23,8 +23,8 @@ class SettingsViewController: UIViewController {
     fileprivate func setupTableView() {
         tableView.delegate      = self
         tableView.dataSource    = self
-        let nib = UINib(nibName: "SettingsTableViewCell", bundle: nil)
-        tableView.register(nib, forCellReuseIdentifier: "SettingsTBCell")
+        let nib = UINib(nibName: K.cells.settingsTBCell, bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: K.cells.settingsTBCell)
     }
 }
 

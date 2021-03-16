@@ -26,7 +26,7 @@ class FilterSettingsViewController: UIViewController {
         
         tableView.delegate      = self
         tableView.dataSource    = self
-        let nib = UINib(nibName: "FilterTableViewCell", bundle: nil)
+        let nib = UINib(nibName: K.cells.filterTBCell, bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: reuseIdentifier)
         
 

@@ -25,7 +25,7 @@ class PreloadManager {
         dinnerStructure(ingredients: ["Dough", "Milk", "Shake"], name: "Sweedish Dinner", origin: "Sweeden", howToMake: ["Mademade", "DoneDone"], allergens: "Dairy;Gluten", uniqueID: 2, image: (UIImage(named: "ironman2")?.pngData())!),
         dinnerStructure(ingredients: ["Dough", "Salt", "Milk"], name: "Danish Dinner", origin: "Denmark", howToMake: ["Makemake", "taketake", "done"], allergens: "Dairy;Gluten", uniqueID: 3, image: (UIImage(named: "test")?.pngData())!),
         dinnerStructure(ingredients: ["Milk", "Salt"], name: "Finnish Dinner", origin: "Finland", howToMake: ["Makemake", "done"], allergens: "Dairy", uniqueID: 4, image: (UIImage(named: "ironman2")?.pngData())!),
-        dinnerStructure(ingredients: ["Oregano", "Cheese"], name: "Italian Pizza", origin: "Italy", howToMake: ["Cheese cheese", "cook cook", "dine done"], allergens: "Dairy;Gluten", uniqueID: 5, image: (UIImage(named: "ironman1")?.pngData())!)
+        dinnerStructure(ingredients: ["Oregano", "Cheese", "Dough", "Chicken"], name: "Italian Pizza", origin: "Italy", howToMake: ["Cheese cheese", "cook cook","cook cook", "dine done", "eat eat"], allergens: "Dairy;Gluten;Soy", uniqueID: 5, image: (UIImage(named: "ironman1")?.pngData())!)
     ]
     
     func checkIfPreloaded() {
@@ -50,6 +50,7 @@ class PreloadManager {
             dinnerToPreload.howToMake = dinner.howToMake
             dinnerToPreload.image = dinner.image
             dinnerToPreload.uniqueID = dinner.uniqueID
+            dinnerToPreload.origin = dinner.origin
             print("PRELOADDINNER\(dinnerToPreload)")
             
             do { try dbManager.context.save() }

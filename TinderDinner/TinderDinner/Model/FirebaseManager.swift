@@ -94,21 +94,6 @@ class FirebaseManager {
         }
     }
     
-    // Not in use atm.
-//    func appendToFirebase(with dinnerId: Int, groupId: Int) {
-//        let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
-//        dbRef.getDocument { (document, error) in
-//            if let document = document {
-//                self.getFirebaseObject(document: document) { (groupStructure) in
-//                    var groupData = groupStructure
-//                    groupData.acceptedDinnerList.append(dinnerId)
-//                    do { try dbRef.setData(from: groupData) }
-//                    catch let error { print("Error transforming data to firebase: \(error)") }
-//                }
-//            }
-//        }
-//    }
-    
     func removeOneFromParticipants(groupCode: Int) {
         let dbRef = Firestore.firestore().collection("Groups").document("\(groupCode)")
         dbRef.getDocument { (document, error) in
@@ -140,13 +125,6 @@ class FirebaseManager {
             "collectionOfAcceptedDinnerList.\(userId)": dinnerIds
         ])
     }
-    
-//    func addDinnerIdToFirebase(with dinnerId: Int, groupId: Int) {
-//        let dbRef = Firestore.firestore().collection("Groups").document("\(groupId)")
-//        dbRef.updateData([
-//            "acceptedDinners": FieldValue.arrayUnion([dinnerId])
-//        ])
-//    }
     
     func mergeIdFieldWithLocalStage(with dinnerIds: [Int]) {
         let dbRef = Firestore.firestore().collection("Groups").document("\(activeGroupId!)")
@@ -265,12 +243,13 @@ class FirebaseManager {
     
     // MARK: - Event Listener Section
     
-    func initiateEventListenerFor(groupCode: Int, completion: @escaping (DocumentSnapshot) -> Void) {
+    func initiateEventListenerFor(groupCode: Int, completion: @escaping (DocumentSnapshot?, Error?) -> Void) {
          let listener = Firestore.firestore().collection("Groups").document("\(groupCode)").addSnapshotListener { (document, error) in
             if let document = document {
-                completion(document)
+                completion(document, nil)
             } else {
                 if let error = error {
+                    completion(nil, error)
                     print("Error getting snapshot from eventlistener: Firebasemanager: \(error)")
                 }
             }
@@ -282,5 +261,20 @@ class FirebaseManager {
         self.activeEventListener?.remove()
         self.activeEventListener = nil
     }
+    
+    
+    
+    // MARK: - Error handling section
+    
+    func displayErrorMessage(error: Error) {
+        let errorController = UIAlertController(title: "No Connection", message: error.localizedDescription, preferredStyle: .alert)
+        self.detachEventListener()
+        errorController.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
+    }
+    
 }
+
+
+
+
 

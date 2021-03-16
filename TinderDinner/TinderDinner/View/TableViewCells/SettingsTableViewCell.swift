@@ -9,7 +9,7 @@ import UIKit
 
 class SettingsTableViewCell: UITableViewCell {
     
-    let identifier = "SettingsTBCell"
+    let identifier = K.cells.settingsTBCell
 
     @IBOutlet weak var txtLabel: UILabel!
     

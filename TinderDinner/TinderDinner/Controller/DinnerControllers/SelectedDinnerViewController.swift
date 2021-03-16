@@ -11,6 +11,7 @@ class SelectedDinnerViewController: UIViewController {
     
     @IBOutlet weak var selectedDinnerCollectionView: UICollectionView!
     @IBOutlet weak var exitButton: UIButton!
+    @IBOutlet weak var addToFavouritesButton: UIButton!
     
     fileprivate let cellId = "DinnerInfoCell"
     fileprivate let headerId = "headerId"
@@ -46,13 +47,30 @@ class SelectedDinnerViewController: UIViewController {
     }
     
     @IBAction func exitPressed(_ sender: UIButton) {
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let vc = storyboard.instantiateViewController(identifier: instantiatedFrom ?? "FavouritesViewController")
-//        vc.modalPresentationStyle = .fullScreen
-//        self.present(vc, animated: true, completion: nil)
         self.dismiss(animated: true, completion: nil)
-        // LOL
     }
+    
+    @IBAction func addToFavoritesPressed(_ sender: UIButton) {
+        let userDefaults = UserDefaults.standard
+        
+        var favoritesArray = userDefaults.array(forKey: K.UserDefaultString.favorites)
+        
+        if favoritesArray == nil {
+            favoritesArray = [dinner?.uniqueID]
+            userDefaults.setValue(favoritesArray, forKey: K.UserDefaultString.favorites)
+        } else {
+            guard var favoritesArray = favoritesArray else { fatalError("Error getting favorites at selectedDinner") }
+            if !favoritesArray.isEmpty {
+                favoritesArray.append(dinner?.uniqueID)
+                userDefaults.setValue(favoritesArray, forKey: K.UserDefaultString.favorites)
+            } else {
+                favoritesArray = [dinner?.uniqueID]
+                userDefaults.setValue(favoritesArray, forKey: K.UserDefaultString.favorites)
+            }
+
+        }
+    }
+    
     
     
     
@@ -89,9 +107,11 @@ extension SelectedDinnerViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let rowsWithItemsCount: Int = (dinner?.howToMake!.count)! + (dinner?.ingredients!.count)!
-//        return .init(width: view.frame.width - 2 * padding, height: CGFloat((rowsWithItemsCount * 200) + 20))
-        return .init(width: view.frame.width - 2 * padding, height: CGFloat(500))
+        let numberOfAllergens = dinner?.allergens?.components(separatedBy: ";").count
+        let rowsWithItemsCount: Int = (dinner?.howToMake!.count)! + (dinner?.ingredients!.count)! + (numberOfAllergens)!
+        
+        // Each item gets a height of 45. Each title gets a height of 75, cumulates to 225. Each spacing gets 50
+        return .init(width: view.frame.width - 2 * padding, height: CGFloat(rowsWithItemsCount * 45) + 225 + (50 * 4))
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {

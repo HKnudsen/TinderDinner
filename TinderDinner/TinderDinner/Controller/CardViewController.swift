@@ -121,17 +121,24 @@ class CardViewController: UIViewController {
         self.firebaseManager.createUniqueUserId()
         self.firebaseManager.isGroupCreator = false
         self.tabBarController!.tabBar.items![1].isEnabled = false
-        self.firebaseManager.initiateEventListenerFor(groupCode: Int(inputCode)!) { (document) in
-            self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
-                print(groupStructure)
-                waitingForHostAlertController.message = "Participants: \(groupStructure.participants)"
-                if groupStructure.swipingSessionRunning == true {
-                    self.startOnlineSession(groupStructure: groupStructure)
-                    self.firebaseManager.detachEventListener()
-                    self.dismiss(animated: true, completion: nil)
+        self.firebaseManager.initiateEventListenerFor(groupCode: Int(inputCode)!) { (document, error) in
+            
+            if let document = document {
+                self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
+                    print(groupStructure)
+                    waitingForHostAlertController.message = "Participants: \(groupStructure.participants)"
+                    if groupStructure.swipingSessionRunning == true {
+                        self.startOnlineSession(groupStructure: groupStructure)
+                        self.firebaseManager.detachEventListener()
+                        self.dismiss(animated: true, completion: nil)
+                    }
+                    
                 }
-                
+            } else {
+                guard let error = error else { return }
+                self.firebaseManager.displayErrorMessage(error: error)
             }
+
         }
         self.present(waitingForHostAlertController, animated: true, completion: nil)
     }
@@ -201,11 +208,18 @@ class CardViewController: UIViewController {
                 self.present(waitingForParticipantsController, animated: true, completion: nil)
                 self.firebaseManager.createGroup(with: groupId, numberOfDesiredCards: self.settingsManager.numberOfDesieredCards)
                 self.firebaseManager.createUniqueUserId()
-                self.firebaseManager.initiateEventListenerFor(groupCode: groupId) { (document) in
-                    self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
-                        waitingForParticipantsController.message = "Waiting for participants \n Number of participants: \(groupStructure.participants). Wait for everyone to join, and press start"
-                        print("Listener ran")
+                self.firebaseManager.initiateEventListenerFor(groupCode: groupId) { (document, error) in
+                    if let document = document {
+                        
+                        self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
+                            waitingForParticipantsController.message = "Waiting for participants \n Number of participants: \(groupStructure.participants). Wait for everyone to join, and press start"
+                            print("Listener ran")
+                        }
+                    } else {
+                        guard let error = error else { return }
+                        self.firebaseManager.displayErrorMessage(error: error)
                     }
+
                 }
             }
         }
@@ -468,24 +482,31 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
 
             firebaseManager.markThisUserAsReady()
 
-            firebaseManager.initiateEventListenerFor(groupCode: firebaseManager.activeGroupId!) { (document) in
+            firebaseManager.initiateEventListenerFor(groupCode: firebaseManager.activeGroupId!) { (document, error) in
+                if let document = document {
+                    self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
 
-                self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
-
-                    if groupStructure.numberOfUsersReady == groupStructure.participants {
-                        
-                        let leftSwipeCount = self.firebaseManager.countYesSwipes(yesSwipedDinnerIdArrays: groupStructure.collectionOfAcceptedDinnerList)
-                        var votedDinnerIds = self.firebaseManager.getDinnersWithMostVotes(voteCount: leftSwipeCount, participants: groupStructure.participants)
-                        var dinners = self.databaseManager.getDinnersWithMultipleIds(Ids: votedDinnerIds)
-                        
-                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                        let vc = storyboard.instantiateViewController(identifier: "DinnerYesListViewController") as DinnerYesListViewController
-                        vc.modalPresentationStyle = .fullScreen
-                        vc.dinnerList = dinners
-                        self.present(vc, animated: true, completion: nil)
+                        if groupStructure.numberOfUsersReady == groupStructure.participants {
+                            
+                            let leftSwipeCount = self.firebaseManager.countYesSwipes(yesSwipedDinnerIdArrays: groupStructure.collectionOfAcceptedDinnerList)
+                            var votedDinnerIds = self.firebaseManager.getDinnersWithMostVotes(voteCount: leftSwipeCount, participants: groupStructure.participants)
+                            var dinners = self.databaseManager.getDinnersWithMultipleIds(Ids: votedDinnerIds)
+                            
+                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                            let vc = storyboard.instantiateViewController(identifier: "DinnerYesListViewController") as DinnerYesListViewController
+                            vc.modalPresentationStyle = .fullScreen
+                            vc.dinnerList = dinners
+                            self.present(vc, animated: true, completion: nil)
+                        }
+                        else {
+                            guard let error = error else { return }
+                            self.firebaseManager.displayErrorMessage(error: error)
+                        }
                     }
                 }
             }
+
+
         } else {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vc = storyboard.instantiateViewController(identifier: "DinnerYesListViewController") as DinnerYesListViewController

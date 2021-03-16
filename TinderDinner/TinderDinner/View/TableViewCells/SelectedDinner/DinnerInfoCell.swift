@@ -21,16 +21,21 @@ class DinnerInfoCell: UICollectionViewCell {
         let parentStackView = setupParentStackView()
         let titleView = setupTitle(title: data.name!, parentStackView: parentStackView)
         let ingredientsView = setupIngredients(ingredients: data.ingredients!, parentStackView: parentStackView)
-//        let howToMakeView = setupHowToMake(steps: data.howToMake!, parentStackView: parentStackView)
-        let howToMakeView = setupHowToMake(steps: ["Test string 1 lang string som lang string string gyugiyguy uyig gguiuyguyg", "String 2 test string lanf string string string"], parentStackView: parentStackView)
+        let howToMakeView = setupHowToMake(steps: data.howToMake!, parentStackView: parentStackView)
+        let allergensView = setupAllergensView(data: data.allergens!, parentStackView: parentStackView)
+        let creditsView = setupCredits(origin: data.origin!, parentStackView: parentStackView)
+        print("Height: \(contentView.frame.height)")
+        print("Number of elements: \(data.ingredients!.count + data.howToMake!.count)")
     }
     
     fileprivate func setupParentStackView() -> UIStackView {
         let stackView: UIStackView = {
             let view = UIStackView()
             view.translatesAutoresizingMaskIntoConstraints = true
-            view.distribution = .equalSpacing
-            view.spacing = 0
+//            view.distribution = .equalSpacing
+            view.distribution = .fill
+
+            view.spacing = 50
             view.axis = .vertical
             return view
         }()
@@ -46,7 +51,7 @@ class DinnerInfoCell: UICollectionViewCell {
         let viewForTitle: UIView = {
             let view = UIView()
             view.translatesAutoresizingMaskIntoConstraints = true
-            view.heightAnchor.constraint(equalToConstant: CGFloat(100)).isActive = true
+            view.heightAnchor.constraint(equalToConstant: CGFloat(75)).isActive = true
             return view
         }()
         let titleTextView: UILabel = {
@@ -55,7 +60,8 @@ class DinnerInfoCell: UICollectionViewCell {
             view.textAlignment = .left
             view.text = title
             view.textColor = .white
-            view.font = view.font?.withSize(25)
+            view.isUserInteractionEnabled = false
+            view.font = view.font?.withSize(30)
             return view
         }()
         
@@ -76,6 +82,7 @@ class DinnerInfoCell: UICollectionViewCell {
             let view = UIView()
             view.translatesAutoresizingMaskIntoConstraints = true
             view.backgroundColor = .systemPink
+            view.heightAnchor.constraint(equalToConstant: CGFloat((40 * ingredients.count) + 50)).isActive = true
             return view
         }()
         
@@ -94,7 +101,8 @@ class DinnerInfoCell: UICollectionViewCell {
             let view = UITextView()
             view.translatesAutoresizingMaskIntoConstraints = true
             view.text = "Ingredients"
-            view.font = view.font?.withSize(20)
+            view.isUserInteractionEnabled = false
+            view.font = view.font?.withSize(25)
             view.heightAnchor.constraint(equalToConstant: CGFloat(50)).isActive = true
             return view
         }()
@@ -104,41 +112,21 @@ class DinnerInfoCell: UICollectionViewCell {
         let ingredientsCollection: UIStackView = {
             let view = UIStackView()
             view.translatesAutoresizingMaskIntoConstraints = true
-            view.axis = .horizontal
-            view.heightAnchor.constraint(equalToConstant: CGFloat(100)).isActive = true
+            view.axis = .vertical
+            view.heightAnchor.constraint(equalToConstant: CGFloat(30 * ingredients.count)).isActive = true
             view.backgroundColor = .brown
             view.distribution = .fillEqually
+            
             return view
         }()
         
         ingredientsStackView.addArrangedSubview(titleLabel)
         ingredientsStackView.addArrangedSubview(ingredientsCollection)
         
-        let leftIngredientsList: UIStackView = {
-            let view = UIStackView()
-            view.translatesAutoresizingMaskIntoConstraints = true
-            view.axis = .vertical
-            view.backgroundColor = .green
-            view.distribution = .fillEqually
-            return view
-        }()
-        
-        let rightIngredientsList: UIStackView = {
-            let view = UIStackView()
-            view.translatesAutoresizingMaskIntoConstraints = true
-            view.axis = .vertical
-            view.backgroundColor = .cyan
-            view.distribution = .fillEqually
-            return view
-        }()
+
         
         // Ingredients
         
-        ingredientsCollection.addArrangedSubview(leftIngredientsList)
-        ingredientsCollection.addArrangedSubview(rightIngredientsList)
-        
-        leftIngredientsList.heightAnchor.constraint(equalTo: ingredientsCollection.heightAnchor).isActive = true
-        rightIngredientsList.heightAnchor.constraint(equalTo: ingredientsCollection.heightAnchor).isActive = true
         
         
         // Ingredients Title
@@ -153,21 +141,22 @@ class DinnerInfoCell: UICollectionViewCell {
         ingredientsCollection.trailingAnchor.constraint(equalTo: ingredientsStackView.trailingAnchor).isActive = true
         ingredientsCollection.bottomAnchor.constraint(equalTo: ingredientsStackView.bottomAnchor).isActive = true
         
-        for (index, item) in ingredients.enumerated() {
+        for item in ingredients {
             let ingredientLabel: UITextView = {
                 let view = UITextView()
                 view.textAlignment = .center
                 view.text = item
-                view.font = view.font?.withSize(15)
-                view.heightAnchor.constraint(equalToConstant: CGFloat(15)).isActive = true
+                view.font = view.font?.withSize(20)
+                view.textAlignment = .left
+                view.isScrollEnabled = false
+                view.isUserInteractionEnabled = false
+                view.heightAnchor.constraint(equalToConstant: CGFloat(30)).isActive = true
                 return view
             }()
             
-            if index % 2 == 0 {
-                leftIngredientsList.addArrangedSubview(ingredientLabel)
-            } else {
-                rightIngredientsList.addArrangedSubview(ingredientLabel)
-            }
+            ingredientsCollection.addArrangedSubview(ingredientLabel)
+            
+            
         }
         parentStackView.addArrangedSubview(viewForIngredients)
         return viewForIngredients
@@ -182,7 +171,7 @@ class DinnerInfoCell: UICollectionViewCell {
             let view = UIView()
             view.translatesAutoresizingMaskIntoConstraints = true
             view.backgroundColor = .orange
-            view.heightAnchor.constraint(equalToConstant: CGFloat(200)).isActive = true
+            view.heightAnchor.constraint(equalToConstant: CGFloat((steps.count * 40) + 50)).isActive = true
             return view
         }()
         
@@ -202,15 +191,17 @@ class DinnerInfoCell: UICollectionViewCell {
             view.heightAnchor.constraint(equalToConstant: CGFloat(50)).isActive = true
             view.text = "Steps to make"
             view.font = view.font?.withSize(25)
+            view.isUserInteractionEnabled = false
             return view
         }()
         
         let stepsStackView: UIStackView = {
             let view = UIStackView()
             view.translatesAutoresizingMaskIntoConstraints = true
-            view.backgroundColor = .cyan
-            view.axis           = .vertical
-            view.distribution   = .fillEqually
+            view.backgroundColor    = .cyan
+            view.axis               = .vertical
+            view.distribution       = .fillEqually
+            view.spacing            = 0
             return view
         }()
         
@@ -219,27 +210,15 @@ class DinnerInfoCell: UICollectionViewCell {
         contentStackView.addArrangedSubview(howToMakeTitle)
         contentStackView.addArrangedSubview(stepsStackView)
         
-
-        
-//        howToMakeTitle.topAnchor.constraint(equalTo: viewForHowToMake.topAnchor).isActive = true
-//        howToMakeTitle.leadingAnchor.constraint(equalTo: viewForHowToMake.leadingAnchor).isActive = true
-//        howToMakeTitle.trailingAnchor.constraint(equalTo: viewForHowToMake.trailingAnchor).isActive = true
-//        howToMakeTitle.bottomAnchor.constraint(equalTo: stepsStackView.topAnchor).isActive = true
-//
-//        stepsStackView.topAnchor.constraint(equalTo: howToMakeTitle.bottomAnchor).isActive = true
-//        stepsStackView.leadingAnchor.constraint(equalTo: viewForHowToMake.leadingAnchor).isActive = true
-//        stepsStackView.trailingAnchor.constraint(equalTo: viewForHowToMake.trailingAnchor).isActive = true
-//        stepsStackView.bottomAnchor.constraint(equalTo: viewForHowToMake.bottomAnchor).isActive = true
-        
         for step in steps {
             let stepTextField: UITextView = {
                 let view = UITextView()
                 view.translatesAutoresizingMaskIntoConstraints = true
                 view.textAlignment = .left
                 view.text = step
-                
                 view.font = view.font?.withSize(20)
-                view.heightAnchor.constraint(equalToConstant: CGFloat(20)).isActive = true
+                view.isUserInteractionEnabled = false
+                view.heightAnchor.constraint(equalToConstant: CGFloat(40)).isActive = true
                 return view
             }()
             
@@ -248,6 +227,100 @@ class DinnerInfoCell: UICollectionViewCell {
         
         parentStackView.addArrangedSubview(viewForHowToMake)
         return viewForHowToMake
+    }
+    
+    fileprivate func setupAllergensView(data: String, parentStackView: UIStackView) -> UIView {
+        let substrings = data.components(separatedBy: ";")
+        
+        let viewForAllergens: UIView = {
+            let view = UIView()
+            view.translatesAutoresizingMaskIntoConstraints = true
+            view.backgroundColor = .orange
+            view.heightAnchor.constraint(equalToConstant: CGFloat((40 * substrings.count) + 50)).isActive = true
+            return view
+        }()
+        
+        let allergensStackView: UIStackView = {
+            let view = UIStackView()
+            view.translatesAutoresizingMaskIntoConstraints = true
+            view.axis = .vertical
+            return view
+        }()
+        
+        viewForAllergens.addSubview(allergensStackView)
+        parentStackView.addArrangedSubview(viewForAllergens)
+        allergensStackView.fillInParent(parent: viewForAllergens)
+        
+        let allergensTitle: UITextView = {
+            let view = UITextView()
+            view.text = "Allergens"
+            view.translatesAutoresizingMaskIntoConstraints = true
+            view.font = view.font?.withSize(CGFloat(25))
+            view.heightAnchor.constraint(equalToConstant: CGFloat(50)).isActive = true
+            return view
+        }()
+        
+        let allergensListStackView: UIStackView = {
+            let view = UIStackView()
+            view.translatesAutoresizingMaskIntoConstraints = true
+            view.heightAnchor.constraint(equalToConstant: CGFloat(substrings.count * 40)).isActive = true
+            view.axis = .vertical
+            view.distribution = .fillEqually
+            return view
+        }()
+        
+        allergensStackView.addArrangedSubview(allergensTitle)
+        allergensStackView.addArrangedSubview(allergensListStackView)
+        
+        for allergen in substrings {
+            let allergenTextView: UITextView = {
+                let view = UITextView()
+                view.translatesAutoresizingMaskIntoConstraints = true
+                view.text = allergen
+                view.font = view.font?.withSize(CGFloat(20))
+                view.isScrollEnabled = false
+                view.heightAnchor.constraint(equalToConstant: CGFloat(40)).isActive = true
+                return view
+            }()
+            
+            allergensListStackView.addArrangedSubview(allergenTextView)
+            
+        }
+        
+//        allergensTitle.topAnchor.constraint(equalTo: viewForAllergens.topAnchor).isActive = true
+//        allergensTitle.leadingAnchor.constraint(equalTo: viewForAllergens.leadingAnchor).isActive = true
+//        allergensTitle.trailingAnchor.constraint(equalTo: viewForAllergens.trailingAnchor).isActive = true
+//        allergensTitle.bottomAnchor.constraint(equalTo: allergensListStackView.topAnchor).isActive = true
+        
+        return viewForAllergens
+        
+    }
+    
+    fileprivate func setupCredits(origin: String, parentStackView: UIStackView) -> UIView {
+        let viewForCredits: UIView = {
+            let view = UIView()
+            view.translatesAutoresizingMaskIntoConstraints = true
+            view.heightAnchor.constraint(equalToConstant: CGFloat(50)).isActive = true
+            return view
+        }()
+        
+        let creditText: UITextView = {
+            let view = UITextView()
+            view.translatesAutoresizingMaskIntoConstraints = true
+            view.text = "Credit: \(origin)"
+            view.font = view.font?.withSize(CGFloat(20))
+            view.isScrollEnabled = false
+            view.isSelectable = false
+            return view
+        }()
+        
+        viewForCredits.addSubview(creditText)
+        creditText.fillInParent(parent: viewForCredits)
+        
+        parentStackView.addArrangedSubview(viewForCredits)
+        
+        
+        return viewForCredits
     }
     
 

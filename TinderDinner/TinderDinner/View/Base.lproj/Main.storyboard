@@ -309,6 +309,14 @@
                                     <action selector="exitPressed:" destination="b9p-em-NqS" eventType="touchUpInside" id="fc8-bw-XZz"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZtZ-iu-Blg">
+                                <rect key="frame" x="382" y="48" width="26" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button" image="star.circle.fill" catalog="system"/>
+                                <connections>
+                                    <action selector="addToFavoritesPressed:" destination="b9p-em-NqS" eventType="touchUpInside" id="mht-7m-9vJ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="tXJ-Eb-AQC"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -322,13 +330,14 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="addToFavouritesButton" destination="ZtZ-iu-Blg" id="13B-T7-jrQ"/>
                         <outlet property="exitButton" destination="j3K-O9-XBi" id="7tq-JW-vWx"/>
                         <outlet property="selectedDinnerCollectionView" destination="IBF-H7-8Rc" id="IPs-Km-xAc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LwM-fl-fFz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2771" y="-227"/>
+            <point key="canvasLocation" x="2769.5652173913045" y="-227.00892857142856"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="LlZ-lc-upa">
@@ -559,6 +568,7 @@
     </scenes>
     <resources>
         <image name="ironman2" width="150" height="84"/>
+        <image name="star.circle.fill" catalog="system" width="128" height="121"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
