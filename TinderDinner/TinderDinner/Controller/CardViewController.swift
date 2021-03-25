@@ -56,6 +56,7 @@ class CardViewController: UIViewController {
         cardView.delegate = self
         cardView.dataSource = self
         tabBarItem.title = "Swipe"
+        groupCodeLabel.isHidden = true
         
         let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
         print("PATH: \(path)")
@@ -121,6 +122,7 @@ class CardViewController: UIViewController {
         self.firebaseManager.createUniqueUserId()
         self.firebaseManager.isGroupCreator = false
         self.tabBarController!.tabBar.items![1].isEnabled = false
+        self.groupCodeLabel.isHidden = false
         self.firebaseManager.initiateEventListenerFor(groupCode: Int(inputCode)!) { (document, error) in
             
             if let document = document {
@@ -136,7 +138,7 @@ class CardViewController: UIViewController {
                 }
             } else {
                 guard let error = error else { return }
-                self.firebaseManager.displayErrorMessage(error: error)
+                self.firebaseManager.displayErrorMessage(error: error, vc: self)
             }
 
         }
@@ -166,6 +168,9 @@ class CardViewController: UIViewController {
                         } else {
                             print("Doesnt exist vc")
                         }
+                    } else if let error = error {
+                        self.firebaseManager.displayErrorMessage(error: error, vc: self)
+                        self.isMultipleUsersSwith.setOn(false, animated: true)
                     }
                 }
             }
@@ -181,47 +186,56 @@ class CardViewController: UIViewController {
     
     func createPressed() {
         firebaseManager.getUsedIds { (groupIds, error) in
-            self.groupId = self.firebaseManager.checkForMachInIds(with: groupIds)
-            DispatchQueue.main.async {
+            if let error = error {
+    
+                self.firebaseManager.displayErrorMessage(error: error, vc: self)
+                self.isMultipleUsersSwith.setOn(false, animated: true)
+            } else {
+                self.groupId = self.firebaseManager.checkForMachInIds(with: groupIds)
+                DispatchQueue.main.async {
+                    if let groupId = self.groupId {
+                        self.groupCodeLabel.text = "\(groupId)"
+                        self.groupCodeLabel.isHidden = false
+                    }
+                }
                 if let groupId = self.groupId {
-                    self.groupCodeLabel.text = "\(groupId)"
-                }
-            }
-            if let groupId = self.groupId {
-                self.firebaseManager.activeGroupId = groupId
-                let waitingForParticipantsController = UIAlertController(title: "\(groupId)", message: "Waiting for participants \n Number of participants: 1. Wait for everyone to join, and press start", preferredStyle: .alert)
-                
-                waitingForParticipantsController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
-                    self.dismiss(animated: true, completion: nil)
-                    self.isMultipleUsersSwith.setOn(false, animated: true)
+                    self.firebaseManager.activeGroupId = groupId
+                    let waitingForParticipantsController = UIAlertController(title: "\(groupId)", message: "Waiting for participants \n Number of participants: 1. Wait for everyone to join, and press start", preferredStyle: .alert)
                     
-                    self.firebaseManager.detachEventListener()
-                }))
-                
-                waitingForParticipantsController.addAction(UIAlertAction(title: "Start", style: .default, handler: { (actuin) in
-                    self.dismiss(animated: true) {
-                        print("Starting online session")
-                        self.moveToOnlineSessionSettings()
-                    }
-                }))
-                
-                self.present(waitingForParticipantsController, animated: true, completion: nil)
-                self.firebaseManager.createGroup(with: groupId, numberOfDesiredCards: self.settingsManager.numberOfDesieredCards)
-                self.firebaseManager.createUniqueUserId()
-                self.firebaseManager.initiateEventListenerFor(groupCode: groupId) { (document, error) in
-                    if let document = document {
+                    waitingForParticipantsController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+                        self.dismiss(animated: true, completion: nil)
+                        self.isMultipleUsersSwith.setOn(false, animated: true)
                         
-                        self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
-                            waitingForParticipantsController.message = "Waiting for participants \n Number of participants: \(groupStructure.participants). Wait for everyone to join, and press start"
-                            print("Listener ran")
+                        self.firebaseManager.detachEventListener()
+                    }))
+                    
+                    waitingForParticipantsController.addAction(UIAlertAction(title: "Start", style: .default, handler: { (actuin) in
+                        self.dismiss(animated: true) {
+                            print("Starting online session")
+                            self.moveToOnlineSessionSettings()
                         }
-                    } else {
-                        guard let error = error else { return }
-                        self.firebaseManager.displayErrorMessage(error: error)
-                    }
+                    }))
+                    
+                    self.present(waitingForParticipantsController, animated: true, completion: nil)
+                    self.firebaseManager.createGroup(with: groupId, numberOfDesiredCards: self.settingsManager.numberOfDesieredCards)
+                    self.firebaseManager.createUniqueUserId()
+                    self.firebaseManager.initiateEventListenerFor(groupCode: groupId) { (document, error) in
+                        if let document = document {
+                            
+                            self.firebaseManager.getFirebaseObject(document: document) { (groupStructure) in
+                                waitingForParticipantsController.message = "Waiting for participants \n Number of participants: \(groupStructure.participants). Wait for everyone to join, and press start"
+                                print("Listener ran")
+                            }
+                        } else {
+                            guard let error = error else { return }
+                            self.firebaseManager.displayErrorMessage(error: error, vc: self)
+                        }
 
+                    }
                 }
+                
             }
+
         }
     }
     
@@ -233,6 +247,7 @@ class CardViewController: UIViewController {
         isMultipleUsersSwith.setOn(false, animated: true)
         firebaseManager.removeOneFromParticipants(groupCode: groupCode)
         databaseManager.wantedDinnersId = nil
+        groupCodeLabel.isHidden = true
     }
     
     func startOnlineSession(groupStructure: GroupStructure) {
@@ -255,7 +270,15 @@ class CardViewController: UIViewController {
             }))
             present(alertController, animated: true, completion: nil)
         } else {
-            changeBackToSingleUserState()
+            let alertController = UIAlertController(title: "Are you sure?", message: "Are you sure you want to exit current session?", preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+                sender.setOn(true, animated: true)
+            }))
+            alertController.addAction(UIAlertAction(title: "Yes", style: .destructive, handler: { (action) in
+                self.changeBackToSingleUserState()
+            }))
+            present(alertController, animated: true, completion: nil)
+            
         }
     }
     
@@ -268,6 +291,7 @@ class CardViewController: UIViewController {
         groupCodeLabel.isHidden = true
         firebaseManager.leftSwipedDinnerIds = []
         databaseManager.wantedDinnersId = nil
+        cardView.reloadData()
     }
     
     // Changes rootVC to Tab Bar for online session settings
@@ -275,6 +299,7 @@ class CardViewController: UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let onlineSessionSettingsController = storyboard.instantiateViewController(identifier: "onlineSessionSettings")
         modalPresentationStyle = .fullScreen
+        
         self.present(onlineSessionSettingsController, animated: true) {
             
         }
@@ -415,7 +440,7 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
     }
     
     func koloda(_ koloda: KolodaView, allowedDirectionsForIndex index: Int) -> [SwipeResultDirection] {
-        return [.left, .right, .up]
+        return [.left, .right]
     }
     
     func koloda(_ koloda: KolodaView, didSwipeCardAt index: Int, in direction: SwipeResultDirection) {
@@ -431,8 +456,6 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
                 firebaseManager.saveDinnerIdToLocalStage(with: Int(items[index].uniqueID))
             case SwipeResultDirection.left:
                 print("Swipe left multiuser")
-            case SwipeResultDirection.up:
-                print("Swipe up multiuser")
             default:
                 fatalError("Error in didSwipeCardAt")
             }
@@ -443,12 +466,7 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
                 databaseManager.addToWantedDinner(with: Int(items[index].uniqueID))
                 print(databaseManager.wantedDinnersId?.count)
             case SwipeResultDirection.left:
-                print("Swipe left singleuser")
-            case SwipeResultDirection.up:
-                if let itemName = items[index].name {
-                    databaseManager.addDinnerToFavourites(with: itemName)
-                }
-                
+                print("Swipe left singleuser")                
             default:
                 fatalError("Error in didSwipeCardAt")
             }
@@ -500,7 +518,7 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
                         }
                         else {
                             guard let error = error else { return }
-                            self.firebaseManager.displayErrorMessage(error: error)
+                            self.firebaseManager.displayErrorMessage(error: error, vc: self)
                         }
                     }
                 }

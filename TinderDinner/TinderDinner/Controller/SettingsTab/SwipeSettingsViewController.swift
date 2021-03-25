@@ -21,15 +21,17 @@ class SwipeSettingsViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        numberOfCardsLabel.text = "5"
         numberOfCardsSlider.value = 5
+        numberOfCardsLabel.text = "5"
     }
     
     @IBAction func sliderDidSlide(_ sender: UISlider) {
         let roundedValue = round(sender.value / 1) * 1
         sender.value = roundedValue
         numberOfCardsLabel.text = String(Int(sender.value))
+        
         settingsManager.numberOfDesieredCards = Int(sender.value)
     }
     
 }
+ 

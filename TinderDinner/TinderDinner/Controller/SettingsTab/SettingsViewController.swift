@@ -55,7 +55,6 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
         case 2:
             performSegue(withIdentifier: "goToSettings", sender: self)
         default:
-            
             print("clicked on tbv")
         }
         tableView.deselectRow(at: indexPath, animated: true)

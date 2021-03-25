@@ -5,7 +5,7 @@
 //  Created by Henrik Bouwer Knudsen on 12/02/2021.
 //
 
-import Foundation
+import UIKit
 import Firebase
 
 class FirebaseManager {
@@ -24,19 +24,29 @@ class FirebaseManager {
     
     
     // MARK: - ID Section
-    func getUsedIds(completion: @escaping ([Int], Error?) -> Void) {
-        let dbRef = Firestore.firestore().collection("Groups")
+    func getUsedIds(completion: @escaping ([Int], String?) -> Void) {
+        let dbRef = Firestore.firestore()
         var documentIdArray = [Int]()
         
-        dbRef.getDocuments { (snapshot, error) in
-            if let error = error {
-                print("Error Firebasemanager \(error)")
-                completion(documentIdArray, error)
-            } else {
-                for document in snapshot!.documents {
-                    documentIdArray.append(Int(document.documentID)!)
+        let settings = FirestoreSettings()
+        settings.isPersistenceEnabled = false
+        dbRef.settings = settings
+        
+        dbRef.collection("Groups").getDocuments { (snapshot, error) in
+            if let documents = snapshot?.documents {
+                if documents.isEmpty {
+                    completion(documentIdArray, "No Internet Connection")
+                } else {
+                    print("NO NETWORK ERROR")
+                    for document in documents {
+                        
+                        documentIdArray.append(Int(document.documentID)!)
+                    }
+                    print("DOCUMENT ARRAY \(documentIdArray)")
+                    completion(documentIdArray, nil)
                 }
-                completion(documentIdArray, nil)
+            } else {
+                completion(documentIdArray, "No Internet Connection")
             }
         }
     }
@@ -266,10 +276,19 @@ class FirebaseManager {
     
     // MARK: - Error handling section
     
-    func displayErrorMessage(error: Error) {
+    func displayErrorMessage(error: String, vc: UIViewController) {
+        let errorController = UIAlertController(title: "No Connection", message: error, preferredStyle: .alert)
+        self.detachEventListener()
+        errorController.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
+        vc.present(errorController, animated: true, completion: nil)
+        
+    }
+    
+    func displayErrorMessage(error: Error, vc: UIViewController) {
         let errorController = UIAlertController(title: "No Connection", message: error.localizedDescription, preferredStyle: .alert)
         self.detachEventListener()
         errorController.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
+        vc.present(errorController, animated: true, completion: nil)
     }
     
 }

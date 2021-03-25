@@ -22,6 +22,8 @@ class MultiUserSettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        isModalInPresentation = true
+        
         allergensTableView.dataSource   = self
         allergensTableView.delegate     = self
         

@@ -59,12 +59,14 @@ class SelectedDinnerViewController: UIViewController {
             favoritesArray = [dinner?.uniqueID]
             userDefaults.setValue(favoritesArray, forKey: K.UserDefaultString.favorites)
         } else {
-            guard var favoritesArray = favoritesArray else { fatalError("Error getting favorites at selectedDinner") }
+            guard var favoritesArray = favoritesArray as? [Int] else { fatalError("Error getting favorites at selectedDinner") }
             if !favoritesArray.isEmpty {
-                favoritesArray.append(dinner?.uniqueID)
-                userDefaults.setValue(favoritesArray, forKey: K.UserDefaultString.favorites)
+                if !favoritesArray.contains(Int(dinner!.uniqueID)) {
+                    favoritesArray.append(Int(dinner!.uniqueID))
+                    userDefaults.setValue(favoritesArray, forKey: K.UserDefaultString.favorites)
+                }
             } else {
-                favoritesArray = [dinner?.uniqueID]
+                favoritesArray = [Int(dinner!.uniqueID)]
                 userDefaults.setValue(favoritesArray, forKey: K.UserDefaultString.favorites)
             }
 
