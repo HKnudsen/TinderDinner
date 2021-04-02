@@ -49,9 +49,13 @@ class MultiUserSettingsViewController: UIViewController {
         for dinner in 0..<settingsManager.numberOfDesieredCards {
             let randomElement = databaseManager.allItemsWithCurrentFiler?.randomElement()
             print("RANDOM ELEMENT: \(randomElement?.uniqueID)")
-            let randomElementIndex = (databaseManager.allItemsWithCurrentFiler?.firstIndex(of: randomElement!))!
-            databaseManager.allItemsWithCurrentFiler?.remove(at: randomElementIndex)
-            dinnerIds.append(Int(randomElement!.uniqueID))
+            if randomElement == nil {
+                break
+            } else {
+                let randomElementIndex = (databaseManager.allItemsWithCurrentFiler?.firstIndex(of: randomElement!))!
+                databaseManager.allItemsWithCurrentFiler?.remove(at: randomElementIndex)
+                dinnerIds.append(Int(randomElement!.uniqueID))
+            }
         }
         
         firebaseManager.startOnlineSession(withDinnersIds: dinnerIds)

@@ -79,6 +79,7 @@ class DatabaseManager {
             do { try synchronizedDinners.append(context.fetch(request)[0]) }
             catch let error { print("Error getting exact dinner with id: \(error)") }
         }
+        
         itemsForCardView = synchronizedDinners
     }
     // Used to get dinners with id for use in yesdinner list after online session

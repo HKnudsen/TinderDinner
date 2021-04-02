@@ -466,7 +466,9 @@ extension CardViewController: KolodaViewDelegate, KolodaViewDataSource {
                 databaseManager.addToWantedDinner(with: Int(items[index].uniqueID))
                 print(databaseManager.wantedDinnersId?.count)
             case SwipeResultDirection.left:
-                print("Swipe left singleuser")                
+                print("Swipe left singleuser")
+
+                
             default:
                 fatalError("Error in didSwipeCardAt")
             }
